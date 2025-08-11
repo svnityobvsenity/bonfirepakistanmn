@@ -1,106 +1,107 @@
-/* src/components/DMsPage.tsx */
 export default function DMsPage() {
   const friends = [
-    { name: "daFoxy", status: "Playing Bonfire", online: true },
-    { name: "james", status: "Playing Bonfire", online: true },
-    { name: "Ekmand", status: "Online", online: true },
-    { name: "Sticks", status: "Online", online: true },
-    { name: "FranzaGeek", status: "Online", online: true },
-    { name: "NRD", status: "Online", online: true },
-    { name: "Markella's", status: "Playing Bonfire", online: true },
-    { name: "AY-Plays", status: "Online", online: true },
-    { name: "LemonTiger", status: "Online", online: true },
-    { name: "Bluemango", status: "Online", online: true },
+    { name: 'daFoxy', status: 'Playing Blender', online: true },
+    { name: 'james', status: 'Playing Procrastination Simulator', online: true },
+    { name: 'Ekmand', status: 'Online', online: true },
+    { name: 'Sticks', status: 'Online', online: true },
+    { name: 'FranzaGeek', status: 'Playing Powerpoint', online: true },
+  ];
+
+  const messages = [
+    { user: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool video the other day mind if I send it?' },
+    { user: 'Concept Central', time: 'Today at 9:41PM', text: 'Sure thing! Want to start a Watch Party?' },
+    { user: 'daFoxy', time: 'Today at 9:41PM', text: 'ooOOOoo what’s that?' },
+    { user: 'Concept Central', time: 'Today at 9:41PM', text: 'It’s this new Discord feature. Have you heard of it?' },
+    { user: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?' },
+    { user: 'Concept Central', time: 'Today at 9:41PM', text: 'Just paste a YouTube link into this DM and Discord will ask you if you want to start a Watch Party!' },
+    { user: 'daFoxy', time: 'Today at 9:41PM', text: 'Woah! I’ll start one now!' },
+    { user: 'Concept Central', time: 'Today at 9:44PM', text: 'Cool, can’t wait to see the video :D' },
+    { user: 'daFoxy', time: 'Today at 9:44PM', text: 'Awesome, starting now…' },
+    { user: 'Concept Central', time: 'Today at 9:44PM', text: 'Joined.' },
   ];
 
   return (
-    <div className="flex-1 flex">
-      {/* Left Sidebar - Friends List */}
-      <div className="w-80 flex flex-col" style={{ backgroundColor: 'var(--panel-dark)', padding: '12px' }}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4 p-2">
-          <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Friends</h2>
-          <button className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-white/5">
-            <svg className="w-5 h-5" style={{ color: 'var(--icon)' }} fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-          </button>
-        </div>
-
-        {/* Pinned Messages Section */}
-        <div className="mb-6">
-          <div className="flex items-center mb-3">
-            <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
-              <path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6l6 6 6-6h-2z"/>
-            </svg>
-            <span className="text-sm font-medium" style={{ color: 'var(--muted)' }}>Pinned Messages</span>
+    <div className="flex-1 flex overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
+      {/* Left friends column */}
+      <aside className="w-80 border-r" style={{ backgroundColor: 'var(--panel-dark)', borderColor: 'var(--divider)' }}>
+        {/* Filters */}
+        <div className="p-3">
+          <div className="h-9 rounded-md flex items-center px-3" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+            <span className="text-sm opacity-60">Friends</span>
+          </div>
+          <div className="h-9 mt-2 rounded-md flex items-center px-3" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+            <span className="text-sm opacity-60">Inbox</span>
           </div>
         </div>
-
-        {/* Direct Messages Section */}
-        <div className="mb-4">
-          <div className="flex items-center mb-3">
-            <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
-              <path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6l6 6 6-6h-2z"/>
-            </svg>
-            <span className="text-sm font-medium" style={{ color: 'var(--muted)' }}>Direct Messages</span>
-          </div>
-          
-          <div className="space-y-1">
-            {friends.map((friend, index) => (
-              <div 
-                key={index}
-                className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5 group"
-              >
-                <div className="relative">
-                  <div 
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white mr-3"
-                    style={{ backgroundColor: 'var(--accent-purple)' }}
-                  >
-                    {friend.name.charAt(0)}
-                  </div>
-                  {friend.online && (
-                    <div 
-                      className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
-                      style={{ 
-                        backgroundColor: 'var(--accent-green)', 
-                        borderColor: 'var(--panel-dark)' 
-                      }}
-                    ></div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
-                    {friend.name}
-                  </div>
-                  <div className="text-xs truncate" style={{ color: 'var(--muted)' }}>
-                    {friend.status}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Right Content Area */}
-      <div className="flex-1" style={{ backgroundColor: 'var(--bg)' }}>
-        <div className="h-full flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: 'var(--panel-mid)' }}>
-              <svg className="w-10 h-10" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v3c0 .6.4 1 1 1h.5c.2 0 .5-.1.6-.2l3.9-3.8H20c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-              </svg>
+        {/* Pinned */}
+        <div className="px-3 text-xs uppercase tracking-wide opacity-60">Pinned Messages</div>
+        <div className="px-3 mt-2 space-y-1">
+          <div className="h-10 rounded-md flex items-center px-2 hover:bg-white/5 cursor-pointer">
+            <div className="w-8 h-8 rounded-full bg-white/10 mr-2" />
+            <div>
+              <div className="text-sm">daFoxy</div>
+              <div className="text-xs opacity-60">Playing Blender</div>
             </div>
-            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-              Select a friend to start chatting
-            </h3>
-            <p style={{ color: 'var(--muted)' }}>
-              Choose someone from your friends list to begin a conversation.
-            </p>
           </div>
         </div>
-      </div>
+        {/* DMs */}
+        <div className="px-3 mt-4 text-xs uppercase tracking-wide opacity-60">Direct Messages</div>
+        <div className="px-3 mt-2 space-y-1">
+          {friends.map((f) => (
+            <div key={f.name} className="h-11 rounded-md flex items-center px-2 hover:bg-white/5 cursor-pointer">
+              <div className="relative mr-2">
+                <div className="w-9 h-9 rounded-full bg-white/10" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--accent-green)', border: '2px solid var(--panel-dark)' }} />
+              </div>
+              <div>
+                <div className="text-sm">{f.name}</div>
+                <div className="text-xs opacity-60">{f.status}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      {/* Chat column */}
+      <main className="flex-1 flex flex-col" style={{ backgroundColor: 'var(--bg)' }}>
+        {/* Header */}
+        <div className="h-12 flex items-center justify-between px-4 border-b" style={{ borderColor: 'var(--divider)' }}>
+          <div className="font-semibold">daFoxy</div>
+          <div className="flex items-center gap-4 opacity-80">
+            <div className="w-5 h-5 rounded-full bg-white/20" />
+            <div className="w-5 h-5 rounded-full bg-white/20" />
+            <div className="w-5 h-5 rounded-full bg-white/20" />
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-auto p-4 space-y-4">
+          {messages.map((m, i) => (
+            <div key={i} className="flex gap-3">
+              <div className="w-9 h-9 rounded-full bg-white/10" />
+              <div>
+                <div className="flex items-baseline gap-2">
+                  <div className="font-medium text-sm">{m.user}</div>
+                  <div className="text-xs opacity-60">{m.time}</div>
+                </div>
+                <div className="text-sm opacity-90">{m.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Message bar */}
+        <div className="px-4 pb-4">
+          <div className="h-12 rounded-md flex items-center px-3 gap-2" style={{ backgroundColor: 'var(--panel-mid)' }}>
+            <div className="w-6 h-6 rounded-md bg-white/10" />
+            <input className="flex-1 bg-transparent outline-none text-sm" placeholder="Message daFoxy" disabled />
+            <div className="w-6 h-6 rounded-md bg-white/10" />
+            <div className="w-6 h-6 rounded-md bg-white/10" />
+            <div className="w-6 h-6 rounded-md bg-white/10" />
+          </div>
+          <div className="text-xs opacity-60 mt-2">Preview mode — input disabled</div>
+        </div>
+      </main>
     </div>
   );
 }
