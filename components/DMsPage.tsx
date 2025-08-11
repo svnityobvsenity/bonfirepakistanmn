@@ -128,7 +128,7 @@ export default function DMsPage() {
     scrollToBottom();
   }, [messages]);
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'online': return 'var(--accent-green)';
       case 'away': return 'var(--accent-orange)';
@@ -138,7 +138,7 @@ export default function DMsPage() {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'online': return '🟢';
       case 'away': return '🟡';
@@ -462,7 +462,7 @@ export default function DMsPage() {
             <div>
               <div className="font-semibold text-[var(--text-primary)]">{selectedFriendData?.name}</div>
               <div className="text-xs text-[var(--muted)] flex items-center">
-                <span className="mr-1">{getStatusIcon(selectedFriendData?.status)}</span>
+                <span className="mr-1">{getStatusIcon(selectedFriendData?.status || 'offline')}</span>
                 {selectedFriendData?.status === 'online' ? 'Online' : 
                  selectedFriendData?.status === 'away' ? 'Away' :
                  selectedFriendData?.status === 'dnd' ? 'Do Not Disturb' : 'Offline'}
