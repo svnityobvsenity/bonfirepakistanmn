@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import '../styles/globals.css'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Bonfire - Discord Clone',
-  description: 'A Discord-style chat application built with Next.js',
+  title: 'Bonfire',
+  description: 'A modern chat application',
 }
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-discord-primary text-discord-text-primary font-discord">
+      <body className="bg-gray-900 text-white">
         {children}
       </body>
     </html>
