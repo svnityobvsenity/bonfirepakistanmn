@@ -1,82 +1,153 @@
 /* src/components/ChannelList.tsx */
 export default function ChannelList() {
   return (
-    <div className="w-60 bg-[#2f3136] flex flex-col">
-      {/* Server Header */}
-      <div className="h-12 px-4 flex items-center border-b border-[#202225] shadow-sm cursor-pointer hover:bg-[#34373c]">
-        <h1 className="text-white font-semibold">daFoxy</h1>
-        <div className="ml-1 w-3 h-3 rounded-full bg-green-500"></div>
-        <svg className="w-4 h-4 ml-auto text-[#b9bbbe]" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-        </svg>
+    <div className="w-72 flex flex-col" style={{ backgroundColor: 'var(--bg-panel)' }}>
+      {/* Server Banner */}
+      <div className="h-24 relative overflow-hidden">
+        <div 
+          className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800"
+          style={{ 
+            backgroundImage: 'linear-gradient(45deg, #2a2a2a, #1a1a1a)',
+          }}
+        ></div>
       </div>
-      
-      {/* Channel List */}
-      <div className="flex-1 overflow-y-auto p-2">
-        {/* Text Channels */}
-        <div className="mb-4">
-          <div className="flex items-center px-2 py-1 text-xs font-semibold text-[#8e9297] uppercase tracking-wide hover:text-[#dcddde] cursor-pointer">
-            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
+
+      {/* Server Info */}
+      <div className="px-4 pb-4 relative">
+        <div 
+          className="w-20 h-20 rounded-full border-4 -mt-10 relative z-10 flex items-center justify-center text-2xl font-bold text-white"
+          style={{ 
+            backgroundColor: 'var(--accent-purple)',
+            borderColor: 'var(--bg-panel)'
+          }}
+        >
+          TS
+        </div>
+        <div className="mt-2">
+          <h2 className="text-xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
+            Type shi
+          </h2>
+          <div className="flex items-center">
+            <div 
+              className="w-2 h-2 rounded-full mr-2"
+              style={{ backgroundColor: 'var(--accent-green)' }}
+            ></div>
+            <span className="text-sm" style={{ color: 'var(--muted)' }}>47</span>
+            <span className="ml-2 text-sm" style={{ color: 'var(--muted)' }}>🇬🇧</span>
+          </div>
+          <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>keyboard warriors</p>
+        </div>
+      </div>
+
+      {/* Text Channels */}
+      <div className="px-4 mb-4">
+        <div className="flex items-center mb-2">
+          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--muted)' }}>
             Text Channels
-          </div>
-          
-          <div className="px-2 py-1 mx-2 rounded text-[#dcddde] bg-[#42464d] flex items-center cursor-pointer">
-            <span className="text-[#8e9297] mr-1.5">#</span>
-            <span className="text-sm">general</span>
-          </div>
-          
-          <div className="px-2 py-1 mx-2 rounded text-[#8e9297] hover:bg-[#42464d] hover:text-[#dcddde] flex items-center cursor-pointer">
-            <span className="mr-1.5">#</span>
-            <span className="text-sm">random</span>
-          </div>
+          </span>
+          <span className="ml-auto text-xs" style={{ color: 'var(--muted)' }}>#</span>
         </div>
         
-        {/* Voice Channels */}
-        <div>
-          <div className="flex items-center px-2 py-1 text-xs font-semibold text-[#8e9297] uppercase tracking-wide hover:text-[#dcddde] cursor-pointer">
-            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-            Voice Channels
+        <div className="space-y-1">
+          <div className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5">
+            <span className="text-sm mr-2" style={{ color: 'var(--muted)' }}>#</span>
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>broadcast</span>
           </div>
-          
-          <div className="px-2 py-1 mx-2 rounded text-[#8e9297] hover:bg-[#42464d] hover:text-[#dcddde] flex items-center cursor-pointer">
-            <svg className="w-4 h-4 mr-1.5 text-[#8e9297]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <span className="text-sm">General</span>
+          <div className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5">
+            <span className="text-sm mr-2" style={{ color: 'var(--muted)' }}>#</span>
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>giveaways</span>
+          </div>
+          <div className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5">
+            <span className="text-sm mr-2" style={{ color: 'var(--muted)' }}>#</span>
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>msg</span>
+          </div>
+          <div 
+            className="flex items-center p-2 rounded-md cursor-pointer"
+            style={{ backgroundColor: 'rgba(86, 64, 122, 0.14)' }}
+          >
+            <span className="text-sm mr-2" style={{ color: 'var(--muted)' }}>🖼️</span>
+            <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Media</span>
           </div>
         </div>
       </div>
-      
-      {/* User Panel */}
-      <div className="h-14 bg-[#292b2f] px-2 flex items-center">
-        <div className="flex items-center flex-1">
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-[#5865f2] flex items-center justify-center text-white text-xs font-medium">
-              K
-            </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-green-500 border-2 border-[#292b2f]"></div>
+
+      {/* Voice Chat */}
+      <div className="px-4 flex-1">
+        <div className="flex items-center mb-3">
+          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--muted)' }}>
+            Voice Chat
+          </span>
+          <svg className="w-4 h-4 ml-auto" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+          </svg>
+        </div>
+
+        <div className="space-y-1 mb-4">
+          <div className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5">
+            <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>GENERAL</span>
+            <span className="ml-auto text-xs" style={{ color: 'var(--muted)' }}>0 / 90</span>
           </div>
-          <div className="ml-2 flex-1">
-            <div className="text-sm font-medium text-white">Kaif#001</div>
-            <div className="text-xs text-[#b9bbbe]">#0001</div>
+          <div className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5">
+            <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>CHILLING</span>
+            <span className="ml-auto text-xs" style={{ color: 'var(--muted)' }}>5 / 10</span>
           </div>
         </div>
-        
-        <div className="flex space-x-2">
-          <button className="p-1 text-[#b9bbbe] hover:text-white transition-colors">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-          </button>
-          <button className="p-1 text-[#b9bbbe] hover:text-white transition-colors">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-            </svg>
-          </button>
+
+        {/* Voice Chat Users Grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { name: "flawless", avatar: "F", speaking: false },
+            { name: "space", avatar: "S", speaking: true },
+            { name: "sobhing", avatar: "S", speaking: false },
+            { name: "Luxury", avatar: "L", speaking: false },
+            { name: "Kaif", avatar: "K", speaking: false },
+          ].map((user, index) => (
+            <div 
+              key={index}
+              className={`p-3 rounded-lg flex flex-col items-center cursor-pointer hover:bg-white/5 ${
+                user.speaking ? 'ring-2' : ''
+              }`}
+              style={{ 
+                backgroundColor: 'var(--bg-card)',
+                ...(user.speaking && { 
+                  ringColor: 'var(--accent-green)',
+                  backgroundColor: 'rgba(67, 181, 129, 0.1)'
+                })
+              }}
+            >
+              <div 
+                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-medium mb-2"
+                style={{ backgroundColor: 'var(--accent-purple)' }}
+              >
+                {user.avatar}
+              </div>
+              <span className="text-xs text-center" style={{ color: 'var(--text-secondary)' }}>
+                {user.name}
+              </span>
+              {user.speaking && (
+                <div className="flex space-x-1 mt-1">
+                  <div 
+                    className="w-1 h-2 rounded-full animate-pulse"
+                    style={{ backgroundColor: 'var(--accent-green)' }}
+                  ></div>
+                  <div 
+                    className="w-1 h-3 rounded-full animate-pulse"
+                    style={{ backgroundColor: 'var(--accent-green)' }}
+                  ></div>
+                  <div 
+                    className="w-1 h-2 rounded-full animate-pulse"
+                    style={{ backgroundColor: 'var(--accent-green)' }}
+                  ></div>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

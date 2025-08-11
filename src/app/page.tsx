@@ -6,7 +6,7 @@ import "@/styles/globals.css";
 
 export default function Page() {
   return (
-    <div className="h-screen flex bg-[#36393f] text-white overflow-hidden">
+    <div className="h-screen flex" style={{ backgroundColor: 'var(--bg-dark)' }}>
       <ServerList />
       <ChannelList />
       <ChatWindow />

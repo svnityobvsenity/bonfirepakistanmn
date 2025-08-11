@@ -1,55 +1,83 @@
 /* src/components/ServerList.tsx */
 export default function ServerList() {
+  const friends = [
+    { name: "daFoxy", status: "Playing Bonfire", online: true },
+    { name: "james", status: "Playing Bonfire", online: true },
+    { name: "Ekmand", status: "Online", online: true },
+    { name: "Sticks", status: "Online", online: true },
+    { name: "FranzaGeek", status: "Online", online: true },
+    { name: "NRD", status: "Online", online: true },
+    { name: "Markella's", status: "Playing Bonfire", online: true },
+    { name: "AY-Plays", status: "Online", online: true },
+    { name: "LemonTiger", status: "Online", online: true },
+    { name: "Bluemango", status: "Online", online: true },
+  ];
+
   return (
-    <div className="w-[72px] bg-[#202225] flex flex-col items-center py-3 space-y-2">
-      {/* Discord Home Server */}
-      <div className="relative">
-        <div className="w-12 h-12 rounded-full bg-[#5865f2] hover:rounded-2xl transition-all duration-200 flex items-center justify-center cursor-pointer">
-          <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+    <div className="w-80 flex flex-col" style={{ backgroundColor: 'var(--bg-panel)', padding: '12px' }}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 p-2">
+        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Friends</h2>
+        <button className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-white/5">
+          <svg className="w-5 h-5" style={{ color: 'var(--icon)' }} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
           </svg>
+        </button>
+      </div>
+
+      {/* Pinned Messages Section */}
+      <div className="mb-6">
+        <div className="flex items-center mb-3">
+          <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6l6 6 6-6h-2z"/>
+          </svg>
+          <span className="text-sm font-medium" style={{ color: 'var(--muted)' }}>Pinned Messages</span>
         </div>
-        <div className="absolute -left-1 top-0 w-1 h-8 bg-white rounded-r-full"></div>
       </div>
-      
-      {/* Divider */}
-      <div className="w-8 h-0.5 bg-[#36393f] rounded-full"></div>
-      
-      {/* Other Servers */}
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        dF
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        j4
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        E
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        S
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        F
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        M
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        A
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        L
-      </div>
-      
-      <div className="w-12 h-12 rounded-full bg-[#36393f] hover:rounded-2xl hover:bg-[#5865f2] transition-all duration-200 flex items-center justify-center cursor-pointer text-[#dcddde] font-medium">
-        N
+
+      {/* Direct Messages Section */}
+      <div className="mb-4">
+        <div className="flex items-center mb-3">
+          <svg className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6l6 6 6-6h-2z"/>
+          </svg>
+          <span className="text-sm font-medium" style={{ color: 'var(--muted)' }}>Direct Messages</span>
+        </div>
+        
+        <div className="space-y-1">
+          {friends.map((friend, index) => (
+            <div 
+              key={index}
+              className="flex items-center p-2 rounded-md cursor-pointer hover:bg-white/5 group"
+            >
+              <div className="relative">
+                <div 
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white mr-3"
+                  style={{ backgroundColor: 'var(--accent-purple)' }}
+                >
+                  {friend.name.charAt(0)}
+                </div>
+                {friend.online && (
+                  <div 
+                    className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
+                    style={{ 
+                      backgroundColor: 'var(--accent-green)', 
+                      borderColor: 'var(--bg-panel)' 
+                    }}
+                  ></div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {friend.name}
+                </div>
+                <div className="text-xs truncate" style={{ color: 'var(--muted)' }}>
+                  {friend.status}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
