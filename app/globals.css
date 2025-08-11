@@ -2,33 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
+:root {
+  /* Colors from your design tokens */
+  --bg: #000000;
+  --bg-dark: #0B0B0D;
+  --panel-dark: #0B0B0D;
+  --panel-mid: #0F1213;
+  --surface: #111214;
+  --bg-card: #121315;
+  --bg-elevated: #141516;
+  --text-primary: #EDEFF1;
+  --text-secondary: #C6C8CA;
+  --muted: #9AA0A6;
+  --accent-green: #43B581;
+  --accent-blue: #304BFF;
+  --accent-purple: #56407A;
+  --accent-orange: #FFC857;
+  --input-bg: #2F2742;
+  --divider: #151516;
+  --avatar-ring: #1A1F20;
+  --icon: rgba(255, 255, 255, 0.85);
+  --borders-hairline: 1px solid var(--divider);
+}
+
+html, body, #__next {
+  height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  overflow: hidden;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #202225;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #36393f;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }

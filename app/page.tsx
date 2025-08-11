@@ -1,43 +1,18 @@
-'use client';
+"use client";
+import { useState } from "react";
+import TopServerBar from "@/components/TopServerBar";
+import DMsPage from "@/components/DMsPage";
+import ServerPage from "@/components/ServerPage";
 
-import { useState } from 'react';
-import ServerSidebar from '@/components/ServerSidebar';
-import ChannelSidebar from '@/components/ChannelSidebar';
-import ChatArea from '@/components/ChatArea';
-import { servers, channels, messages } from '@/data/sampleData';
-
-export default function Home() {
-  const [activeServerId, setActiveServerId] = useState('1');
-  const [activeChannelId, setActiveChannelId] = useState('1');
-
-  const activeServer = servers.find(s => s.id === activeServerId);
-  const activeChannel = channels.find(c => c.id === activeChannelId);
-
-  const handleSendMessage = (content: string) => {
-    // In a real app, this would send the message to the server
-    console.log('Sending message:', content);
-  };
+export default function Page() {
+  const [activePage, setActivePage] = useState("dms"); // 'dms' or 'server'
 
   return (
-    <div className="flex h-screen w-screen bg-discord-dark text-white">
-      <ServerSidebar 
-        activeServerId={activeServerId}
-        onServerSelect={setActiveServerId}
-      />
-      
-      <ChannelSidebar 
-        serverName={activeServer?.name}
-        activeChannelId={activeChannelId}
-        onChannelSelect={setActiveChannelId}
-      />
-      
-      <ChatArea 
-        channelName={activeChannel?.name}
-        channelType={activeChannel?.type}
-        topic="Welcome to Bonfire Pakistan! Share your thoughts and connect with fellow Pakistanis."
-        messages={messages}
-        onSendMessage={handleSendMessage}
-      />
+    <div className="flex flex-col min-h-screen bg-[var(--bg)] text-[var(--text-primary)]">
+      <TopServerBar setActivePage={setActivePage} activePage={activePage} />
+      <div className="flex flex-1">
+        {activePage === "dms" ? <DMsPage /> : <ServerPage />}
+      </div>
     </div>
   );
 }
