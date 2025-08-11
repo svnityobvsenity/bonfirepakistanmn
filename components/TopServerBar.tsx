@@ -9,18 +9,18 @@ interface TopServerBarProps {
 
 export default function TopServerBar({ setActivePage, activePage }: TopServerBarProps) {
   const apps = [
-    { id: 'dms', icon: '💬', label: 'DMs' },
-    { id: 'server', icon: '🏠', label: 'Type shi' },
-    { id: 'club', icon: '♣️', label: 'The Club' },
-    { id: 'files', icon: '📁', label: 'Files' },
-    { id: 'ig', icon: '📸', label: 'Instagram' },
-    { id: 'code', icon: '💻', label: 'Code' },
-    { id: 'github', icon: '🐙', label: 'GitHub' },
-    { id: 'chatgpt', icon: '🤖', label: 'ChatGPT' },
-    { id: 'google', icon: '🔍', label: 'Google' },
-    { id: 'firebase', icon: '🔥', label: 'Firebase' },
-    { id: 'microsoft', icon: 'Ⓜ️', label: 'Microsoft' },
-    { id: 'youtube', icon: '▶️', label: 'YouTube' },
+    { id: 'dms', icon: 'B', label: 'DMs' },
+    { id: 'server', icon: null, label: 'Type shi' },
+    { id: 'club', icon: null, label: 'The Club' },
+    { id: 'files', icon: null, label: 'Files' },
+    { id: 'ig', icon: null, label: 'Instagram' },
+    { id: 'code', icon: null, label: 'Code' },
+    { id: 'github', icon: null, label: 'GitHub' },
+    { id: 'chatgpt', icon: null, label: 'ChatGPT' },
+    { id: 'google', icon: null, label: 'Google' },
+    { id: 'firebase', icon: null, label: 'Firebase' },
+    { id: 'microsoft', icon: null, label: 'Microsoft' },
+    { id: 'youtube', icon: null, label: 'YouTube' },
   ];
 
   return (
@@ -35,19 +35,41 @@ export default function TopServerBar({ setActivePage, activePage }: TopServerBar
           B
         </button>
         <div className="w-[1px] h-[24px] bg-[var(--divider)]"></div>
-        <div className="flex space-x-[8px]">
-          {apps.map((app) => (
-            <button
-              key={app.id}
-              className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-sm transition-all duration-120 ease ${
-                activePage === app.id ? 'bg-[var(--accent-purple)]' : 'bg-[var(--surface)] hover:bg-[var(--bg-elevated)]'
-              }`}
-              onClick={() => setActivePage(app.id)}
-            >
-              {app.icon}
-            </button>
-          ))}
-        </div>
+                    <div className="flex space-x-[8px]">
+              {apps.map((app) => (
+                <button
+                  key={app.id}
+                  className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-sm transition-all duration-120 ease ${
+                    activePage === app.id ? 'bg-[var(--accent-purple)]' : 'bg-[var(--surface)] hover:bg-[var(--bg-elevated)]'
+                  }`}
+                  onClick={() => setActivePage(app.id)}
+                >
+                  {app.icon ? (
+                    <span className="text-lg font-bold">{app.icon}</span>
+                  ) : (
+                    <svg className="w-[20px] h-[20px] text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="currentColor"/>
+                      {/* X symbol (top left) */}
+                      <g transform="translate(6,6)">
+                        <path d="M2 2 L6 6 M6 2 L2 6" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
+                      </g>
+                      {/* Square (top right) */}
+                      <g transform="translate(14,6)">
+                        <rect x="1" y="1" width="4" height="4" fill="none" stroke="#000" strokeWidth="1.5" rx="0.5"/>
+                      </g>
+                      {/* Circle (bottom left) */}
+                      <g transform="translate(6,14)">
+                        <circle cx="3" cy="3" r="2.5" fill="none" stroke="#000" strokeWidth="1.5"/>
+                      </g>
+                      {/* Triangle (bottom right) */}
+                      <g transform="translate(14,14)">
+                        <path d="M3 1 L1 5 L5 5 Z" fill="none" stroke="#000" strokeWidth="1.5" strokeLinejoin="round"/>
+                      </g>
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
       </div>
 
       <div className="flex items-center space-x-[12px]">
