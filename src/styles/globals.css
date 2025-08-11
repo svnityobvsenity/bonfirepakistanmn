@@ -5,19 +5,23 @@
 
 :root {
   /* Colors from design tokens */
+  --bg: #000000;
   --bg-dark: #0B0B0D;
-  --bg-panel: #0F1113;
-  --bg-nav: #0D0E10;
+  --panel-dark: #0B0B0D;
+  --panel-mid: #0F1213;
+  --surface: #111214;
   --bg-card: #121315;
   --bg-elevated: #141516;
-  --text-primary: #E6E7E9;
+  --text-primary: #EDEFF1;
   --text-secondary: #C6C8CA;
-  --muted: #8C8F93;
+  --muted: #9AA0A6;
   --accent-green: #43B581;
-  --accent-blue: #2F80ED;
+  --accent-blue: #304BFF;
   --accent-purple: #56407A;
+  --accent-orange: #FFC857;
   --input-bg: #2F2742;
-  --divider: #1B1C1E;
+  --divider: #151516;
+  --avatar-ring: #1A1F20;
   --icon: rgba(255, 255, 255, 0.85);
 }
 
