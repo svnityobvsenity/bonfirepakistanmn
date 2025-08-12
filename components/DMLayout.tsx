@@ -129,7 +129,7 @@ export default function DMLayout() {
         {selectedFriend ? (
           <div className="flex-1 flex flex-col">
             {/* Chat Header */}
-            <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--divider)]">
+            <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--divider)] bg-[var(--bg)]">
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-sm font-semibold text-white">
@@ -138,34 +138,34 @@ export default function DMLayout() {
                   <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[var(--bg)] ${getStatusColor(selectedFriend.status)}`}></div>
                 </div>
                 <div>
-                  <div className="font-semibold text-[var(--text-primary)]">{selectedFriend.name}</div>
-                  <div className="text-xs text-[var(--muted)]">{selectedFriend.status}</div>
+                  <div className="font-semibold text-[var(--text-primary)] text-sm">{selectedFriend.name}</div>
+                  <div className="text-xs text-[var(--muted)] capitalize">{selectedFriend.status}</div>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
                 <button className="w-9 h-9 rounded-md hover:bg-[var(--surface)] flex items-center justify-center transition-colors">
-                  <Phone className="w-5 h-5 text-[var(--muted)]" />
+                  <Phone className="w-4 h-4 text-[var(--muted)]" />
                 </button>
                 <button className="w-9 h-9 rounded-md hover:bg-[var(--surface)] flex items-center justify-center transition-colors">
-                  <Video className="w-5 h-5 text-[var(--muted)]" />
+                  <Video className="w-4 h-4 text-[var(--muted)]" />
                 </button>
               </div>
             </div>
             
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto px-4 py-6">
+              <div className="space-y-6">
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-sm font-semibold text-white">
                     {selectedFriend.avatar}
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
+                    <div className="flex items-center space-x-2 mb-2">
                       <span className="font-semibold text-[var(--text-primary)]">{selectedFriend.name}</span>
                       <span className="text-xs text-[var(--muted)]">Today at 3:45 PM</span>
                     </div>
-                    <div className="text-[var(--text-secondary)]">
+                    <div className="text-[var(--text-secondary)] leading-relaxed">
                       yo bro whats good
                     </div>
                   </div>
@@ -176,11 +176,11 @@ export default function DMLayout() {
                     K
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
+                    <div className="flex items-center space-x-2 mb-2">
                       <span className="font-semibold text-[var(--text-primary)]">Kaif</span>
                       <span className="text-xs text-[var(--muted)]">Today at 3:46 PM</span>
                     </div>
-                    <div className="text-[var(--text-secondary)]">
+                    <div className="text-[var(--text-secondary)] leading-relaxed">
                       nothing much just working on some projects
                     </div>
                   </div>
@@ -189,21 +189,21 @@ export default function DMLayout() {
             </div>
             
             {/* Message Input */}
-            <div className="p-4 border-t border-[var(--divider)]">
-              <div className="bg-[var(--input-bg)] rounded-lg px-4 py-3 flex items-center space-x-3">
+            <div className="px-4 py-4 border-t border-[var(--divider)]">
+              <div className="bg-[var(--input-bg)] rounded-lg px-4 py-3 flex items-center space-x-3 min-h-[48px]">
                 <input
                   type="text"
                   placeholder={`Message @${selectedFriend.name}`}
-                  className="flex-1 bg-transparent text-[var(--text-primary)] placeholder-[var(--muted)] outline-none"
+                  className="flex-1 bg-transparent text-[var(--text-primary)] placeholder-[var(--muted)] outline-none text-sm"
                 />
                 <div className="flex items-center space-x-2">
-                  <button className="text-[var(--muted)] hover:text-[var(--text-primary)] transition-colors">
+                  <button className="text-[var(--muted)] hover:text-[var(--text-primary)] transition-colors p-1">
                     😊
                   </button>
-                  <button className="text-[var(--muted)] hover:text-[var(--text-primary)] transition-colors">
+                  <button className="text-[var(--muted)] hover:text-[var(--text-primary)] transition-colors p-1">
                     📎
                   </button>
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors text-sm">
                     →
                   </button>
                 </div>

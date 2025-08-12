@@ -246,11 +246,35 @@ button:focus {
 
 /* Message grouping improvements */
 .message-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .message-group:last-child {
   margin-bottom: 0;
+}
+
+/* Enhanced message spacing */
+.message-container {
+  padding: 24px 16px;
+}
+
+.message-bubble-spacing {
+  margin-bottom: 24px;
+}
+
+.message-header-spacing {
+  margin-bottom: 8px;
+}
+
+/* Chat input improvements */
+.chat-input-container {
+  padding: 16px;
+  min-height: 64px;
+}
+
+.chat-input-field {
+  min-height: 48px;
+  padding: 12px 16px;
 }
 
 /* Better focus states */

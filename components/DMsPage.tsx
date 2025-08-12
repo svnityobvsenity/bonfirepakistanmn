@@ -237,8 +237,8 @@ export default function DMsPage() {
           />
         </div>
         <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-1">
-            <span className="font-semibold hover:underline cursor-pointer transition-colors duration-200">
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="font-semibold hover:underline cursor-pointer transition-colors duration-200 text-sm">
               {user?.name}
             </span>
             <span className="text-xs opacity-60">
@@ -443,7 +443,7 @@ export default function DMsPage() {
       {/* Chat column */}
       <main className="flex-1 flex flex-col" style={{ backgroundColor: 'var(--bg)' }}>
         {/* Header */}
-        <div className="h-16 flex items-center justify-between px-4 border-b backdrop-blur-sm bg-[var(--bg)]/80 sticky top-0 z-10" style={{ borderColor: 'var(--divider)' }}>
+        <div className="h-16 flex items-center justify-between px-6 border-b backdrop-blur-sm bg-[var(--bg)]/80 sticky top-0 z-10" style={{ borderColor: 'var(--divider)' }}>
           <div className="flex items-center">
             <div className="relative mr-3">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
@@ -460,7 +460,7 @@ export default function DMsPage() {
               />
             </div>
             <div>
-              <div className="font-semibold text-[var(--text-primary)]">{selectedFriendData?.name}</div>
+              <div className="font-semibold text-[var(--text-primary)] text-sm">{selectedFriendData?.name}</div>
               <div className="text-xs text-[var(--muted)] flex items-center">
                 <span className="mr-1">{getStatusIcon(selectedFriendData?.status || 'offline')}</span>
                 {selectedFriendData?.status === 'online' ? 'Online' : 
@@ -469,24 +469,24 @@ export default function DMsPage() {
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <button className="w-9 h-9 rounded-md hover:bg-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110" title="Start Voice Call">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
               </svg>
             </button>
             <button className="w-9 h-9 rounded-md hover:bg-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110" title="Start Video Call">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
               </svg>
             </button>
             <button className="w-9 h-9 rounded-md hover:bg-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110" title="Pinned Messages">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M16 12V4a1 1 0 00-1-1H9a1 1 0 00-1 1v8a1 1 0 001 1h2v6h2v-6h2a1 1 0 001-1z"/>
               </svg>
             </button>
             <button className="w-9 h-9 rounded-md hover:bg-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110" title="User Profile">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
             </button>
@@ -495,7 +495,7 @@ export default function DMsPage() {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
+          <div className="px-4 py-6 space-y-6">
             {messages.map(msg => renderMessage(msg))}
             
             {/* Typing Indicator */}
@@ -516,10 +516,10 @@ export default function DMsPage() {
         </div>
 
         {/* Message Input */}
-        <div className="p-4 border-t" style={{ borderColor: 'var(--divider)' }}>
-          <div className="flex items-center bg-[var(--input-bg)] rounded-lg px-4 py-3 transition-all duration-200 focus-within:ring-2 focus-within:ring-[var(--accent-blue)]/50">
-            <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-colors duration-200 mr-3">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <div className="px-4 py-4 border-t" style={{ borderColor: 'var(--divider)' }}>
+          <div className="flex items-center bg-[var(--input-bg)] rounded-lg px-4 py-3 min-h-[48px] transition-all duration-200 focus-within:ring-2 focus-within:ring-[var(--accent-blue)]/50">
+            <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-colors duration-200 mr-3 p-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
               </svg>
             </button>
@@ -530,25 +530,25 @@ export default function DMsPage() {
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
               placeholder={`Message @${selectedFriendData?.name}`}
-              className="flex-1 bg-transparent text-[var(--text-primary)] placeholder-[var(--muted)] outline-none"
+              className="flex-1 bg-transparent text-[var(--text-primary)] placeholder-[var(--muted)] outline-none text-sm"
             />
             <div className="flex items-center space-x-2 ml-4">
               <button 
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110"
+                className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110 p-1"
                 title="Add Emoji"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
               </button>
-              <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110" title="Upload File">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110 p-1" title="Upload File">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                 </svg>
               </button>
-              <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110" title="GIF">
-                <span className="text-sm font-bold">GIF</span>
+              <button className="text-[var(--icon)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-110 p-1" title="GIF">
+                <span className="text-xs font-bold">GIF</span>
               </button>
               {message.trim() && (
                 <button 
