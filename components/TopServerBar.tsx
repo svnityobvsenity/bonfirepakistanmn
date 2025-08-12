@@ -9,67 +9,47 @@ interface TopServerBarProps {
 
 export default function TopServerBar({ setActivePage, activePage }: TopServerBarProps) {
   const apps = [
-    { id: 'dms', icon: 'B', label: 'DMs' },
-    { id: 'server', icon: null, label: 'Type shi' },
-    { id: 'club', icon: null, label: 'The Club' },
-    { id: 'files', icon: null, label: 'Files' },
-    { id: 'ig', icon: null, label: 'Instagram' },
-    { id: 'code', icon: null, label: 'Code' },
-    { id: 'github', icon: null, label: 'GitHub' },
-    { id: 'chatgpt', icon: null, label: 'ChatGPT' },
-    { id: 'google', icon: null, label: 'Google' },
-    { id: 'firebase', icon: null, label: 'Firebase' },
-    { id: 'microsoft', icon: null, label: 'Microsoft' },
-    { id: 'youtube', icon: null, label: 'YouTube' },
+    { id: 'dms', icon: '💬', label: 'DMs', color: 'from-blue-500 to-blue-600' },
+    { id: 'server', icon: '🇵🇰', label: 'Pakistan Community', color: 'from-green-500 to-green-600' },
+    { id: 'islam', icon: '🕌', label: 'Islam Server', color: 'from-emerald-500 to-emerald-600' },
+    { id: 'tech', icon: '💻', label: 'Tech Hub', color: 'from-purple-500 to-purple-600' },
+    { id: 'cricket', icon: '🏏', label: 'Cricket Zone', color: 'from-orange-500 to-orange-600' },
+    { id: 'food', icon: '🍛', label: 'Desi Food', color: 'from-red-500 to-red-600' },
+    { id: 'memes', icon: '😂', label: 'Pakistani Memes', color: 'from-yellow-500 to-yellow-600' },
+    { id: 'study', icon: '📚', label: 'Study Group', color: 'from-indigo-500 to-indigo-600' },
   ];
 
   return (
     <header className="flex items-center justify-between h-[48px] px-[16px] bg-[var(--panel-mid)] border-b-[var(--borders-hairline)]">
       <div className="flex items-center space-x-[16px]">
-        <button
-          className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-lg font-bold transition-all duration-120 ease ${
-            activePage === 'dms' ? 'bg-[var(--accent-purple)]' : 'bg-[var(--surface)] hover:bg-[var(--bg-elevated)]'
-          }`}
-          onClick={() => setActivePage('dms')}
-        >
-          B
-        </button>
-        <div className="w-[1px] h-[24px] bg-[var(--divider)]"></div>
-                    <div className="flex space-x-[8px]">
-              {apps.map((app) => (
-                <button
-                  key={app.id}
-                  className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-sm transition-all duration-120 ease ${
-                    activePage === app.id ? 'bg-[var(--accent-purple)]' : 'bg-[var(--surface)] hover:bg-[var(--bg-elevated)]'
-                  }`}
-                  onClick={() => setActivePage(app.id)}
-                >
-                  {app.icon ? (
-                    <span className="text-lg font-bold">{app.icon}</span>
-                  ) : (
-                    <svg className="w-[20px] h-[20px] text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="12" fill="currentColor"/>
-                      {/* X symbol (top left) */}
-                      <g transform="translate(6,6)">
-                        <path d="M2 2 L6 6 M6 2 L2 6" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
-                      </g>
-                      {/* Square (top right) */}
-                      <g transform="translate(14,6)">
-                        <rect x="1" y="1" width="4" height="4" fill="none" stroke="#000" strokeWidth="1.5" rx="0.5"/>
-                      </g>
-                      {/* Circle (bottom left) */}
-                      <g transform="translate(6,14)">
-                        <circle cx="3" cy="3" r="2.5" fill="none" stroke="#000" strokeWidth="1.5"/>
-                      </g>
-                      {/* Triangle (bottom right) */}
-                      <g transform="translate(14,14)">
-                        <path d="M3 1 L1 5 L5 5 Z" fill="none" stroke="#000" strokeWidth="1.5" strokeLinejoin="round"/>
-                      </g>
-                    </svg>
-                  )}
-                </button>
-              ))}
+        <div className="flex space-x-[8px]">
+          {apps.map((app) => (
+            <div key={app.id} className="relative group">
+              <button
+                className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-lg transition-all duration-300 ease-out transform hover:scale-110 hover:-translate-y-1 ${
+                  activePage === app.id 
+                    ? `bg-gradient-to-r ${app.color} shadow-lg scale-110` 
+                    : 'bg-[var(--surface)] hover:bg-gradient-to-r hover:from-white/10 hover:to-white/20'
+                } ${
+                  activePage === app.id ? 'animate-pulse' : 'hover:animate-bounce'
+                }`}
+                onClick={() => setActivePage(app.id)}
+                title={app.label}
+              >
+                <span className={`transition-all duration-300 ${
+                  activePage === app.id ? 'animate-wiggle' : 'group-hover:animate-spin'
+                }`}>
+                  {app.icon}
+                </span>
+              </button>
+              
+              {/* Tooltip */}
+              <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
+                {app.label}
+              </div>
             </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex items-center space-x-[12px]">
