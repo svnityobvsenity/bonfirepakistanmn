@@ -1,10 +1,17 @@
 'use client';
 
 import React from 'react';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+});
 
 export default function DMsPage() {
   return (
     <div
+      className={`dms-root ${inter.className}`}
       style={{
         margin: 0,
         padding: 0,
