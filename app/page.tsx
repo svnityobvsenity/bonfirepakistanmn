@@ -1,5 +1,5 @@
-import DiscordInterface from '@/components/DiscordInterface';
+import FigmaDMsPage from '@/components/FigmaDMsPage';
 
 export default function Page() {
-  return <DiscordInterface />;
+  return <FigmaDMsPage />;
 }
