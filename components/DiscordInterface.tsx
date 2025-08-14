@@ -34,6 +34,12 @@ const serverIcons = [
   { id: 3, name: 'Music', icon: '/servers/music.jpg', active: false },
 ];
 
+const navigationIcons = {
+  dms: '/servers/dms.jpg',
+  discovery: '/servers/discovery.jpg',
+  profile: '/servers/profile.jpg'
+};
+
 export default function DiscordInterface() {
   const [selectedUserId, setSelectedUserId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
@@ -162,21 +168,11 @@ export default function DiscordInterface() {
         }
 
         .server-icon.discovery {
-          background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          color: white;
+          background-image: url('/servers/discovery.jpg');
         }
 
         .server-icon.profile {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          color: white;
+          background-image: url('/servers/profile.jpg');
         }
 
         /* DMs Sidebar */
@@ -453,8 +449,26 @@ export default function DiscordInterface() {
           background: rgba(255, 255, 255, 0.2);
         }
 
+        .attach-btn {
+          background-image: url('/icons/attach.svg');
+          background-size: 16px;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+
+        .emoji-btn {
+          background-image: url('/icons/emoji.svg');
+          background-size: 16px;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+
         .send-button {
           background: #5865f2;
+          background-image: url('/icons/send.svg');
+          background-size: 16px;
+          background-repeat: no-repeat;
+          background-position: center;
         }
 
         .send-button:hover {
@@ -506,7 +520,7 @@ export default function DiscordInterface() {
           <div 
             className={`server-icon ${activeView === 'dms' ? 'active' : ''}`}
             onClick={() => setActiveView('dms')}
-            style={{backgroundImage: 'url(/servers/dms.jpg)'}}
+            style={{backgroundImage: `url(${navigationIcons.dms})`}}
           />
           
           {/* Server Icons */}
@@ -523,17 +537,15 @@ export default function DiscordInterface() {
           <div 
             className={`server-icon discovery ${activeView === 'discovery' ? 'active' : ''}`}
             onClick={handleDiscoveryClick}
-          >
-            🔍
-          </div>
+            style={{backgroundImage: `url(${navigationIcons.discovery})`}}
+          />
           
           {/* Profile Icon */}
           <div 
             className={`server-icon profile ${activeView === 'profile' ? 'active' : ''}`}
             onClick={handleProfileClick}
-          >
-            👤
-          </div>
+            style={{backgroundImage: `url(${navigationIcons.profile})`}}
+          />
         </div>
 
         {/* DMs Sidebar */}
@@ -614,14 +626,12 @@ export default function DiscordInterface() {
                 onKeyPress={handleKeyPress}
               />
               <div className="input-actions">
-                <button className="input-button">📎</button>
-                <button className="input-button">😊</button>
+                <button className="input-button attach-btn"></button>
+                <button className="input-button emoji-btn"></button>
                 <button 
                   className="input-button send-button"
                   onClick={handleSendMessage}
-                >
-                  ➤
-                </button>
+                ></button>
               </div>
             </div>
           </div>
