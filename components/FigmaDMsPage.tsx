@@ -34,6 +34,7 @@ export default function FigmaDMsPage() {
   const [messageInput, setMessageInput] = useState('');
   const [currentMessages, setCurrentMessages] = useState(messages);
   const [currentView, setCurrentView] = useState<'dms' | 'server'>('dms');
+  const [selectedServer, setSelectedServer] = useState<string>('bonfire pakistan');
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -55,9 +56,14 @@ export default function FigmaDMsPage() {
     }
   };
 
+  const handleServerClick = (serverName: string) => {
+    setSelectedServer(serverName);
+    setCurrentView('server');
+  };
+
   // Show server view if selected
   if (currentView === 'server') {
-    return <FigmaServerPage onBackToDMs={() => setCurrentView('dms')} />;
+    return <FigmaServerPage onBackToDMs={() => setCurrentView('dms')} serverName={selectedServer} />;
   }
 
   return (
@@ -554,19 +560,49 @@ export default function FigmaDMsPage() {
         <div className="server-list">
           <div 
             className="server-icon github"
-            onClick={() => setCurrentView('server')}
+            onClick={() => handleServerClick('bonfire pakistan')}
           >⚡</div>
           <div className="server-separator"></div>
-          <div className="server-icon blender"></div>
-          <div className="server-icon coinbase"></div>
-          <div className="server-icon instagram"></div>
-          <div className="server-icon vscode"></div>
-          <div className="server-icon github-desktop"></div>
-          <div className="server-icon nova"></div>
-          <div className="server-icon google-chrome"></div>
-          <div className="server-icon superstar"></div>
-          <div className="server-icon microsoft"></div>
-          <div className="server-icon youtube"></div>
+          <div 
+            className="server-icon blender"
+            onClick={() => handleServerClick('Blender Community')}
+          ></div>
+          <div 
+            className="server-icon coinbase"
+            onClick={() => handleServerClick('Crypto Trading')}
+          ></div>
+          <div 
+            className="server-icon instagram"
+            onClick={() => handleServerClick('Instagram Creators')}
+          ></div>
+          <div 
+            className="server-icon vscode"
+            onClick={() => handleServerClick('VS Code Developers')}
+          ></div>
+          <div 
+            className="server-icon github-desktop"
+            onClick={() => handleServerClick('GitHub Community')}
+          ></div>
+          <div 
+            className="server-icon nova"
+            onClick={() => handleServerClick('Nova Users')}
+          ></div>
+          <div 
+            className="server-icon google-chrome"
+            onClick={() => handleServerClick('Chrome Extensions')}
+          ></div>
+          <div 
+            className="server-icon superstar"
+            onClick={() => handleServerClick('Superstar Gaming')}
+          ></div>
+          <div 
+            className="server-icon microsoft"
+            onClick={() => handleServerClick('Microsoft Office')}
+          ></div>
+          <div 
+            className="server-icon youtube"
+            onClick={() => handleServerClick('YouTube Creators')}
+          ></div>
         </div>
 
         {/* Left Sidebar - DMs */}

@@ -17,20 +17,21 @@ const members = [
   { id: 4, name: 'Sticks', status: 'Offline', avatar: '/avatars/sticks.jpg', role: 'Member' },
 ];
 
-const serverMessages = [
-  { id: 1, author: 'daFoxy', time: 'Today at 10:15AM', text: 'Welcome to bonfire pakistan! 🔥', avatar: '/avatars/dafoxy.jpg' },
+const getServerMessages = (serverName: string) => [
+  { id: 1, author: 'daFoxy', time: 'Today at 10:15AM', text: `Welcome to ${serverName}! 🔥`, avatar: '/avatars/dafoxy.jpg' },
   { id: 2, author: 'james', time: 'Today at 10:16AM', text: 'Thanks for creating this awesome server!', avatar: '/avatars/james.jpg' },
   { id: 3, author: 'daFoxy', time: 'Today at 10:17AM', text: 'Feel free to chat and share ideas here', avatar: '/avatars/dafoxy.jpg' },
 ];
 
 interface FigmaServerPageProps {
   onBackToDMs: () => void;
+  serverName: string;
 }
 
-export default function FigmaServerPage({ onBackToDMs }: FigmaServerPageProps) {
+export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServerPageProps) {
   const [selectedChannelId, setSelectedChannelId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
-  const [currentMessages, setCurrentMessages] = useState(serverMessages);
+  const [currentMessages, setCurrentMessages] = useState(getServerMessages(serverName));
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -573,7 +574,7 @@ export default function FigmaServerPage({ onBackToDMs }: FigmaServerPageProps) {
         {/* Left Sidebar - Channels */}
         <div className="channels-sidebar">
           <div className="server-header">
-            <div className="server-name">bonfire pakistan</div>
+            <div className="server-name">{serverName}</div>
             <div className="server-dropdown">▼</div>
           </div>
           
