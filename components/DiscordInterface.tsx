@@ -134,13 +134,34 @@ export default function DiscordInterface() {
           top: 0;
           width: 72px;
           height: 100vh;
-          background: #000000;
+          background: #202225;
           display: flex;
           flex-direction: column;
           align-items: center;
           padding: 12px 0;
-          gap: 8px;
           z-index: 10;
+        }
+        
+        .server-separator {
+          width: 32px;
+          height: 2px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 1px;
+          margin: 8px 0;
+        }
+        
+        .server-separator-bottom {
+          width: 32px;
+          height: 2px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 1px;
+          margin: 8px 0;
+          flex-grow: 1;
+          max-height: 2px;
+        }
+        
+        .server-spacer {
+          flex-grow: 1;
         }
 
         .server-icon {
@@ -154,6 +175,7 @@ export default function DiscordInterface() {
           transition: all 0.2s ease;
           position: relative;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          margin: 4px 0;
         }
 
         .server-icon:hover {
@@ -168,11 +190,26 @@ export default function DiscordInterface() {
         }
 
         .server-icon.discovery {
+          background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%);
           background-image: url('/servers/discovery.jpg');
         }
 
         .server-icon.profile {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
           background-image: url('/servers/profile.jpg');
+        }
+        
+        /* Temporary colors for server icons until images are added */
+        .server-icon:nth-child(4) { /* First server (Club) */
+          background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+        
+        .server-icon:nth-child(5) { /* Second server (Gaming) */
+          background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+        }
+        
+        .server-icon:nth-child(6) { /* Third server (Music) */
+          background: linear-gradient(135deg, #00d2d3 0%, #01a3a4 100%);
         }
 
         /* DMs Sidebar */
@@ -523,6 +560,9 @@ export default function DiscordInterface() {
             style={{backgroundImage: `url(${navigationIcons.dms})`}}
           />
           
+          {/* Separator */}
+          <div className="server-separator"></div>
+          
           {/* Server Icons */}
           {serverIcons.map((server) => (
             <div
@@ -532,6 +572,9 @@ export default function DiscordInterface() {
               style={{backgroundImage: `url(${server.icon})`}}
             />
           ))}
+          
+          {/* Spacer to push bottom icons down */}
+          <div className="server-spacer"></div>
           
           {/* Discovery Icon */}
           <div 
