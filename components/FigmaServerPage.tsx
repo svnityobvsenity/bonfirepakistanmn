@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 
 // Server data based on Figma JSON
 const channels = [
-  { id: 1, name: 'general', type: 'text', selected: true },
-  { id: 2, name: 'random', type: 'text', selected: false },
-  { id: 3, name: 'memes', type: 'text', selected: false },
-  { id: 4, name: 'General', type: 'voice', selected: false },
+  { id: 1, name: 'Main-Chat', type: 'text', selected: true },
+  { id: 2, name: 'Media', type: 'text', selected: false },
+  { id: 3, name: 'Forum', type: 'text', selected: false },
+  { id: 4, name: 'Memes', type: 'text', selected: false },
+  { id: 5, name: 'General', type: 'voice', selected: false },
 ];
 
 const members = [
@@ -18,9 +19,16 @@ const members = [
 ];
 
 const getServerMessages = (serverName: string) => [
-  { id: 1, author: 'daFoxy', time: 'Today at 10:15AM', text: `Welcome to ${serverName}! 🔥`, avatar: '/avatars/dafoxy.jpg' },
-  { id: 2, author: 'james', time: 'Today at 10:16AM', text: 'Thanks for creating this awesome server!', avatar: '/avatars/james.jpg' },
-  { id: 3, author: 'daFoxy', time: 'Today at 10:17AM', text: 'Feel free to chat and share ideas here', avatar: '/avatars/dafoxy.jpg' },
+  { id: 1, author: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool video the other day mind if I send it?', avatar: '/avatars/dafoxy.jpg' },
+  { id: 2, author: 'Kalf', time: 'Today at 9:41PM', text: 'Sure thing! Want to start a Watch Party?', avatar: '/avatars/kalf.jpg' },
+  { id: 3, author: 'daFoxy', time: 'Today at 9:41PM', text: 'oOoOOoo what\'s that?', avatar: '/avatars/dafoxy.jpg' },
+  { id: 4, author: 'Kalf', time: 'Today at 9:41PM', text: 'It\'s this new Discord feature. Have you heard of it?', avatar: '/avatars/kalf.jpg' },
+  { id: 5, author: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?', avatar: '/avatars/kalf.jpg' },
+  { id: 6, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Just paste a YouTube link into the DM and Discord will ask you if you want to start a Watch Party!', avatar: '/avatars/kalf.jpg' },
+  { id: 7, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Woah! I\'ll start one now!', avatar: '/avatars/dafoxy.jpg' },
+  { id: 8, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Cool, can\'t wait to see the video:D', avatar: '/avatars/kalf.jpg' },
+  { id: 9, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Awesome, starting now...', avatar: '/avatars/dafoxy.jpg' },
+  { id: 10, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Joined.', avatar: '/avatars/kalf.jpg' },
 ];
 
 interface FigmaServerPageProps {
@@ -123,17 +131,14 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           color: white;
         }
 
-        .server-icon.active {
-          border: 2px solid #667eea;
-          box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-        }
-
-        .server-icon.github.active {
+        .server-icon.github {
           background: #24292f;
         }
 
         .server-icon.blender {
           background: linear-gradient(135deg, #E87D0D 0%, #F5792A 100%);
+          border: 2px solid #667eea;
+          box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
         }
 
         .server-separator {
@@ -531,7 +536,7 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         .back-button {
           position: absolute;
           top: 32px;
-          right: 32px;
+          left: 32px;
           width: 40px;
           height: 40px;
           background: rgba(0, 0, 0, 0.8);
@@ -546,6 +551,7 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           transition: all 0.3s ease;
           z-index: 60;
           font-size: 16px;
+          border: none;
         }
 
         .back-button:hover {
@@ -566,7 +572,7 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         
         {/* Server List - Same as DMs but with active state */}
         <div className="server-list">
-          <div className="server-icon github active">⚡</div>
+          <div className="server-icon github">⚡</div>
           <div className="server-separator"></div>
           <div className="server-icon blender"></div>
         </div>

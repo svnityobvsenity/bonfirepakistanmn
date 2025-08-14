@@ -558,14 +558,11 @@ export default function FigmaDMsPage() {
         
         {/* Server List - Taskbar Style */}
         <div className="server-list">
-          <div 
-            className="server-icon github"
-            onClick={() => handleServerClick('bonfire pakistan')}
-          >⚡</div>
+          <div className="server-icon github">⚡</div>
           <div className="server-separator"></div>
           <div 
             className="server-icon blender"
-            onClick={() => handleServerClick('Blender Community')}
+            onClick={() => handleServerClick('The Club // Pakistan')}
           ></div>
           <div 
             className="server-icon coinbase"
