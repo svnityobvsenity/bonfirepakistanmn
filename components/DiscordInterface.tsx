@@ -100,6 +100,7 @@ export default function DiscordInterface() {
           display: flex;
           height: 100vh;
           width: 100vw;
+          min-width: 800px;
           position: relative;
         }
 
@@ -114,34 +115,17 @@ export default function DiscordInterface() {
           height: 100%;
         }
 
+        @media (max-width: 1024px) {
+          .sidebar {
+            min-width: 220px;
+            width: 220px;
+          }
+        }
+        
         @media (max-width: 768px) {
           .sidebar {
             min-width: 200px;
             width: 200px;
-          }
-          
-          .pinned-messages {
-            font-size: 8px !important;
-          }
-          
-          .user-name {
-            font-size: 10px !important;
-          }
-          
-          .user-status {
-            font-size: 6px !important;
-          }
-          
-          .message-author {
-            font-size: 7px !important;
-          }
-          
-          .message-text {
-            font-size: 6.5px !important;
-          }
-          
-          .profile-name {
-            font-size: 7px !important;
           }
         }
 
@@ -323,16 +307,23 @@ export default function DiscordInterface() {
           min-height: 0;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
           .chat-container {
-            border-radius: 20px;
+            border-radius: 50px 30px 20px 50px;
             margin: 8px;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .chat-container {
+            border-radius: 25px 15px 10px 25px;
+            margin: 6px;
           }
         }
 
         @media (max-width: 768px) {
           .chat-container {
-            border-radius: 15px;
+            border-radius: 15px 8px 5px 15px;
             margin: 4px;
           }
         }
@@ -439,13 +430,13 @@ export default function DiscordInterface() {
           flex: 1;
           background: none;
           border: none;
-          color: #383838;
+          color: #FFFFFF;
           font-size: 9.4px;
           outline: none;
         }
 
         .message-input input::placeholder {
-          color: #383838;
+          color: #6B6B6B;
         }
 
         .input-icon {
@@ -527,7 +518,7 @@ export default function DiscordInterface() {
               
               <div className="typing-indicator">
                 <div className="typing-avatar">D</div>
-                <div className="typing-text">daFoxy</div>
+                <div className="typing-text">daFoxy is typing...</div>
               </div>
             </div>
             
