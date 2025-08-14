@@ -1,52 +1,53 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Inter } from 'next/font/google';
 
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-});
-
-// Mock data structures
+// Mock data structures based on Figma design
 const users = [
-  { id: 1, avatar: 'D', name: 'daFoxy', status: 'Playing Blender', selected: true },
-  { id: 2, avatar: 'J', name: 'james', status: 'Playing Procrast', selected: false },
-  { id: 3, avatar: 'E', name: 'Ekmand', status: '', selected: false },
-  { id: 4, avatar: 'S', name: 'Sticks', status: '', selected: false },
-  { id: 5, avatar: 'F', name: 'FranzaGeek', status: 'Playing Powerpoi', selected: false },
-  { id: 6, avatar: 'M', name: "Markella's", status: 'Playing MTG Aren', selected: false },
-  { id: 7, avatar: 'A', name: 'AY-Plays', status: '', selected: false },
-  { id: 8, avatar: 'L', name: 'LemonTiger', status: '', selected: false },
-  { id: 9, avatar: 'N', name: 'NRD', status: '', selected: false },
+  { id: 1, name: 'daFoxy', status: 'Playing Blender', avatar: '/avatars/dafoxy.jpg', selected: true, online: true },
+  { id: 2, name: 'james', status: 'Playing Procrast', avatar: '/avatars/james.jpg', selected: false, online: true },
+  { id: 3, name: 'Ekmand', status: '', avatar: '/avatars/ekmand.jpg', selected: false, online: false },
+  { id: 4, name: 'Sticks', status: '', avatar: '/avatars/sticks.jpg', selected: false, online: false },
+  { id: 5, name: 'FranzaGeek', status: 'Playing Powerpoi', avatar: '/avatars/franzageek.jpg', selected: false, online: true },
+  { id: 6, name: "Markella's", status: 'Playing MTG Aren', avatar: '/avatars/markellas.jpg', selected: false, online: true },
+  { id: 7, name: 'AY-Plays', status: '', avatar: '/avatars/ayplays.jpg', selected: false, online: false },
+  { id: 8, name: 'LemonTiger', status: '', avatar: '/avatars/lemontiger.jpg', selected: false, online: false },
+  { id: 9, name: 'NRD', status: '', avatar: '/avatars/nrd.jpg', selected: false, online: false },
 ];
 
 const messages = [
-  { id: 1, avatar: 'D', author: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool Discord clone tutorial' },
-  { id: 2, avatar: 'S', author: 'Concept Central', time: 'Today at 9:41PM', text: 'Sure thing! Want to collaborate on it?' },
-  { id: 3, avatar: 'D', author: 'daFoxy', time: 'Today at 9:41PM', text: "oOoOOoo what's the tech stack?" },
-  { id: 4, avatar: 'S', author: 'Concept Central', time: 'Today at 9:41PM', text: "It's this new Discord interface design I found" },
-  { id: 5, avatar: 'D', author: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?' },
-  { id: 6, avatar: 'S', author: 'Concept Central', time: 'Today at 9:44 PM', text: "Just paste a YouTube link and it'll automatically embed the video with a nice preview" },
-  { id: 7, avatar: 'D', author: 'daFoxy', time: 'Today at 9:41PM', text: "Woah! I'll start working on the frontend" },
-  { id: 8, avatar: 'S', author: 'Concept Central', time: 'Today at 9:44 PM', text: "Cool, can't wait to see what you build!" },
-  { id: 9, avatar: 'D', author: 'daFoxy', time: 'Today at 9:41PM', text: 'Awesome, starting now!' },
-  { id: 10, avatar: 'C', author: 'Concept Central', time: 'Today at 9:44 PM', text: 'Joined.' },
+  { id: 1, author: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool Discord clone tutorial', avatar: '/avatars/dafoxy.jpg' },
+  { id: 2, author: 'Concept Central', time: 'Today at 9:41PM', text: 'Sure thing! Want to collaborate on it?', avatar: '/avatars/concept.jpg' },
+  { id: 3, author: 'daFoxy', time: 'Today at 9:41PM', text: "oOoOOoo what's the tech stack?", avatar: '/avatars/dafoxy.jpg' },
+  { id: 4, author: 'Concept Central', time: 'Today at 9:41PM', text: "It's this new Discord interface design I found", avatar: '/avatars/concept.jpg' },
+  { id: 5, author: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?', avatar: '/avatars/dafoxy.jpg' },
+  { id: 6, author: 'Concept Central', time: 'Today at 9:44 PM', text: "Just paste a YouTube link and it'll automatically embed the video with a nice preview", avatar: '/avatars/concept.jpg' },
+  { id: 7, author: 'daFoxy', time: 'Today at 9:41PM', text: "Woah! I'll start working on the frontend", avatar: '/avatars/dafoxy.jpg' },
+  { id: 8, author: 'Concept Central', time: 'Today at 9:44 PM', text: "Cool, can't wait to see what you build!", avatar: '/avatars/concept.jpg' },
+  { id: 9, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Awesome, starting now!', avatar: '/avatars/dafoxy.jpg' },
+  { id: 10, author: 'Concept Central', time: 'Today at 9:44 PM', text: 'Joined.', avatar: '/avatars/concept.jpg' },
+];
+
+const serverIcons = [
+  { id: 1, name: 'Club', icon: '/servers/club.jpg', active: false },
+  { id: 2, name: 'Gaming', icon: '/servers/gaming.jpg', active: false },
+  { id: 3, name: 'Music', icon: '/servers/music.jpg', active: false },
 ];
 
 export default function DiscordInterface() {
   const [selectedUserId, setSelectedUserId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
   const [currentMessages, setCurrentMessages] = useState(messages);
+  const [activeView, setActiveView] = useState('dms'); // 'dms', 'server', 'discovery', 'profile'
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
       const newMessage = {
         id: currentMessages.length + 1,
-        avatar: 'K',
-        author: 'Kaif',
+        author: 'You',
         time: 'Today at ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-        text: messageInput.trim()
+        text: messageInput.trim(),
+        avatar: '/avatars/you.jpg'
       };
       setCurrentMessages([...currentMessages, newMessage]);
       setMessageInput('');
@@ -59,8 +60,23 @@ export default function DiscordInterface() {
     }
   };
 
+  const handleServerClick = (serverName: string) => {
+    setActiveView('server');
+    console.log('Navigating to server:', serverName);
+  };
+
+  const handleDiscoveryClick = () => {
+    setActiveView('discovery');
+    console.log('Navigating to discovery');
+  };
+
+  const handleProfileClick = () => {
+    setActiveView('profile');
+    console.log('Navigating to profile');
+  };
+
   return (
-    <div className={inter.className}>
+    <div>
       <style jsx global>{`
         * {
           margin: 0;
@@ -69,7 +85,7 @@ export default function DiscordInterface() {
         }
 
         body {
-          font-family: 'Inter', sans-serif;
+          font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
           background: #000000;
           color: #ffffff;
           height: 100vh;
@@ -82,111 +98,152 @@ export default function DiscordInterface() {
         }
 
         ::-webkit-scrollbar-track {
-          background: #1a1a1a;
+          background: rgba(0, 0, 0, 0.1);
         }
 
         ::-webkit-scrollbar-thumb {
-          background: #333;
+          background: rgba(255, 255, 255, 0.2);
           border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: #555;
+          background: rgba(255, 255, 255, 0.3);
         }
       `}</style>
       
       <style jsx>{`
-        .container {
-          display: flex;
-          height: 100vh;
-          width: 100vw;
-          min-width: 800px;
+        /* Main Container - Figma Frame */
+        .main-container {
           position: relative;
+          width: 100vw;
+          height: 100vh;
+          background: linear-gradient(135deg, #000000 0%, #0f0f0f 50%, #1a1a1a 100%);
+          overflow: hidden;
         }
 
-        /* Sidebar */
-        .sidebar {
-          min-width: 236px;
-          width: 236px;
+        /* Server List (Left Side) */
+        .server-list {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 72px;
+          height: 100vh;
           background: #000000;
-          border-right: 1px solid #1A1A1A;
           display: flex;
           flex-direction: column;
-          height: 100%;
+          align-items: center;
+          padding: 12px 0;
+          gap: 8px;
+          z-index: 10;
         }
 
-        @media (max-width: 1024px) {
-          .sidebar {
-            min-width: 220px;
-            width: 220px;
-          }
+        .server-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 24px;
+          background: #36393f;
+          background-size: cover;
+          background-position: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-        
+
+        .server-icon:hover {
+          border-radius: 16px;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .server-icon.active {
+          border-radius: 16px;
+          box-shadow: 0 0 0 2px #5865f2;
+        }
+
+        .server-icon.discovery {
+          background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          color: white;
+        }
+
+        .server-icon.profile {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          color: white;
+        }
+
+        /* DMs Sidebar */
+        .dms-sidebar {
+          position: absolute;
+          left: 72px;
+          top: 0;
+          width: 240px;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(20px);
+          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          display: flex;
+          flex-direction: column;
+          z-index: 5;
+          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+
         @media (max-width: 768px) {
-          .sidebar {
-            min-width: 200px;
+          .dms-sidebar {
             width: 200px;
           }
         }
 
-        .sidebar-header {
-          padding: 15px;
-          border-bottom: 1px solid #1A1A1A;
+        /* DMs Header */
+        .dms-header {
+          padding: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .pinned-messages {
-          display: flex;
-          align-items: center;
-          color: #FFFFFF;
-          font-size: 9.1px;
+        .dms-title {
+          font-family: 'SF Pro Display', sans-serif;
+          font-size: 16px;
           font-weight: 600;
-          margin-bottom: 10px;
+          color: #ffffff;
+          margin-bottom: 12px;
         }
 
-        .search-box {
-          background: linear-gradient(90deg, #202020 0%, #090909 100%);
-          border: 1px solid #0C0C0C;
-          border-radius: 6px;
-          padding: 8px 12px;
-          margin-bottom: 10px;
-        }
-
-        .search-box input {
-          background: none;
-          border: none;
-          color: #BDBDBD;
-          font-size: 9.3px;
-          outline: none;
+        .search-input {
           width: 100%;
-        }
-
-        .search-box input::placeholder {
-          color: #BDBDBD;
-        }
-
-        .friends-section {
-          background: linear-gradient(90deg, #202020 0%, #090909 100%);
-          border: 1px solid #111111;
-          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
           padding: 8px 12px;
-          display: flex;
-          align-items: center;
-          color: #696969;
-          font-size: 9.5px;
+          font-size: 14px;
+          color: #ffffff;
+          outline: none;
         }
 
+        .search-input::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* User List */
         .user-list {
           flex: 1;
           overflow-y: auto;
-          padding: 15px 0;
+          padding: 8px 0;
         }
 
         .user-item {
           display: flex;
           align-items: center;
-          padding: 8px 15px;
+          padding: 8px 16px;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: background 0.2s ease;
+          position: relative;
         }
 
         .user-item:hover {
@@ -194,22 +251,29 @@ export default function DiscordInterface() {
         }
 
         .user-item.selected {
-          background: linear-gradient(90deg, #202020 0%, #090909 100%);
-          border-radius: 6px;
-          margin: 0 10px;
+          background: rgba(255, 255, 255, 0.1);
         }
 
         .user-avatar {
-          width: 26px;
-          height: 26px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
-          background: #333;
+          background-image: url('/avatars/default.jpg');
+          background-size: cover;
+          background-position: center;
           margin-right: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          color: #fff;
+          position: relative;
+        }
+
+        .online-indicator {
+          position: absolute;
+          bottom: -2px;
+          right: -2px;
+          width: 10px;
+          height: 10px;
+          background: #10b981;
+          border: 2px solid #000;
+          border-radius: 50%;
         }
 
         .user-info {
@@ -217,142 +281,93 @@ export default function DiscordInterface() {
         }
 
         .user-name {
-          font-size: 11.5px;
-          color: #FFFFFF;
+          font-size: 14px;
+          font-weight: 500;
+          color: #ffffff;
           margin-bottom: 2px;
         }
 
         .user-status {
-          font-size: 7px;
-          color: #333333;
-        }
-
-        .direct-messages {
-          padding: 12px 15px;
-          color: #FFFFFF;
-          font-size: 9.4px;
-          font-weight: 400;
-          border-top: 1px solid #1A1A1A;
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.6);
         }
 
         /* Main Chat Area */
-        .main-content {
-          flex: 1;
+        .chat-area {
+          position: absolute;
+          left: 312px;
+          top: 0;
+          right: 0;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(30px);
           display: flex;
           flex-direction: column;
-          background: #000000;
-        }
-
-        .top-header {
-          height: 79px;
-          background: linear-gradient(93.68deg, #000000 16.57%, #2F2F2F 156.41%);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 20px;
-        }
-
-        .user-avatars {
-          display: flex;
-          gap: 8px;
-        }
-
-        .avatar {
-          width: 44px;
-          height: 44px;
-          border-radius: 22px;
-          background: #333;
-        }
-
-        .user-profile {
-          display: flex;
-          align-items: center;
-          background: rgba(0, 0, 0, 0.8);
-          backdrop-filter: blur(3.25px);
-          border-radius: 11px 27px 27px 11px;
-          padding: 8px;
-          box-shadow: inset 0px 0px 15.8px #181818;
-        }
-
-        .profile-info {
-          margin-right: 12px;
-        }
-
-        .profile-name {
-          font-size: 8px;
-          font-weight: 600;
-          color: #FFFFFF;
-        }
-
-        .profile-tag {
-          font-size: 4px;
-          color: #6B6B6B;
-        }
-
-        .profile-avatar {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: #333;
-        }
-
-        .chat-container {
-          flex: 1;
-          background: rgba(0, 0, 0, 0.996078);
-          border-radius: 141px 99px 64px 151px;
-          margin: 8px 11px;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          min-height: 0;
-        }
-
-        @media (max-width: 1400px) {
-          .chat-container {
-            border-radius: 50px 30px 20px 50px;
-            margin: 8px;
-          }
-        }
-
-        @media (max-width: 1024px) {
-          .chat-container {
-            border-radius: 25px 15px 10px 25px;
-            margin: 6px;
-          }
+          border-radius: 12px 0 0 12px;
+          box-shadow: -2px 0 20px rgba(0, 0, 0, 0.4);
         }
 
         @media (max-width: 768px) {
-          .chat-container {
-            border-radius: 15px 8px 5px 15px;
-            margin: 4px;
+          .chat-area {
+            left: 272px;
           }
         }
 
-        .chat-messages {
-          flex: 1;
-          padding: 20px;
-          overflow-y: auto;
+        /* Chat Header */
+        .chat-header {
+          height: 60px;
+          background: rgba(0, 0, 0, 0.9);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          flex-direction: column;
-          gap: 15px;
+          align-items: center;
+          padding: 0 20px;
+          backdrop-filter: blur(10px);
         }
 
-        .message {
+        .chat-user-info {
+          display: flex;
+          align-items: center;
+        }
+
+        .chat-user-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-image: url('/avatars/default.jpg');
+          background-size: cover;
+          background-position: center;
+          margin-right: 12px;
+        }
+
+        .chat-user-name {
+          font-size: 16px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+
+        /* Messages Container */
+        .messages-container {
+          flex: 1;
+          overflow-y: auto;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .message-group {
           display: flex;
           align-items: flex-start;
-          gap: 10px;
+          gap: 12px;
         }
 
         .message-avatar {
-          width: 25px;
-          height: 25px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
-          background: #333;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          color: #fff;
+          background-image: url('/avatars/default.jpg');
+          background-size: cover;
+          background-position: center;
           flex-shrink: 0;
         }
 
@@ -364,63 +379,38 @@ export default function DiscordInterface() {
           display: flex;
           align-items: center;
           gap: 8px;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
         }
 
         .message-author {
-          font-size: 8.3px;
-          font-weight: 400;
-          color: #FFFFFF;
+          font-size: 14px;
+          font-weight: 600;
+          color: #ffffff;
         }
 
         .message-time {
-          font-size: 7px;
-          color: #4E4E4E;
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.5);
         }
 
         .message-text {
-          font-size: 7.6px;
-          color: #FFFFFF;
-          line-height: 1.2;
+          font-size: 14px;
+          color: #ffffff;
+          line-height: 1.4;
         }
 
-        .separator {
-          height: 3px;
-          background: #040404;
-          margin: 10px 0;
-        }
-
-        .typing-indicator {
-          padding: 15px 20px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          border-top: 1px solid #1A1A1A;
-        }
-
-        .typing-avatar {
-          width: 25px;
-          height: 25px;
-          border-radius: 50%;
-          background: #333;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          color: #fff;
-        }
-
-        .typing-text {
-          font-size: 15px;
-          font-weight: 700;
-          color: #959595;
+        /* Message Input */
+        .message-input-container {
+          padding: 20px;
+          background: rgba(0, 0, 0, 0.9);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .message-input {
-          background: linear-gradient(90deg, #090909 0%, #202020 100%);
-          border-radius: 4px 7px 4px 4px;
-          margin: 7px 11px;
-          padding: 8px 15px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
+          padding: 12px 20px;
           display: flex;
           align-items: center;
           gap: 12px;
@@ -430,34 +420,131 @@ export default function DiscordInterface() {
           flex: 1;
           background: none;
           border: none;
-          color: #FFFFFF;
-          font-size: 9.4px;
+          color: #ffffff;
+          font-size: 14px;
           outline: none;
         }
 
         .message-input input::placeholder {
-          color: #6B6B6B;
+          color: rgba(255, 255, 255, 0.5);
         }
 
-        .input-icon {
-          width: 17px;
-          height: 17px;
-          background: #444;
-          border-radius: 3px;
+        .input-actions {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .input-button {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: none;
+          color: #ffffff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease;
+        }
+
+        .input-button:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .send-button {
+          background: #5865f2;
+        }
+
+        .send-button:hover {
+          background: #4752c4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+          .server-list {
+            width: 60px;
+          }
+          .server-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+          }
+          .dms-sidebar {
+            left: 60px;
+            width: 220px;
+          }
+          .chat-area {
+            left: 280px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .server-list {
+            width: 50px;
+          }
+          .server-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+          }
+          .dms-sidebar {
+            left: 50px;
+            width: 200px;
+          }
+          .chat-area {
+            left: 250px;
+          }
         }
       `}</style>
       
-      <div className="container">
-        {/* Sidebar */}
-        <div className="sidebar">
-          <div className="sidebar-header">
-            <div className="pinned-messages">📌 Pinned Messages</div>
-            <div className="search-box">
-              <input type="text" placeholder="Inbox" />
-            </div>
-            <div className="friends-section">
-              👥 Friends
-            </div>
+      <div className="main-container">
+        {/* Server List (Left Side) */}
+        <div className="server-list">
+          {/* DMs Icon */}
+          <div 
+            className={`server-icon ${activeView === 'dms' ? 'active' : ''}`}
+            onClick={() => setActiveView('dms')}
+            style={{backgroundImage: 'url(/servers/dms.jpg)'}}
+          />
+          
+          {/* Server Icons */}
+          {serverIcons.map((server) => (
+            <div
+              key={server.id}
+              className={`server-icon ${activeView === 'server' ? 'active' : ''}`}
+              onClick={() => handleServerClick(server.name)}
+              style={{backgroundImage: `url(${server.icon})`}}
+            />
+          ))}
+          
+          {/* Discovery Icon */}
+          <div 
+            className={`server-icon discovery ${activeView === 'discovery' ? 'active' : ''}`}
+            onClick={handleDiscoveryClick}
+          >
+            🔍
+          </div>
+          
+          {/* Profile Icon */}
+          <div 
+            className={`server-icon profile ${activeView === 'profile' ? 'active' : ''}`}
+            onClick={handleProfileClick}
+          >
+            👤
+          </div>
+        </div>
+
+        {/* DMs Sidebar */}
+        <div className="dms-sidebar">
+          <div className="dms-header">
+            <div className="dms-title">Direct Messages</div>
+            <input 
+              type="text" 
+              className="search-input" 
+              placeholder="Find or start a conversation"
+            />
           </div>
           
           <div className="user-list">
@@ -467,7 +554,12 @@ export default function DiscordInterface() {
                 className={`user-item ${selectedUserId === user.id ? 'selected' : ''}`}
                 onClick={() => setSelectedUserId(user.id)}
               >
-                <div className="user-avatar">{user.avatar}</div>
+                <div 
+                  className="user-avatar"
+                  style={{backgroundImage: `url(${user.avatar})`}}
+                >
+                  {user.online && <div className="online-indicator" />}
+                </div>
                 <div className="user-info">
                   <div className="user-name">{user.name}</div>
                   {user.status && <div className="user-status">{user.status}</div>}
@@ -475,64 +567,62 @@ export default function DiscordInterface() {
               </div>
             ))}
           </div>
-          
-          <div className="direct-messages">
-            📧 Direct Messages
-          </div>
         </div>
 
-        {/* Main Content */}
-        <div className="main-content">
-          <div className="top-header">
-            <div className="user-avatars">
-              {Array.from({ length: 14 }, (_, i) => (
-                <div key={i} className="avatar"></div>
-              ))}
-            </div>
-            
-            <div className="user-profile">
-              <div className="profile-info">
-                <div className="profile-name">Kaif</div>
-                <div className="profile-tag">Kaif#001</div>
+        {/* Main Chat Area */}
+        <div className="chat-area">
+          {/* Chat Header */}
+          <div className="chat-header">
+            <div className="chat-user-info">
+              <div 
+                className="chat-user-avatar"
+                style={{backgroundImage: `url(${users.find(u => u.id === selectedUserId)?.avatar})`}}
+              />
+              <div className="chat-user-name">
+                {users.find(u => u.id === selectedUserId)?.name || 'Select a user'}
               </div>
-              <div className="profile-avatar"></div>
             </div>
           </div>
           
-          <div className="chat-container">
-            <div className="chat-messages">
-              {currentMessages.map((message) => (
-                <div key={message.id} className="message">
-                  <div className="message-avatar">{message.avatar}</div>
-                  <div className="message-content">
-                    <div className="message-header">
-                      <span className="message-author">{message.author}</span>
-                      <span className="message-time">{message.time}</span>
-                    </div>
-                    <div className="message-text">{message.text}</div>
+          {/* Messages Container */}
+          <div className="messages-container">
+            {currentMessages.map((message) => (
+              <div key={message.id} className="message-group">
+                <div 
+                  className="message-avatar"
+                  style={{backgroundImage: `url(${message.avatar})`}}
+                />
+                <div className="message-content">
+                  <div className="message-header">
+                    <span className="message-author">{message.author}</span>
+                    <span className="message-time">{message.time}</span>
                   </div>
+                  <div className="message-text">{message.text}</div>
                 </div>
-              ))}
-              
-              <div className="separator"></div>
-              
-              <div className="typing-indicator">
-                <div className="typing-avatar">D</div>
-                <div className="typing-text">daFoxy is typing...</div>
               </div>
-            </div>
-            
+            ))}
+          </div>
+          
+          {/* Message Input */}
+          <div className="message-input-container">
             <div className="message-input">
-              <div className="input-icon"></div>
-              <div className="input-icon"></div>
               <input 
                 type="text" 
-                placeholder="Message daFoxy" 
+                placeholder={`Message ${users.find(u => u.id === selectedUserId)?.name || 'user'}`}
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyPress={handleKeyPress}
               />
-              <div className="input-icon" onClick={handleSendMessage} style={{cursor: 'pointer'}}></div>
+              <div className="input-actions">
+                <button className="input-button">📎</button>
+                <button className="input-button">😊</button>
+                <button 
+                  className="input-button send-button"
+                  onClick={handleSendMessage}
+                >
+                  ➤
+                </button>
+              </div>
             </div>
           </div>
         </div>
