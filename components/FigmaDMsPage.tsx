@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import FigmaServerPage from './FigmaServerPage';
 
 // Data based on your Figma design
 const users = [
@@ -32,6 +33,7 @@ export default function FigmaDMsPage() {
   const [selectedUserId, setSelectedUserId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
   const [currentMessages, setCurrentMessages] = useState(messages);
+  const [currentView, setCurrentView] = useState<'dms' | 'server'>('dms');
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -52,6 +54,11 @@ export default function FigmaDMsPage() {
       handleSendMessage();
     }
   };
+
+  // Show server view if selected
+  if (currentView === 'server') {
+    return <FigmaServerPage onBackToDMs={() => setCurrentView('dms')} />;
+  }
 
   return (
     <div>
@@ -545,7 +552,10 @@ export default function FigmaDMsPage() {
         
         {/* Server List - Taskbar Style */}
         <div className="server-list">
-          <div className="server-icon github">⚡</div>
+          <div 
+            className="server-icon github"
+            onClick={() => setCurrentView('server')}
+          >⚡</div>
           <div className="server-separator"></div>
           <div className="server-icon blender"></div>
           <div className="server-icon coinbase"></div>
