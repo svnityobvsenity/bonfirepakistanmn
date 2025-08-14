@@ -115,66 +115,95 @@ export default function FigmaDMsPage() {
 
 
 
-        /* Server List - Above DMs sidebar */
+        /* Server List - Taskbar Style */
         .server-list {
           position: absolute;
           left: 24px;
           top: 24px;
-          width: 280px;
-          height: 72px;
+          width: calc(100vw - 48px);
+          height: 60px;
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 12px;
-          padding: 12px 16px;
-          background: rgba(0, 0, 0, 0.6);
+          gap: 8px;
+          padding: 8px 16px;
+          background: rgba(0, 0, 0, 0.85);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border-radius: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
           z-index: 50;
         }
 
         .server-icon {
-          width: 48px;
-          height: 48px;
-          border-radius: 12px;
+          width: 44px;
+          height: 44px;
+          border-radius: 8px;
           background-size: cover;
           background-position: center;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
           position: relative;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-          border: 2px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           flex-shrink: 0;
         }
 
         .server-icon:hover {
-          border-radius: 16px;
-          transform: translateY(-2px) scale(1.05);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-          border-color: rgba(255, 255, 255, 0.3);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+          border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Famous App Logos */
-        .server-icon.discord {
-          background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
+        /* Taskbar App Icons - Exact Match */
+        .server-icon.github {
+          background: #24292f;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
         }
 
-        .server-icon.spotify {
-          background: linear-gradient(135deg, #1ED760 0%, #1DB954 100%);
+        .server-icon.blender {
+          background: linear-gradient(135deg, #E87D0D 0%, #F5792A 100%);
         }
 
-        .server-icon.youtube {
-          background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+        .server-icon.coinbase {
+          background: linear-gradient(135deg, #0052FF 0%, #0041CC 100%);
         }
 
         .server-icon.instagram {
           background: linear-gradient(135deg, #E4405F 0%, #833AB4 50%, #F77737 100%);
         }
 
-        .server-icon.twitter {
-          background: linear-gradient(135deg, #1DA1F2 0%, #0D8BD9 100%);
+        .server-icon.vscode {
+          background: linear-gradient(135deg, #007ACC 0%, #005A9E 100%);
+        }
+
+        .server-icon.github-desktop {
+          background: linear-gradient(135deg, #6f42c1 0%, #5A2D91 100%);
+        }
+
+        .server-icon.nova {
+          background: linear-gradient(135deg, #00C4A7 0%, #00A085 100%);
+        }
+
+        .server-icon.google-chrome {
+          background: linear-gradient(135deg, #4285F4 0%, #34A853 25%, #FBBC05 50%, #EA4335 100%);
+        }
+
+        .server-icon.superstar {
+          background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .server-icon.microsoft {
+          background: linear-gradient(135deg, #00BCF2 0%, #0078D4 100%);
+        }
+
+        .server-icon.youtube {
+          background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
         }
 
         .server-separator {
@@ -189,9 +218,9 @@ export default function FigmaDMsPage() {
         .left-sidebar {
           position: absolute;
           left: 24px;
-          top: 108px;
+          top: 100px;
           width: 280px;
-          height: calc(100vh - 132px);
+          height: calc(100vh - 124px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -308,9 +337,9 @@ export default function FigmaDMsPage() {
         .chat-area {
           position: absolute;
           left: 328px;
-          top: 24px;
+          top: 100px;
           right: 24px;
-          height: calc(100vh - 48px);
+          height: calc(100vh - 124px);
           background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -514,14 +543,20 @@ export default function FigmaDMsPage() {
         <div className="background"></div>
         <div className="blur-overlay"></div>
         
-        {/* Server List - Above DMs */}
+        {/* Server List - Taskbar Style */}
         <div className="server-list">
-          <div className="server-icon discord"></div>
+          <div className="server-icon github">⚡</div>
           <div className="server-separator"></div>
-          <div className="server-icon spotify"></div>
-          <div className="server-icon youtube"></div>
+          <div className="server-icon blender"></div>
+          <div className="server-icon coinbase"></div>
           <div className="server-icon instagram"></div>
-          <div className="server-icon twitter"></div>
+          <div className="server-icon vscode"></div>
+          <div className="server-icon github-desktop"></div>
+          <div className="server-icon nova"></div>
+          <div className="server-icon google-chrome"></div>
+          <div className="server-icon superstar"></div>
+          <div className="server-icon microsoft"></div>
+          <div className="server-icon youtube"></div>
         </div>
 
         {/* Left Sidebar - DMs */}
