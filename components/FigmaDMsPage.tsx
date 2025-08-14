@@ -113,123 +113,85 @@ export default function FigmaDMsPage() {
           background: rgba(0, 0, 0, 0.3);
         }
 
-        /* Header - x: 0, y: 0, width: 1512, height: 80 */
-        .header {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 80px;
-          background: rgba(0, 0, 0, 0.8);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          align-items: center;
-          padding: 0 24px;
-          z-index: 100;
-        }
 
-        .header-title {
-          font-size: 24px;
-          font-weight: 700;
-          color: #ffffff;
-          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-        }
 
-        .header-actions {
-          margin-left: auto;
-          display: flex;
-          gap: 12px;
-        }
-
-        .header-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: #ffffff;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          font-size: 18px;
-        }
-
-        .header-btn:hover {
-          background: rgba(255, 255, 255, 0.2);
-          transform: translateY(-1px);
-        }
-
-        /* Server List - x: 24, y: 104, width: 72, height: 854 */
+        /* Server List - Above DMs sidebar */
         .server-list {
           position: absolute;
           left: 24px;
-          top: 104px;
-          width: 72px;
-          height: calc(100vh - 128px);
+          top: 24px;
+          width: 280px;
+          height: 72px;
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           align-items: center;
           gap: 12px;
-          padding: 16px 0;
+          padding: 12px 16px;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           z-index: 50;
         }
 
         .server-icon {
-          width: 56px;
-          height: 56px;
-          border-radius: 16px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
           background-size: cover;
           background-position: center;
           cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.3s ease;
           position: relative;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
           border: 2px solid rgba(255, 255, 255, 0.1);
+          flex-shrink: 0;
         }
 
         .server-icon:hover {
-          border-radius: 20px;
-          transform: translateY(-4px) scale(1.05);
-          box-shadow: 0 12px 48px rgba(102, 126, 234, 0.4);
-          border-color: rgba(102, 126, 234, 0.6);
+          border-radius: 16px;
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+          border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .server-icon:nth-child(1) {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Famous App Logos */
+        .server-icon.discord {
+          background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
         }
 
-        .server-icon:nth-child(2) {
-          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .server-icon.spotify {
+          background: linear-gradient(135deg, #1ED760 0%, #1DB954 100%);
         }
 
-        .server-icon:nth-child(3) {
-          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .server-icon.youtube {
+          background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
         }
 
-        .server-icon:nth-child(4) {
-          background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        .server-icon.instagram {
+          background: linear-gradient(135deg, #E4405F 0%, #833AB4 50%, #F77737 100%);
+        }
+
+        .server-icon.twitter {
+          background: linear-gradient(135deg, #1DA1F2 0%, #0D8BD9 100%);
         }
 
         .server-separator {
-          width: 32px;
-          height: 2px;
-          background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+          width: 2px;
+          height: 32px;
+          background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
           border-radius: 1px;
-          margin: 8px 0;
+          margin: 0 4px;
         }
 
-        /* Left Sidebar - x: 120, y: 104, width: 280, height: 854 */
+        /* Left Sidebar - DMs */
         .left-sidebar {
           position: absolute;
-          left: 120px;
-          top: 104px;
+          left: 24px;
+          top: 108px;
           width: 280px;
-          height: calc(100vh - 128px);
+          height: calc(100vh - 132px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -242,16 +204,15 @@ export default function FigmaDMsPage() {
         }
 
         .sidebar-header {
-          padding: 24px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 16px 20px 8px 20px;
           background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
         }
 
         .sidebar-title {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 600;
           color: #ffffff;
-          margin-bottom: 16px;
+          margin-bottom: 8px;
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
@@ -343,13 +304,13 @@ export default function FigmaDMsPage() {
           color: rgba(255, 255, 255, 0.6);
         }
 
-        /* Main Chat Area - x: 424, y: 104, width: 800, height: 854 */
+        /* Main Chat Area */
         .chat-area {
           position: absolute;
-          left: 424px;
-          top: 104px;
-          width: calc(100vw - 424px - 288px);
-          height: calc(100vh - 128px);
+          left: 328px;
+          top: 24px;
+          right: 24px;
+          height: calc(100vh - 48px);
           background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -516,110 +477,35 @@ export default function FigmaDMsPage() {
           background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
         }
 
-        /* Right Sidebar - x: 1248, y: 104, width: 240, height: 854 */
-        .right-sidebar {
-          position: absolute;
-          right: 24px;
-          top: 104px;
-          width: 240px;
-          height: calc(100vh - 128px);
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          z-index: 40;
-        }
 
-        .members-header {
-          padding: 24px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        }
-
-        .members-title {
-          font-size: 16px;
-          font-weight: 600;
-          color: #ffffff;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .members-list {
-          flex: 1;
-          overflow-y: auto;
-          padding: 8px;
-        }
-
-        .member-item {
-          display: flex;
-          align-items: center;
-          padding: 8px 12px;
-          margin: 2px 0;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .member-item:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        .member-avatar {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          background-size: cover;
-          background-position: center;
-          margin-right: 8px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          position: relative;
-        }
-
-        .member-name {
-          font-size: 13px;
-          font-weight: 500;
-          color: #ffffff;
-        }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-          .right-sidebar {
-            display: none;
-          }
-          .chat-area {
-            width: calc(100vw - 424px - 24px);
-          }
-        }
-
         @media (max-width: 900px) {
+          .server-list {
+            width: 240px;
+          }
           .left-sidebar {
             width: 240px;
           }
           .chat-area {
-            left: 384px;
-            width: calc(100vw - 384px - 24px);
+            left: 284px;
+            right: 16px;
           }
         }
 
         @media (max-width: 768px) {
           .server-list {
-            width: 60px;
+            width: 200px;
             left: 16px;
           }
-          .server-icon {
-            width: 44px;
-            height: 44px;
-          }
           .left-sidebar {
-            left: 92px;
-            width: 220px;
+            left: 16px;
+            width: 200px;
+            top: 92px;
           }
           .chat-area {
-            left: 328px;
-            width: calc(100vw - 328px - 16px);
+            left: 232px;
+            right: 16px;
           }
         }
       `}</style>
@@ -628,22 +514,14 @@ export default function FigmaDMsPage() {
         <div className="background"></div>
         <div className="blur-overlay"></div>
         
-        {/* Header */}
-        <div className="header">
-          <div className="header-title">daFoxy</div>
-          <div className="header-actions">
-            <div className="header-btn">⚙️</div>
-            <div className="header-btn">🔍</div>
-          </div>
-        </div>
-
-        {/* Server List */}
+        {/* Server List - Above DMs */}
         <div className="server-list">
-          <div className="server-icon" style={{backgroundImage: 'url(/servers/dms.jpg)'}}></div>
+          <div className="server-icon discord"></div>
           <div className="server-separator"></div>
-          <div className="server-icon" style={{backgroundImage: 'url(/servers/club.jpg)'}}></div>
-          <div className="server-icon" style={{backgroundImage: 'url(/servers/gaming.jpg)'}}></div>
-          <div className="server-icon" style={{backgroundImage: 'url(/servers/music.jpg)'}}></div>
+          <div className="server-icon spotify"></div>
+          <div className="server-icon youtube"></div>
+          <div className="server-icon instagram"></div>
+          <div className="server-icon twitter"></div>
         </div>
 
         {/* Left Sidebar - DMs */}
@@ -730,26 +608,7 @@ export default function FigmaDMsPage() {
           </div>
         </div>
 
-        {/* Right Sidebar - Members */}
-        <div className="right-sidebar">
-          <div className="members-header">
-            <div className="members-title">Members</div>
-          </div>
-          
-          <div className="members-list">
-            {users.slice(0, 5).map((member) => (
-              <div key={member.id} className="member-item">
-                <div 
-                  className="member-avatar"
-                  style={{backgroundImage: `url(${member.avatar})`}}
-                >
-                  {member.online && <div className="online-dot" />}
-                </div>
-                <div className="member-name">{member.name}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </div>
   );
