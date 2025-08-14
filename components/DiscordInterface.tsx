@@ -118,12 +118,12 @@ export default function DiscordInterface() {
       `}</style>
       
       <style jsx>{`
-        /* Main Container - Figma Frame */
+        /* Main Container - Discord Style */
         .main-container {
           position: relative;
           width: 100vw;
           height: 100vh;
-          background: linear-gradient(135deg, #000000 0%, #0f0f0f 50%, #1a1a1a 100%);
+          background: #202225;
           overflow: hidden;
         }
 
@@ -219,13 +219,11 @@ export default function DiscordInterface() {
           top: 0;
           width: 240px;
           height: 100vh;
-          background: rgba(0, 0, 0, 0.85);
-          backdrop-filter: blur(20px);
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          background: #2f3136;
+          border-right: 1px solid #202225;
           display: flex;
           flex-direction: column;
           z-index: 5;
-          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -237,30 +235,67 @@ export default function DiscordInterface() {
         /* DMs Header */
         .dms-header {
           padding: 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid #202225;
+        }
+
+        .nav-buttons {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          margin-bottom: 16px;
+        }
+
+        .nav-button {
+          display: flex;
+          align-items: center;
+          padding: 8px 12px;
+          border-radius: 4px;
+          color: #96989d;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .nav-button:hover {
+          background: #393c43;
+          color: #dcddde;
+        }
+
+        .nav-button.active {
+          background: #393c43;
+          color: #ffffff;
+        }
+
+        .nav-button-icon {
+          width: 20px;
+          height: 20px;
+          margin-right: 12px;
+          background: currentColor;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+          mask-position: center;
+        }
+
+        .friends-icon {
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+        }
+
+        .inbox-icon {
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E");
+        }
+
+        .pinned-icon {
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5h2a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-2z'/%3E%3C/svg%3E");
         }
 
         .dms-title {
-          font-family: 'SF Pro Display', sans-serif;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: 600;
-          color: #ffffff;
-          margin-bottom: 12px;
-        }
-
-        .search-input {
-          width: 100%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-          padding: 8px 12px;
-          font-size: 14px;
-          color: #ffffff;
-          outline: none;
-        }
-
-        .search-input::placeholder {
-          color: rgba(255, 255, 255, 0.5);
+          color: #96989d;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 8px;
         }
 
         /* User List */
@@ -273,25 +308,26 @@ export default function DiscordInterface() {
         .user-item {
           display: flex;
           align-items: center;
-          padding: 8px 16px;
+          padding: 8px 12px;
+          margin: 0 8px;
+          border-radius: 4px;
           cursor: pointer;
           transition: background 0.2s ease;
           position: relative;
         }
 
         .user-item:hover {
-          background: rgba(255, 255, 255, 0.05);
+          background: #393c43;
         }
 
         .user-item.selected {
-          background: rgba(255, 255, 255, 0.1);
+          background: #393c43;
         }
 
         .user-avatar {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background-image: url('/avatars/default.jpg');
           background-size: cover;
           background-position: center;
           margin-right: 12px;
@@ -304,8 +340,8 @@ export default function DiscordInterface() {
           right: -2px;
           width: 10px;
           height: 10px;
-          background: #10b981;
-          border: 2px solid #000;
+          background: #3ba55c;
+          border: 2px solid #2f3136;
           border-radius: 50%;
         }
 
@@ -316,13 +352,13 @@ export default function DiscordInterface() {
         .user-name {
           font-size: 14px;
           font-weight: 500;
-          color: #ffffff;
+          color: #dcddde;
           margin-bottom: 2px;
         }
 
         .user-status {
           font-size: 12px;
-          color: rgba(255, 255, 255, 0.6);
+          color: #96989d;
         }
 
         /* Main Chat Area */
@@ -332,12 +368,9 @@ export default function DiscordInterface() {
           top: 0;
           right: 0;
           height: 100vh;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(30px);
+          background: #36393f;
           display: flex;
           flex-direction: column;
-          border-radius: 12px 0 0 12px;
-          box-shadow: -2px 0 20px rgba(0, 0, 0, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -348,13 +381,13 @@ export default function DiscordInterface() {
 
         /* Chat Header */
         .chat-header {
-          height: 60px;
-          background: rgba(0, 0, 0, 0.9);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          height: 48px;
+          background: #36393f;
+          border-bottom: 1px solid #202225;
           display: flex;
           align-items: center;
-          padding: 0 20px;
-          backdrop-filter: blur(10px);
+          padding: 0 16px;
+          box-shadow: 0 1px 0 rgba(4,4,5,0.2), 0 1.5px 0 rgba(6,6,7,0.05), 0 2px 0 rgba(4,4,5,0.05);
         }
 
         .chat-user-info {
@@ -362,20 +395,20 @@ export default function DiscordInterface() {
           align-items: center;
         }
 
-        .chat-user-avatar {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background-image: url('/avatars/default.jpg');
-          background-size: cover;
-          background-position: center;
-          margin-right: 12px;
-        }
-
         .chat-user-name {
           font-size: 16px;
           font-weight: 600;
           color: #ffffff;
+          display: flex;
+          align-items: center;
+        }
+
+        .status-dot {
+          width: 8px;
+          height: 8px;
+          background: #3ba55c;
+          border-radius: 50%;
+          margin-left: 8px;
         }
 
         /* Messages Container */
@@ -435,15 +468,14 @@ export default function DiscordInterface() {
         /* Message Input */
         .message-input-container {
           padding: 20px;
-          background: rgba(0, 0, 0, 0.9);
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          background: #36393f;
         }
 
         .message-input {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-          padding: 12px 20px;
+          background: #40444b;
+          border: none;
+          border-radius: 8px;
+          padding: 12px 16px;
           display: flex;
           align-items: center;
           gap: 12px;
@@ -453,13 +485,13 @@ export default function DiscordInterface() {
           flex: 1;
           background: none;
           border: none;
-          color: #ffffff;
+          color: #dcddde;
           font-size: 14px;
           outline: none;
         }
 
         .message-input input::placeholder {
-          color: rgba(255, 255, 255, 0.5);
+          color: #72767d;
         }
 
         .input-actions {
@@ -594,12 +626,21 @@ export default function DiscordInterface() {
         {/* DMs Sidebar */}
         <div className="dms-sidebar">
           <div className="dms-header">
+            <div className="nav-buttons">
+              <div className="nav-button">
+                <div className="nav-button-icon friends-icon"></div>
+                Friends
+              </div>
+              <div className="nav-button">
+                <div className="nav-button-icon inbox-icon"></div>
+                Inbox
+              </div>
+              <div className="nav-button">
+                <div className="nav-button-icon pinned-icon"></div>
+                Pinned Messages
+              </div>
+            </div>
             <div className="dms-title">Direct Messages</div>
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Find or start a conversation"
-            />
           </div>
           
           <div className="user-list">
@@ -629,12 +670,9 @@ export default function DiscordInterface() {
           {/* Chat Header */}
           <div className="chat-header">
             <div className="chat-user-info">
-              <div 
-                className="chat-user-avatar"
-                style={{backgroundImage: `url(${users.find(u => u.id === selectedUserId)?.avatar})`}}
-              />
               <div className="chat-user-name">
                 {users.find(u => u.id === selectedUserId)?.name || 'Select a user'}
+                <div className="status-dot"></div>
               </div>
             </div>
           </div>
