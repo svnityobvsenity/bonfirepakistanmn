@@ -36,6 +36,28 @@ const messages = [
 
 export default function DiscordInterface() {
   const [selectedUserId, setSelectedUserId] = useState(1);
+  const [messageInput, setMessageInput] = useState('');
+  const [currentMessages, setCurrentMessages] = useState(messages);
+
+  const handleSendMessage = () => {
+    if (messageInput.trim()) {
+      const newMessage = {
+        id: currentMessages.length + 1,
+        avatar: 'K',
+        author: 'Kaif',
+        time: 'Today at ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+        text: messageInput.trim()
+      };
+      setCurrentMessages([...currentMessages, newMessage]);
+      setMessageInput('');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className={inter.className}>
@@ -77,19 +99,50 @@ export default function DiscordInterface() {
         .container {
           display: flex;
           height: 100vh;
-          width: 1049px;
-          margin: 0 auto;
+          width: 100vw;
           position: relative;
         }
 
         /* Sidebar */
         .sidebar {
+          min-width: 236px;
           width: 236px;
           background: #000000;
           border-right: 1px solid #1A1A1A;
           display: flex;
           flex-direction: column;
           height: 100%;
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            min-width: 200px;
+            width: 200px;
+          }
+          
+          .pinned-messages {
+            font-size: 8px !important;
+          }
+          
+          .user-name {
+            font-size: 10px !important;
+          }
+          
+          .user-status {
+            font-size: 6px !important;
+          }
+          
+          .message-author {
+            font-size: 7px !important;
+          }
+          
+          .message-text {
+            font-size: 6.5px !important;
+          }
+          
+          .profile-name {
+            font-size: 7px !important;
+          }
         }
 
         .sidebar-header {
@@ -267,6 +320,21 @@ export default function DiscordInterface() {
           display: flex;
           flex-direction: column;
           overflow: hidden;
+          min-height: 0;
+        }
+
+        @media (max-width: 1200px) {
+          .chat-container {
+            border-radius: 20px;
+            margin: 8px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .chat-container {
+            border-radius: 15px;
+            margin: 4px;
+          }
         }
 
         .chat-messages {
@@ -405,7 +473,7 @@ export default function DiscordInterface() {
             {users.map((user) => (
               <div
                 key={user.id}
-                className={`user-item ${user.id === 1 ? 'selected' : ''}`}
+                className={`user-item ${selectedUserId === user.id ? 'selected' : ''}`}
                 onClick={() => setSelectedUserId(user.id)}
               >
                 <div className="user-avatar">{user.avatar}</div>
@@ -442,7 +510,7 @@ export default function DiscordInterface() {
           
           <div className="chat-container">
             <div className="chat-messages">
-              {messages.map((message) => (
+              {currentMessages.map((message) => (
                 <div key={message.id} className="message">
                   <div className="message-avatar">{message.avatar}</div>
                   <div className="message-content">
@@ -466,8 +534,14 @@ export default function DiscordInterface() {
             <div className="message-input">
               <div className="input-icon"></div>
               <div className="input-icon"></div>
-              <input type="text" placeholder="Message daFoxy" />
-              <div className="input-icon"></div>
+              <input 
+                type="text" 
+                placeholder="Message daFoxy" 
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+              <div className="input-icon" onClick={handleSendMessage} style={{cursor: 'pointer'}}></div>
             </div>
           </div>
         </div>
