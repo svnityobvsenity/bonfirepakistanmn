@@ -93,70 +93,170 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           background: rgba(0, 0, 0, 0.3);
         }
 
-        /* Server List - Same as DMs */
+        /* Server List - Enhanced Cool Design */
         .server-list {
           position: absolute;
           left: 24px;
-          top: 24px;
+          top: 20px;
           width: calc(100vw - 48px);
-          height: 60px;
+          height: 100px;
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 8px;
-          padding: 8px 16px;
-          background: rgba(0, 0, 0, 0.85);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+          gap: 16px;
+          padding: 16px 24px;
+          background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 35, 0.95) 100%);
+          backdrop-filter: blur(30px);
+          -webkit-backdrop-filter: blur(30px);
+          border-radius: 20px;
+          border: 2px solid rgba(102, 126, 234, 0.3);
+          box-shadow: 
+            0 8px 40px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
           z-index: 50;
+          overflow-x: auto;
+          overflow-y: hidden;
         }
 
         .server-icon {
-          width: 44px;
-          height: 44px;
-          border-radius: 8px;
+          width: 72px;
+          height: 72px;
+          border-radius: 16px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           position: relative;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 4px 20px rgba(0, 0, 0, 0.6),
+            0 0 0 2px rgba(255, 255, 255, 0.1);
+          border: 2px solid transparent;
           flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 24px;
+          font-size: 36px;
+          font-weight: bold;
           color: white;
+          overflow: hidden;
+        }
+
+        .server-icon::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .server-icon:hover {
+          transform: translateY(-8px) scale(1.1);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.8),
+            0 0 0 3px rgba(102, 126, 234, 0.5),
+            0 0 30px rgba(102, 126, 234, 0.3);
+          border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .server-icon:hover::before {
+          opacity: 1;
+        }
+
+        .server-icon:active {
+          transform: translateY(-6px) scale(1.05);
+        }
+
+        /* Server Notification Badge */
+        .server-notification {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          min-width: 20px;
+          height: 20px;
+          background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+          border: 2px solid rgba(0, 0, 0, 0.8);
+          border-radius: 10px;
+          color: white;
+          font-size: 11px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 4px;
+          box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Active Server Indicator */
+        .server-icon.active {
+          border-color: rgba(102, 126, 234, 0.8);
+          box-shadow: 
+            0 4px 20px rgba(0, 0, 0, 0.6),
+            0 0 0 3px rgba(102, 126, 234, 0.6),
+            0 0 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .server-icon.active::after {
+          content: '';
+          position: absolute;
+          left: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 40px;
+          background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+          border-radius: 2px;
+          box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
         .server-icon.github {
-          background: #24292f;
+          background: linear-gradient(135deg, #24292f 0%, #1a1e23 100%);
+        }
+
+        .server-icon.github:hover {
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.8),
+            0 0 0 3px rgba(36, 41, 47, 0.8),
+            0 0 30px rgba(36, 41, 47, 0.6);
         }
 
         .server-icon.blender {
-          background: linear-gradient(135deg, #E87D0D 0%, #F5792A 100%);
-          border: 2px solid #667eea;
-          box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+          background: linear-gradient(135deg, #E87D0D 0%, #F5792A 50%, #FF6B35 100%);
+          position: relative;
+        }
+
+        .server-icon.blender:hover {
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.8),
+            0 0 0 3px rgba(232, 125, 13, 0.8),
+            0 0 30px rgba(232, 125, 13, 0.6);
         }
 
         .server-separator {
-          width: 2px;
-          height: 32px;
-          background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
-          border-radius: 1px;
-          margin: 0 4px;
+          width: 3px;
+          height: 48px;
+          background: linear-gradient(180deg, transparent 0%, rgba(102, 126, 234, 0.5) 30%, rgba(255, 255, 255, 0.4) 50%, rgba(102, 126, 234, 0.5) 70%, transparent 100%);
+          border-radius: 2px;
+          margin: 0 8px;
+          box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
         }
 
         /* Left Sidebar - Channels */
-        /* Frame 1000002743: x: 24, y: 100, width: 280, height: 858 */
+        /* Frame 1000002743: x: 24, y: 140, width: 280, height: 818 */
         .channels-sidebar {
           position: absolute;
           left: 24px;
-          top: 100px;
+          top: 140px;
           width: 280px;
-          height: calc(100vh - 124px);
+          height: calc(100vh - 164px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -249,13 +349,13 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         }
 
         /* Main Chat Area */
-        /* Frame 1000002747: x: 328, y: 100, width: 944, height: 858 */
+        /* Frame 1000002747: x: 328, y: 140, width: 944, height: 818 */
         .server-chat-area {
           position: absolute;
           left: 328px;
-          top: 100px;
+          top: 140px;
           width: calc(100vw - 592px);
-          height: calc(100vh - 124px);
+          height: calc(100vh - 164px);
           background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -428,13 +528,13 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         }
 
         /* Members Sidebar */
-        /* Frame 1000002749: x: 1296, y: 100, width: 240, height: 858 */
+        /* Frame 1000002749: x: 1296, y: 140, width: 240, height: 818 */
         .members-sidebar {
           position: absolute;
           right: 24px;
-          top: 100px;
+          top: 140px;
           width: 240px;
-          height: calc(100vh - 124px);
+          height: calc(100vh - 164px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -570,11 +670,16 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           ←
         </button>
         
-        {/* Server List - Same as DMs but with active state */}
+        {/* Server List - Enhanced with Active State */}
         <div className="server-list">
-          <div className="server-icon github">⚡</div>
+          <div className="server-icon github">
+            ⚡
+            <div className="server-notification">3</div>
+          </div>
           <div className="server-separator"></div>
-          <div className="server-icon blender"></div>
+          <div className="server-icon blender active">
+            <div className="server-notification">12</div>
+          </div>
         </div>
 
         {/* Left Sidebar - Channels */}
