@@ -45,6 +45,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
   const [selectedChannelId, setSelectedChannelId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
   const [currentMessages, setCurrentMessages] = useState(getServerMessages(serverName));
+  const [currentView, setCurrentView] = useState<'server' | 'voice'>('server');
+  const [isVoiceConnected, setIsVoiceConnected] = useState(false);
+  const [voiceSettings, setVoiceSettings] = useState({
+    muted: false,
+    deafened: false,
+    camera: false,
+    screenShare: false
+  });
+  const [connectedVoiceChannel, setConnectedVoiceChannel] = useState<number | null>(null);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -65,6 +74,296 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
       handleSendMessage();
     }
   };
+
+  const handleVoiceChannelJoin = (channelId: number) => {
+    setConnectedVoiceChannel(channelId);
+    setIsVoiceConnected(true);
+    setCurrentView('voice');
+  };
+
+  const handleVoiceDisconnect = () => {
+    setConnectedVoiceChannel(null);
+    setIsVoiceConnected(false);
+    setCurrentView('server');
+    setVoiceSettings({
+      muted: false,
+      deafened: false,
+      camera: false,
+      screenShare: false
+    });
+  };
+
+  const toggleVoiceSetting = (setting: keyof typeof voiceSettings) => {
+    setVoiceSettings(prev => ({
+      ...prev,
+      [setting]: !prev[setting]
+    }));
+  };
+
+  // Show voice channel interface if connected
+  if (currentView === 'voice' && connectedVoiceChannel) {
+    const channel = channels.find(c => c.id === connectedVoiceChannel);
+    return (
+      <div className="server-voice-interface">
+        <style jsx>{`
+          .server-voice-interface {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+          }
+
+          .server-voice-header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+          }
+
+          .server-voice-channel-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+          }
+
+          .server-voice-server-name {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+          }
+
+          .server-voice-users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 800px;
+            margin: 40px 0;
+          }
+
+          .server-voice-user-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .server-voice-user-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+
+          .server-voice-user-card:hover::before {
+            opacity: 1;
+          }
+
+          .server-voice-user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+          }
+
+          .server-voice-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+          }
+
+          .server-voice-user-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+          }
+
+          .server-voice-controls {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+          }
+
+          .server-voice-control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(20px);
+          }
+
+          .server-voice-control-btn.mute {
+            background: ${voiceSettings.muted ? 'linear-gradient(135deg, #ff4757 0%, #ff3838 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .server-voice-control-btn.deafen {
+            background: ${voiceSettings.deafened ? 'linear-gradient(135deg, #ff4757 0%, #ff3838 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .server-voice-control-btn.camera {
+            background: ${voiceSettings.camera ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .server-voice-control-btn.screen {
+            background: ${voiceSettings.screenShare ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .server-voice-control-btn.disconnect {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+            color: white;
+          }
+
+          .server-voice-control-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+          }
+
+          .back-to-server {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+          }
+
+          .back-to-server:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+          }
+        `}</style>
+
+        <button className="back-to-server" onClick={() => setCurrentView('server')}>
+          ←
+        </button>
+
+        <div className="server-voice-header">
+          <div className="server-voice-channel-name">🔊 {channel?.name}</div>
+          <div className="server-voice-server-name">{serverName}</div>
+        </div>
+
+        <div className="server-voice-users-grid">
+          <div className="server-voice-user-card">
+            <div className="server-voice-user-avatar">
+              D
+            </div>
+            <div className="server-voice-user-name">daFoxy</div>
+            <div className="server-voice-user-status">Speaking</div>
+          </div>
+          
+          <div className="server-voice-user-card">
+            <div className="server-voice-user-avatar">
+              J
+            </div>
+            <div className="server-voice-user-name">james</div>
+            <div className="server-voice-user-status">Connected</div>
+          </div>
+          
+          <div className="server-voice-user-card">
+            <div className="server-voice-user-avatar">
+              Y
+            </div>
+            <div className="server-voice-user-name">You</div>
+            <div className="server-voice-user-status">
+              {voiceSettings.muted ? 'Muted' : 'Speaking'}
+            </div>
+          </div>
+        </div>
+
+        <div className="server-voice-controls">
+          <button 
+            className="server-voice-control-btn mute"
+            onClick={() => toggleVoiceSetting('muted')}
+            title={voiceSettings.muted ? 'Unmute' : 'Mute'}
+          >
+            {voiceSettings.muted ? '🔇' : '🎤'}
+          </button>
+          
+          <button 
+            className="server-voice-control-btn deafen"
+            onClick={() => toggleVoiceSetting('deafened')}
+            title={voiceSettings.deafened ? 'Undeafen' : 'Deafen'}
+          >
+            {voiceSettings.deafened ? '🔇' : '🔊'}
+          </button>
+          
+          <button 
+            className="server-voice-control-btn camera"
+            onClick={() => toggleVoiceSetting('camera')}
+            title={voiceSettings.camera ? 'Turn off camera' : 'Turn on camera'}
+          >
+            {voiceSettings.camera ? '📹' : '📷'}
+          </button>
+          
+          <button 
+            className="server-voice-control-btn screen"
+            onClick={() => toggleVoiceSetting('screenShare')}
+            title={voiceSettings.screenShare ? 'Stop sharing' : 'Share screen'}
+          >
+            {voiceSettings.screenShare ? '🖥️' : '📺'}
+          </button>
+          
+          <button 
+            className="server-voice-control-btn disconnect"
+            onClick={handleVoiceDisconnect}
+            title="Disconnect"
+          >
+            📞
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -423,6 +722,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           text-align: center;
         }
 
+        /* DMs Icon Special Styling */
+        .server-icon.dms-icon:hover {
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.8),
+            0 0 0 3px rgba(30, 58, 138, 0.8),
+            0 0 30px rgba(30, 58, 138, 0.6);
+          border-color: rgba(30, 58, 138, 0.8);
+        }
+
         /* Main Chat Area */
         /* Frame 1000002747: x: 328, y: 150, width: 944, height: 808 */
         .server-chat-area {
@@ -707,46 +1015,26 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           letter-spacing: 0.3px;
         }
 
-        /* Back Button */
-        .back-button {
-          position: absolute;
-          top: 32px;
-          left: 32px;
-          width: 40px;
-          height: 40px;
-          background: rgba(0, 0, 0, 0.8);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 50%;
-          color: #ffffff;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          z-index: 60;
-          font-size: 16px;
-          border: none;
-        }
 
-        .back-button:hover {
-          background: rgba(102, 126, 234, 0.8);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-        }
       `}</style>
       
       <div className="figma-server">
         <div className="server-background"></div>
         <div className="server-blur-overlay"></div>
         
-        {/* Back Button */}
-        <button className="back-button" onClick={onBackToDMs}>
-          ←
-        </button>
+
         
         {/* Server List - Enhanced with Active State */}
         <div className="server-list">
+          <div 
+            className="server-icon dms-icon"
+            onClick={onBackToDMs}
+            title="Back to DMs"
+            style={{background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)'}}
+          >
+            ⛈️
+          </div>
+          <div className="server-separator"></div>
           <div className="server-icon github">
             ⚡
             <div className="server-notification">3</div>
@@ -798,7 +1086,16 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
                 <div className="channel-icon">🔊</div>
                 <div className="channel-name">{channel.name}</div>
                 <div className="voice-channel-controls">
-                  <button className="voice-join-btn" title="Join Voice">🎤</button>
+                  <button 
+                    className="voice-join-btn" 
+                    title="Join Voice"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleVoiceChannelJoin(channel.id);
+                    }}
+                  >
+                    🎤
+                  </button>
                   <div className="voice-users-count">2/10</div>
                 </div>
               </div>

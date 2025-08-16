@@ -1483,60 +1483,74 @@ export default function FigmaDMsPage() {
           position: relative;
         }
 
-        /* Voice Channels Section */
-        .voice-channels-section {
+        /* Quick Voice Section */
+        .quick-voice-section {
           margin-bottom: 20px;
           padding: 0 16px;
         }
 
-        .voice-channel-item {
+        .quick-voice-actions {
           display: flex;
-          align-items: center;
-          padding: 12px 16px;
-          margin: 4px 0;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .quick-voice-btn {
+          flex: 1;
+          min-width: 80px;
+          padding: 12px 8px;
           border-radius: 12px;
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid transparent;
+          color: white;
           cursor: pointer;
           transition: all 0.3s ease;
-          border: 2px solid transparent;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
           position: relative;
         }
 
-        .voice-channel-item:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: rgba(102, 126, 234, 0.3);
-          transform: translateX(4px);
+        .quick-voice-btn:hover {
+          background: rgba(102, 126, 234, 0.2);
+          border-color: rgba(102, 126, 234, 0.4);
+          transform: translateY(-2px);
         }
 
-        .voice-channel-item.connected {
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+        .quick-voice-btn.connected {
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
           border-color: rgba(102, 126, 234, 0.6);
           box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .voice-channel-icon {
-          font-size: 20px;
-          margin-right: 12px;
+        .voice-btn-icon {
+          font-size: 16px;
         }
 
-        .voice-channel-info {
-          flex: 1;
-        }
-
-        .voice-channel-name {
-          font-size: 14px;
+        .voice-btn-name {
+          font-size: 10px;
           font-weight: 600;
-          color: #ffffff;
-          margin-bottom: 2px;
+          text-align: center;
+          line-height: 1.2;
         }
 
-        .voice-channel-users {
-          font-size: 12px;
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        .voice-active-indicator {
-          font-size: 12px;
-          animation: pulse 2s infinite;
+        .voice-btn-users {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          min-width: 16px;
+          height: 16px;
+          background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          border-radius: 8px;
+          color: white;
+          font-size: 9px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 4px;
         }
 
         /* Status Section */
@@ -1622,6 +1636,52 @@ export default function FigmaDMsPage() {
         .chat-action-btn:hover {
           background: rgba(102, 126, 234, 0.3);
           transform: translateY(-2px);
+        }
+
+        .chat-action-btn.voice-call:hover {
+          background: rgba(34, 197, 94, 0.3);
+          border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .chat-action-btn.video-call:hover {
+          background: rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .chat-action-btn.search:hover {
+          background: rgba(168, 85, 247, 0.3);
+          border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        /* User Action Buttons */
+        .user-action-btn {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .user-action-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          transform: scale(1.1);
+        }
+
+        .user-action-btn.voice-call:hover {
+          background: rgba(34, 197, 94, 0.3);
+          border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .user-action-btn.video-call:hover {
+          background: rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
         }
 
         /* Typing Indicator */
@@ -1909,30 +1969,27 @@ export default function FigmaDMsPage() {
             </div>
           </div>
 
-          {/* Voice Channels Section */}
-          <div className="voice-channels-section">
+          {/* Quick Voice Actions */}
+          <div className="quick-voice-section">
             <div className="section-header">
-              <span>🔊 Voice Channels</span>
-              <span className="section-count">{voiceChannels.length}</span>
+              <span>🎙️ Quick Connect</span>
             </div>
-            {voiceChannels.map((channel) => (
-              <div
-                key={channel.id}
-                className={`voice-channel-item ${connectedVoiceChannel === channel.id ? 'connected' : ''}`}
-                onClick={() => handleVoiceChannelJoin(channel.id)}
-              >
-                <div className="voice-channel-icon">🎙️</div>
-                <div className="voice-channel-info">
-                  <div className="voice-channel-name">{channel.name}</div>
-                  <div className="voice-channel-users">
-                    {channel.users.length}/{channel.maxUsers} users
-                  </div>
-                </div>
-                {channel.users.length > 0 && (
-                  <div className="voice-active-indicator">🔴</div>
-                )}
-              </div>
-            ))}
+            <div className="quick-voice-actions">
+              {voiceChannels.map((channel) => (
+                <button
+                  key={channel.id}
+                  className={`quick-voice-btn ${connectedVoiceChannel === channel.id ? 'connected' : ''}`}
+                  onClick={() => handleVoiceChannelJoin(channel.id)}
+                  title={`Join ${channel.name}`}
+                >
+                  <div className="voice-btn-icon">🎧</div>
+                  <div className="voice-btn-name">{channel.name}</div>
+                  {channel.users.length > 0 && (
+                    <div className="voice-btn-users">{channel.users.length}</div>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Status selector */}
@@ -1980,8 +2037,16 @@ export default function FigmaDMsPage() {
                   <div className="user-last-seen">{user.lastSeen}</div>
                 </div>
                 <div className="user-actions">
-                  <button className="user-action-btn" title="Voice call">📞</button>
-                  <button className="user-action-btn" title="Video call">📹</button>
+                  <button className="user-action-btn voice-call" title="Voice call">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                  </button>
+                  <button className="user-action-btn video-call" title="Video call">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             ))}
@@ -2040,10 +2105,26 @@ export default function FigmaDMsPage() {
               </div>
             </div>
             <div className="chat-actions">
-              <button className="chat-action-btn" title="Voice call">📞</button>
-              <button className="chat-action-btn" title="Video call">📹</button>
-              <button className="chat-action-btn" title="Search">🔍</button>
-              <button className="chat-action-btn" title="More options">⋯</button>
+              <button className="chat-action-btn voice-call" title="Voice call">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+              </button>
+              <button className="chat-action-btn video-call" title="Video call">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                </svg>
+              </button>
+              <button className="chat-action-btn search" title="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+              </button>
+              <button className="chat-action-btn more" title="More options">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </button>
             </div>
           </div>
           
