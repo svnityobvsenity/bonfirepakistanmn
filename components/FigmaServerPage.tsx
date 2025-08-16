@@ -8,7 +8,12 @@ const channels = [
   { id: 2, name: 'Media', type: 'text', selected: false },
   { id: 3, name: 'Forum', type: 'text', selected: false },
   { id: 4, name: 'Memes', type: 'text', selected: false },
-  { id: 5, name: 'General', type: 'voice', selected: false },
+  { id: 5, name: 'Announcements', type: 'text', selected: false },
+  { id: 6, name: 'Random', type: 'text', selected: false },
+  { id: 7, name: 'Help-Desk', type: 'text', selected: false },
+  { id: 8, name: 'General', type: 'voice', selected: false },
+  { id: 9, name: 'Music', type: 'voice', selected: false },
+  { id: 10, name: 'Gaming', type: 'voice', selected: false },
 ];
 
 const members = [
@@ -99,42 +104,58 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           left: 24px;
           top: 20px;
           width: calc(100vw - 48px);
-          height: 100px;
+          height: 110px;
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 16px;
-          padding: 16px 24px;
-          background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 35, 0.95) 100%);
-          backdrop-filter: blur(30px);
-          -webkit-backdrop-filter: blur(30px);
-          border-radius: 20px;
-          border: 2px solid rgba(102, 126, 234, 0.3);
+          gap: 20px;
+          padding: 20px 32px;
+          background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(15, 15, 35, 0.98) 50%, rgba(25, 25, 45, 0.98) 100%);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border-radius: 24px;
+          border: 2px solid rgba(102, 126, 234, 0.4);
           box-shadow: 
-            0 8px 40px rgba(0, 0, 0, 0.7),
-            0 0 0 1px rgba(255, 255, 255, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 12px 50px rgba(0, 0, 0, 0.8),
+            0 0 0 1px rgba(255, 255, 255, 0.15),
+            inset 0 2px 0 rgba(255, 255, 255, 0.15),
+            0 0 60px rgba(102, 126, 234, 0.2);
           z-index: 50;
           overflow-x: auto;
           overflow-y: hidden;
+          position: relative;
+        }
+
+        .server-list::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.1) 50%, transparent 70%);
+          border-radius: 24px;
+          pointer-events: none;
+          opacity: 0.8;
         }
 
         .server-icon {
-          width: 72px;
-          height: 72px;
-          border-radius: 16px;
+          width: 80px;
+          height: 80px;
+          border-radius: 20px;
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
           position: relative;
           box-shadow: 
-            0 4px 20px rgba(0, 0, 0, 0.6),
-            0 0 0 2px rgba(255, 255, 255, 0.1);
+            0 6px 30px rgba(0, 0, 0, 0.7),
+            0 0 0 3px rgba(255, 255, 255, 0.15),
+            inset 0 2px 0 rgba(255, 255, 255, 0.2);
           border: 2px solid transparent;
           flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 36px;
+          font-size: 40px;
           font-weight: bold;
           color: white;
           overflow: hidden;
@@ -250,13 +271,13 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         }
 
         /* Left Sidebar - Channels */
-        /* Frame 1000002743: x: 24, y: 140, width: 280, height: 818 */
+        /* Frame 1000002743: x: 24, y: 150, width: 280, height: 808 */
         .channels-sidebar {
           position: absolute;
           left: 24px;
-          top: 140px;
+          top: 150px;
           width: 280px;
-          height: calc(100vh - 164px);
+          height: calc(100vh - 174px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -318,21 +339,28 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         .channel-item {
           display: flex;
           align-items: center;
-          padding: 8px 20px;
-          margin: 2px 8px;
-          border-radius: 8px;
+          padding: 10px 20px;
+          margin: 3px 12px;
+          border-radius: 12px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
           position: relative;
+          border: 1px solid transparent;
         }
 
         .channel-item:hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(102, 126, 234, 0.3);
+          transform: translateX(4px);
         }
 
         .channel-item.selected {
-          background: rgba(102, 126, 234, 0.3);
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
           border-left: 4px solid #667eea;
+          border-color: rgba(102, 126, 234, 0.6);
+          box-shadow: 
+            0 4px 20px rgba(102, 126, 234, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .channel-icon {
@@ -346,16 +374,63 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           font-size: 14px;
           font-weight: 500;
           color: #ffffff;
+          flex: 1;
+        }
+
+        /* Voice Channel Enhancements */
+        .voice-channel {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .voice-channel-controls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .voice-channel:hover .voice-channel-controls {
+          opacity: 1;
+        }
+
+        .voice-join-btn {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(102, 126, 234, 0.3);
+          border: 1px solid rgba(102, 126, 234, 0.5);
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .voice-join-btn:hover {
+          background: rgba(102, 126, 234, 0.6);
+          transform: scale(1.1);
+        }
+
+        .voice-users-count {
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.6);
+          min-width: 30px;
+          text-align: center;
         }
 
         /* Main Chat Area */
-        /* Frame 1000002747: x: 328, y: 140, width: 944, height: 818 */
+        /* Frame 1000002747: x: 328, y: 150, width: 944, height: 808 */
         .server-chat-area {
           position: absolute;
           left: 328px;
-          top: 140px;
+          top: 150px;
           width: calc(100vw - 592px);
-          height: calc(100vh - 164px);
+          height: calc(100vh - 174px);
           background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -528,13 +603,13 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         }
 
         /* Members Sidebar */
-        /* Frame 1000002749: x: 1296, y: 140, width: 240, height: 818 */
+        /* Frame 1000002749: x: 1296, y: 150, width: 240, height: 808 */
         .members-sidebar {
           position: absolute;
           right: 24px;
-          top: 140px;
+          top: 150px;
           width: 240px;
-          height: calc(100vh - 164px);
+          height: calc(100vh - 174px);
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
@@ -678,7 +753,18 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
           </div>
           <div className="server-separator"></div>
           <div className="server-icon blender active">
+            🔥
             <div className="server-notification">12</div>
+          </div>
+          <div className="server-separator"></div>
+          <div className="server-icon" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+            🎮
+            <div className="server-notification">7</div>
+          </div>
+          <div className="server-separator"></div>
+          <div className="server-icon" style={{background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'}}>
+            💬
+            <div className="server-notification">2</div>
           </div>
         </div>
 
@@ -706,11 +792,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             {channels.filter(c => c.type === 'voice').map((channel) => (
               <div
                 key={channel.id}
-                className={`channel-item ${selectedChannelId === channel.id ? 'selected' : ''}`}
+                className={`channel-item voice-channel ${selectedChannelId === channel.id ? 'selected' : ''}`}
                 onClick={() => setSelectedChannelId(channel.id)}
               >
                 <div className="channel-icon">🔊</div>
                 <div className="channel-name">{channel.name}</div>
+                <div className="voice-channel-controls">
+                  <button className="voice-join-btn" title="Join Voice">🎤</button>
+                  <div className="voice-users-count">2/10</div>
+                </div>
               </div>
             ))}
           </div>

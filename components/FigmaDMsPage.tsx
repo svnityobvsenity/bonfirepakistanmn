@@ -3,17 +3,24 @@
 import React, { useState } from 'react';
 import FigmaServerPage from './FigmaServerPage';
 
-// Data based on your Figma design
+// Enhanced user data with more detailed status
 const users = [
-  { id: 1, name: 'daFoxy', status: 'Playing Blender', avatar: '/avatars/dafoxy.jpg', selected: true, online: true },
-  { id: 2, name: 'james', status: 'Playing Procrast', avatar: '/avatars/james.jpg', selected: false, online: true },
-  { id: 3, name: 'Ekmand', status: '', avatar: '/avatars/ekmand.jpg', selected: false, online: false },
-  { id: 4, name: 'Sticks', status: '', avatar: '/avatars/sticks.jpg', selected: false, online: false },
-  { id: 5, name: 'FranzaGeek', status: 'Playing Powerpoi', avatar: '/avatars/franzageek.jpg', selected: false, online: true },
-  { id: 6, name: "Markella's", status: 'Playing MTG Aren', avatar: '/avatars/markellas.jpg', selected: false, online: true },
-  { id: 7, name: 'AY-Plays', status: '', avatar: '/avatars/ayplays.jpg', selected: false, online: false },
-  { id: 8, name: 'LemonTiger', status: '', avatar: '/avatars/lemontiger.jpg', selected: false, online: false },
-  { id: 9, name: 'NRD', status: '', avatar: '/avatars/nrd.jpg', selected: false, online: false },
+  { id: 1, name: 'daFoxy', status: 'Playing Blender', avatar: '/avatars/dafoxy.jpg', selected: true, online: true, lastSeen: 'Active now', unread: 3 },
+  { id: 2, name: 'james', status: 'Playing Procrast', avatar: '/avatars/james.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 1 },
+  { id: 3, name: 'Ekmand', status: 'Away', avatar: '/avatars/ekmand.jpg', selected: false, online: true, lastSeen: '5 minutes ago', unread: 0 },
+  { id: 4, name: 'Sticks', status: 'Do Not Disturb', avatar: '/avatars/sticks.jpg', selected: false, online: true, lastSeen: '2 hours ago', unread: 0 },
+  { id: 5, name: 'FranzaGeek', status: 'Playing Powerpoi', avatar: '/avatars/franzageek.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 7 },
+  { id: 6, name: "Markella's", status: 'Playing MTG Aren', avatar: '/avatars/markellas.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 0 },
+  { id: 7, name: 'AY-Plays', status: 'Offline', avatar: '/avatars/ayplays.jpg', selected: false, online: false, lastSeen: '2 days ago', unread: 0 },
+  { id: 8, name: 'LemonTiger', status: 'Offline', avatar: '/avatars/lemontiger.jpg', selected: false, online: false, lastSeen: '1 week ago', unread: 0 },
+  { id: 9, name: 'NRD', status: 'Offline', avatar: '/avatars/nrd.jpg', selected: false, online: false, lastSeen: '3 days ago', unread: 0 },
+];
+
+// Voice channel state
+const voiceChannels = [
+  { id: 'general', name: 'General', users: ['daFoxy', 'james'], maxUsers: 10 },
+  { id: 'music', name: 'Music Lounge', users: ['FranzaGeek'], maxUsers: 8 },
+  { id: 'gaming', name: 'Gaming Hub', users: [], maxUsers: 12 },
 ];
 
 const messages = [
@@ -33,8 +40,18 @@ export default function FigmaDMsPage() {
   const [selectedUserId, setSelectedUserId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
   const [currentMessages, setCurrentMessages] = useState(messages);
-  const [currentView, setCurrentView] = useState<'dms' | 'server'>('dms');
+  const [currentView, setCurrentView] = useState<'dms' | 'server' | 'voice'>('dms');
   const [selectedServer, setSelectedServer] = useState<string>('bonfire pakistan');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isVoiceConnected, setIsVoiceConnected] = useState(false);
+  const [voiceSettings, setVoiceSettings] = useState({
+    muted: false,
+    deafened: false,
+    camera: false,
+    screenShare: false
+  });
+  const [connectedVoiceChannel, setConnectedVoiceChannel] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -61,9 +78,297 @@ export default function FigmaDMsPage() {
     setCurrentView('server');
   };
 
+  const handleVoiceChannelJoin = (channelId: string) => {
+    setConnectedVoiceChannel(channelId);
+    setIsVoiceConnected(true);
+    setCurrentView('voice');
+  };
+
+  const handleVoiceDisconnect = () => {
+    setConnectedVoiceChannel(null);
+    setIsVoiceConnected(false);
+    setCurrentView('dms');
+    setVoiceSettings({
+      muted: false,
+      deafened: false,
+      camera: false,
+      screenShare: false
+    });
+  };
+
+  const toggleVoiceSetting = (setting: keyof typeof voiceSettings) => {
+    setVoiceSettings(prev => ({
+      ...prev,
+      [setting]: !prev[setting]
+    }));
+  };
+
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Show server view if selected
   if (currentView === 'server') {
     return <FigmaServerPage onBackToDMs={() => setCurrentView('dms')} serverName={selectedServer} />;
+  }
+
+  // Show voice channel interface if connected
+  if (currentView === 'voice' && connectedVoiceChannel) {
+    const channel = voiceChannels.find(vc => vc.id === connectedVoiceChannel);
+    return (
+      <div className="voice-interface">
+        <style jsx>{`
+          .voice-interface {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+          }
+
+          .voice-header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+          }
+
+          .voice-channel-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+          }
+
+          .voice-users-count {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+          }
+
+          .voice-users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 800px;
+            margin: 40px 0;
+          }
+
+          .voice-user-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .voice-user-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+
+          .voice-user-card:hover::before {
+            opacity: 1;
+          }
+
+          .voice-user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+          }
+
+          .voice-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+          }
+
+          .voice-user-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+          }
+
+          .voice-controls {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+          }
+
+          .voice-control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(20px);
+          }
+
+          .voice-control-btn.mute {
+            background: ${voiceSettings.muted ? 'linear-gradient(135deg, #ff4757 0%, #ff3838 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .voice-control-btn.deafen {
+            background: ${voiceSettings.deafened ? 'linear-gradient(135deg, #ff4757 0%, #ff3838 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .voice-control-btn.camera {
+            background: ${voiceSettings.camera ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .voice-control-btn.screen {
+            background: ${voiceSettings.screenShare ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.2)'};
+            color: white;
+          }
+
+          .voice-control-btn.disconnect {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+            color: white;
+          }
+
+          .voice-control-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+          }
+
+          .back-to-dms {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+          }
+
+          .back-to-dms:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+          }
+        `}</style>
+
+        <button className="back-to-dms" onClick={() => setCurrentView('dms')}>
+          ←
+        </button>
+
+        <div className="voice-header">
+          <div className="voice-channel-name">🔊 {channel?.name}</div>
+          <div className="voice-users-count">{channel?.users.length}/{channel?.maxUsers} users</div>
+        </div>
+
+        <div className="voice-users-grid">
+          {channel?.users.map((username, index) => (
+            <div key={index} className="voice-user-card">
+              <div className="voice-user-avatar">
+                {username.charAt(0).toUpperCase()}
+              </div>
+              <div className="voice-user-name">{username}</div>
+              <div className="voice-user-status">Connected</div>
+            </div>
+          ))}
+          
+          <div className="voice-user-card">
+            <div className="voice-user-avatar">
+              Y
+            </div>
+            <div className="voice-user-name">You</div>
+            <div className="voice-user-status">
+              {voiceSettings.muted ? 'Muted' : 'Speaking'}
+            </div>
+          </div>
+        </div>
+
+        <div className="voice-controls">
+          <button 
+            className="voice-control-btn mute"
+            onClick={() => toggleVoiceSetting('muted')}
+            title={voiceSettings.muted ? 'Unmute' : 'Mute'}
+          >
+            {voiceSettings.muted ? '🔇' : '🎤'}
+          </button>
+          
+          <button 
+            className="voice-control-btn deafen"
+            onClick={() => toggleVoiceSetting('deafened')}
+            title={voiceSettings.deafened ? 'Undeafen' : 'Deafen'}
+          >
+            {voiceSettings.deafened ? '🔇' : '🔊'}
+          </button>
+          
+          <button 
+            className="voice-control-btn camera"
+            onClick={() => toggleVoiceSetting('camera')}
+            title={voiceSettings.camera ? 'Turn off camera' : 'Turn on camera'}
+          >
+            {voiceSettings.camera ? '📹' : '📷'}
+          </button>
+          
+          <button 
+            className="voice-control-btn screen"
+            onClick={() => toggleVoiceSetting('screenShare')}
+            title={voiceSettings.screenShare ? 'Stop sharing' : 'Share screen'}
+          >
+            {voiceSettings.screenShare ? '🖥️' : '📺'}
+          </button>
+          
+          <button 
+            className="voice-control-btn disconnect"
+            onClick={handleVoiceDisconnect}
+            title="Disconnect"
+          >
+            📞
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -1144,7 +1449,300 @@ export default function FigmaDMsPage() {
           animation: heartbeat 0.6s ease-in-out;
         }
 
+        /* New Enhanced Styles for Redesigned Components */
 
+        /* Sidebar Header Enhancements */
+        .sidebar-title-section {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        }
+
+        .settings-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+          font-size: 16px;
+        }
+
+        .settings-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          transform: rotate(90deg);
+        }
+
+        .search-container {
+          position: relative;
+        }
+
+        /* Voice Channels Section */
+        .voice-channels-section {
+          margin-bottom: 20px;
+          padding: 0 16px;
+        }
+
+        .voice-channel-item {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          margin: 4px 0;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 2px solid transparent;
+          position: relative;
+        }
+
+        .voice-channel-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(102, 126, 234, 0.3);
+          transform: translateX(4px);
+        }
+
+        .voice-channel-item.connected {
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+          border-color: rgba(102, 126, 234, 0.6);
+          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .voice-channel-icon {
+          font-size: 20px;
+          margin-right: 12px;
+        }
+
+        .voice-channel-info {
+          flex: 1;
+        }
+
+        .voice-channel-name {
+          font-size: 14px;
+          font-weight: 600;
+          color: #ffffff;
+          margin-bottom: 2px;
+        }
+
+        .voice-channel-users {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .voice-active-indicator {
+          font-size: 12px;
+          animation: pulse 2s infinite;
+        }
+
+        /* Status Section */
+        .status-section {
+          margin-bottom: 20px;
+          padding: 0 16px;
+        }
+
+        .status-selector {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .status-btn {
+          padding: 6px 12px;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          font-size: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .status-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-1px);
+        }
+
+        .status-btn.active {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-color: transparent;
+        }
+
+        /* Enhanced Chat Components */
+        .chat-user-info {
+          display: flex;
+          align-items: center;
+        }
+
+        .chat-user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+          margin-right: 12px;
+          position: relative;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-user-details {
+          flex: 1;
+        }
+
+        .chat-user-status {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.6);
+          margin-top: 2px;
+        }
+
+        .chat-actions {
+          display: flex;
+          gap: 8px;
+        }
+
+        .chat-action-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          transition: all 0.3s ease;
+        }
+
+        .chat-action-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          transform: translateY(-2px);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+          display: flex;
+          align-items: center;
+          padding: 12px 20px;
+          margin: 8px 0;
+          opacity: 0.8;
+        }
+
+        .typing-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          margin-right: 12px;
+        }
+
+        .typing-content {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .typing-name {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.6);
+          margin-bottom: 4px;
+        }
+
+        .typing-dots {
+          display: flex;
+          gap: 4px;
+        }
+
+        .typing-dots span {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.6);
+          animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+          0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.6;
+          }
+          30% {
+            transform: translateY(-10px);
+            opacity: 1;
+          }
+        }
+
+        /* Enhanced Input Components */
+        .input-extras {
+          display: flex;
+          gap: 8px;
+          margin-right: 12px;
+        }
+
+        .input-extra-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          transition: all 0.3s ease;
+        }
+
+        .input-extra-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .quick-actions-bar {
+          display: flex;
+          gap: 12px;
+          padding: 8px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          margin-top: 8px;
+        }
+
+        .quick-action-btn {
+          padding: 8px 16px;
+          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          cursor: pointer;
+          font-size: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .quick-action-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .messages-date-header {
+          text-align: center;
+          padding: 20px 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.6);
+          position: relative;
+        }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
@@ -1287,95 +1885,171 @@ export default function FigmaDMsPage() {
           </div>
         </div>
 
-        {/* Left Sidebar - Enhanced DMs */}
+        {/* Left Sidebar - Completely Redesigned */}
         <div className="left-sidebar">
+          {/* Header with search and settings */}
           <div className="sidebar-header">
-            <div className="sidebar-title">Messages</div>
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Search conversations..."
-            />
+            <div className="sidebar-title-section">
+              <div className="sidebar-title">💬 Messages</div>
+              <button 
+                className="settings-btn"
+                onClick={() => setShowSettings(!showSettings)}
+              >
+                ⚙️
+              </button>
+            </div>
+            <div className="search-container">
+              <input 
+                type="text" 
+                className="search-input" 
+                placeholder="🔍 Search conversations, users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
 
-          <div className="quick-actions">
-            <button className="quick-action-btn active">All</button>
-            <button className="quick-action-btn">Unread</button>
-            <button className="quick-action-btn">Priority</button>
-          </div>
-          
-          <div className="user-list">
+          {/* Voice Channels Section */}
+          <div className="voice-channels-section">
             <div className="section-header">
-              <span>Recent</span>
-              <span className="section-count">4</span>
+              <span>🔊 Voice Channels</span>
+              <span className="section-count">{voiceChannels.length}</span>
             </div>
-            {users.slice(0, 4).map((user, index) => (
+            {voiceChannels.map((channel) => (
+              <div
+                key={channel.id}
+                className={`voice-channel-item ${connectedVoiceChannel === channel.id ? 'connected' : ''}`}
+                onClick={() => handleVoiceChannelJoin(channel.id)}
+              >
+                <div className="voice-channel-icon">🎙️</div>
+                <div className="voice-channel-info">
+                  <div className="voice-channel-name">{channel.name}</div>
+                  <div className="voice-channel-users">
+                    {channel.users.length}/{channel.maxUsers} users
+                  </div>
+                </div>
+                {channel.users.length > 0 && (
+                  <div className="voice-active-indicator">🔴</div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Status selector */}
+          <div className="status-section">
+            <div className="section-header">
+              <span>📊 Your Status</span>
+            </div>
+            <div className="status-selector">
+              <button className="status-btn active">🟢 Online</button>
+              <button className="status-btn">🟡 Away</button>
+              <button className="status-btn">🔴 Busy</button>
+              <button className="status-btn">⚫ Invisible</button>
+            </div>
+          </div>
+
+          {/* Enhanced user list */}
+          <div className="conversations-section">
+            <div className="section-header">
+              <span>💬 Conversations</span>
+              <span className="section-count">{filteredUsers.length}</span>
+            </div>
+            
+            {filteredUsers.map((user, index) => (
               <div
                 key={user.id}
                 className={`user-item ${selectedUserId === user.id ? 'selected' : ''} ${
-                  index === 0 ? 'has-unread priority-high' : ''
-                } ${index === 1 ? 'typing' : ''} ${index === 2 ? 'priority-medium' : ''}`}
+                  user.unread > 0 ? 'has-unread' : ''
+                }`}
                 onClick={() => setSelectedUserId(user.id)}
               >
-                <div className="priority-indicator"></div>
-                <div className="activity-indicator"></div>
-                <div 
-                  className="user-avatar"
-                  style={{backgroundImage: `url(${user.avatar})`}}
-                >
-                  {user.online && <div className="online-dot" />}
-                </div>
-                <div className="user-info">
-                  <div className="user-name">{user.name}</div>
-                  {user.status && <div className="user-status">{user.status}</div>}
-                  <div className="user-preview">
-                    {index === 0 ? "Hey, are you free for a call?" : 
-                     index === 1 ? "typing..." :
-                     index === 2 ? "Thanks for the help earlier!" :
-                     "Sent you some files"}
+                <div className="user-avatar-container">
+                  <div 
+                    className="user-avatar"
+                    style={{backgroundImage: `url(${user.avatar})`}}
+                  >
+                    <div className={`status-dot ${user.online ? 'online' : 'offline'}`} />
                   </div>
-                </div>
-              </div>
-            ))}
-
-            <div className="section-header">
-              <span>Others</span>
-              <span className="section-count">{users.length - 4}</span>
-            </div>
-            {users.slice(4).map((user) => (
-              <div
-                key={user.id}
-                className={`user-item ${selectedUserId === user.id ? 'selected' : ''}`}
-                onClick={() => setSelectedUserId(user.id)}
-              >
-                <div className="priority-indicator"></div>
-                <div className="activity-indicator"></div>
-                <div 
-                  className="user-avatar"
-                  style={{backgroundImage: `url(${user.avatar})`}}
-                >
-                  {user.online && <div className="online-dot" />}
+                  {user.unread > 0 && (
+                    <div className="unread-badge">{user.unread}</div>
+                  )}
                 </div>
                 <div className="user-info">
                   <div className="user-name">{user.name}</div>
-                  {user.status && <div className="user-status">{user.status}</div>}
-                  <div className="user-preview">Last seen recently</div>
+                  <div className="user-status">{user.status}</div>
+                  <div className="user-last-seen">{user.lastSeen}</div>
+                </div>
+                <div className="user-actions">
+                  <button className="user-action-btn" title="Voice call">📞</button>
+                  <button className="user-action-btn" title="Video call">📹</button>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Voice connection status at bottom */}
+          {isVoiceConnected && (
+            <div className="voice-status-bar">
+              <div className="voice-status-info">
+                <div className="voice-status-channel">
+                  Connected to {voiceChannels.find(vc => vc.id === connectedVoiceChannel)?.name}
+                </div>
+                <div className="voice-mini-controls">
+                  <button 
+                    className={`voice-mini-btn ${voiceSettings.muted ? 'active' : ''}`}
+                    onClick={() => toggleVoiceSetting('muted')}
+                  >
+                    {voiceSettings.muted ? '🔇' : '🎤'}
+                  </button>
+                  <button 
+                    className={`voice-mini-btn ${voiceSettings.deafened ? 'active' : ''}`}
+                    onClick={() => toggleVoiceSetting('deafened')}
+                  >
+                    {voiceSettings.deafened ? '🔇' : '🔊'}
+                  </button>
+                  <button 
+                    className="voice-mini-btn disconnect"
+                    onClick={handleVoiceDisconnect}
+                  >
+                    📞
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Main Chat Area */}
+        {/* Main Chat Area - Completely Enhanced */}
         <div className="chat-area">
+          {/* Enhanced Chat Header */}
           <div className="chat-header">
-            <div className="chat-user-name">
-              {users.find(u => u.id === selectedUserId)?.name || 'Select a user'}
+            <div className="chat-user-info">
+              <div 
+                className="chat-user-avatar"
+                style={{backgroundImage: `url(${users.find(u => u.id === selectedUserId)?.avatar})`}}
+              >
+                <div className={`status-dot ${users.find(u => u.id === selectedUserId)?.online ? 'online' : 'offline'}`} />
+              </div>
+              <div className="chat-user-details">
+                <div className="chat-user-name">
+                  {users.find(u => u.id === selectedUserId)?.name || 'Select a user'}
+                </div>
+                <div className="chat-user-status">
+                  {users.find(u => u.id === selectedUserId)?.status || 'Last seen recently'}
+                </div>
+              </div>
             </div>
-            <div className="chat-status"></div>
+            <div className="chat-actions">
+              <button className="chat-action-btn" title="Voice call">📞</button>
+              <button className="chat-action-btn" title="Video call">📹</button>
+              <button className="chat-action-btn" title="Search">🔍</button>
+              <button className="chat-action-btn" title="More options">⋯</button>
+            </div>
           </div>
           
+          {/* Enhanced Messages Area */}
           <div className="messages-area">
+            <div className="messages-date-header">Today</div>
             {currentMessages.map((message, index) => (
               <div key={message.id} className="message">
                 <div 
@@ -1389,43 +2063,81 @@ export default function FigmaDMsPage() {
                   </div>
                   <div className="message-text">{message.text}</div>
                   
-                  {index < 3 && (
+                  {/* Enhanced message reactions */}
+                  {index < 4 && (
                     <div className="message-reactions">
-                      <button className="reaction-btn">👍 2</button>
+                      <button className="reaction-btn active">👍 2</button>
                       <button className="reaction-btn">❤️ 1</button>
+                      <button className="reaction-btn">😂 3</button>
+                      <button className="add-reaction-btn">+</button>
                     </div>
                   )}
                   
+                  {/* Message actions */}
+                  <div className="message-actions">
+                    <button className="message-action-btn" title="Reply">↩️</button>
+                    <button className="message-action-btn" title="React">😊</button>
+                    <button className="message-action-btn" title="More">⋯</button>
+                  </div>
+                  
+                  {/* Enhanced read receipts */}
                   <div className="message-meta">
-                    <div className={`read-receipt ${index < 2 ? 'read' : index < 5 ? 'delivered' : ''}`}>
-                      {index < 2 ? '✓✓ Read' : index < 5 ? '✓ Delivered' : '○ Sending...'}
+                    <div className={`read-receipt ${index < 2 ? 'read' : index < 5 ? 'delivered' : 'sending'}`}>
+                      {index < 2 ? '✓✓ Read' : index < 5 ? '✓ Delivered' : '⏳ Sending...'}
                     </div>
                   </div>
                 </div>
               </div>
             ))}
+            
+            {/* Typing indicator */}
+            <div className="typing-indicator">
+              <div className="typing-avatar" />
+              <div className="typing-content">
+                <div className="typing-name">james</div>
+                <div className="typing-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
           </div>
           
+          {/* Enhanced Message Input */}
           <div className="message-input-area">
             <div className="message-input-container">
+              <div className="input-extras">
+                <button className="input-extra-btn" title="Upload file">📎</button>
+                <button className="input-extra-btn" title="GIF">🎬</button>
+                <button className="input-extra-btn" title="Sticker">🎨</button>
+              </div>
               <input 
                 type="text" 
                 className="message-input"
-                placeholder={`Message ${users.find(u => u.id === selectedUserId)?.name || 'user'}`}
+                placeholder={`💬 Message ${users.find(u => u.id === selectedUserId)?.name || 'user'}...`}
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyPress={handleKeyPress}
               />
               <div className="input-actions">
-                <button className="input-btn">📎</button>
-                <button className="input-btn">😊</button>
+                <button className="input-btn emoji-btn" title="Emoji">😊</button>
                 <button 
                   className="input-btn send-btn"
                   onClick={handleSendMessage}
+                  disabled={!messageInput.trim()}
                 >
-                  ➤
+                  {messageInput.trim() ? '🚀' : '🎤'}
                 </button>
               </div>
+            </div>
+            
+            {/* Quick actions bar */}
+            <div className="quick-actions-bar">
+              <button className="quick-action-btn">📷 Photo</button>
+              <button className="quick-action-btn">🎵 Audio</button>
+              <button className="quick-action-btn">📍 Location</button>
+              <button className="quick-action-btn">💰 Payment</button>
             </div>
           </div>
         </div>
