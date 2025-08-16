@@ -1483,75 +1483,7 @@ export default function FigmaDMsPage() {
           position: relative;
         }
 
-        /* Quick Voice Section */
-        .quick-voice-section {
-          margin-bottom: 20px;
-          padding: 0 16px;
-        }
 
-        .quick-voice-actions {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-
-        .quick-voice-btn {
-          flex: 1;
-          min-width: 80px;
-          padding: 12px 8px;
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.1);
-          border: 2px solid transparent;
-          color: white;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-          position: relative;
-        }
-
-        .quick-voice-btn:hover {
-          background: rgba(102, 126, 234, 0.2);
-          border-color: rgba(102, 126, 234, 0.4);
-          transform: translateY(-2px);
-        }
-
-        .quick-voice-btn.connected {
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
-          border-color: rgba(102, 126, 234, 0.6);
-          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .voice-btn-icon {
-          font-size: 16px;
-        }
-
-        .voice-btn-name {
-          font-size: 10px;
-          font-weight: 600;
-          text-align: center;
-          line-height: 1.2;
-        }
-
-        .voice-btn-users {
-          position: absolute;
-          top: -4px;
-          right: -4px;
-          min-width: 16px;
-          height: 16px;
-          background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
-          border: 1px solid rgba(0, 0, 0, 0.8);
-          border-radius: 8px;
-          color: white;
-          font-size: 9px;
-          font-weight: 700;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0 4px;
-        }
 
         /* Status Section */
         .status-section {
@@ -1566,12 +1498,12 @@ export default function FigmaDMsPage() {
         }
 
         .status-btn {
-          padding: 6px 12px;
-          border-radius: 16px;
+          padding: 4px 8px;
+          border-radius: 12px;
           border: 1px solid rgba(255, 255, 255, 0.2);
           background: rgba(255, 255, 255, 0.1);
           color: white;
-          font-size: 12px;
+          font-size: 11px;
           cursor: pointer;
           transition: all 0.3s ease;
         }
@@ -1969,28 +1901,7 @@ export default function FigmaDMsPage() {
             </div>
           </div>
 
-          {/* Quick Voice Actions */}
-          <div className="quick-voice-section">
-            <div className="section-header">
-              <span>🎙️ Quick Connect</span>
-            </div>
-            <div className="quick-voice-actions">
-              {voiceChannels.map((channel) => (
-                <button
-                  key={channel.id}
-                  className={`quick-voice-btn ${connectedVoiceChannel === channel.id ? 'connected' : ''}`}
-                  onClick={() => handleVoiceChannelJoin(channel.id)}
-                  title={`Join ${channel.name}`}
-                >
-                  <div className="voice-btn-icon">🎧</div>
-                  <div className="voice-btn-name">{channel.name}</div>
-                  {channel.users.length > 0 && (
-                    <div className="voice-btn-users">{channel.users.length}</div>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
+
 
           {/* Status selector */}
           <div className="status-section">
