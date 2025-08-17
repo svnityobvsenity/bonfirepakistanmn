@@ -1451,32 +1451,13 @@ export default function FigmaDMsPage() {
 
         /* New Enhanced Styles for Redesigned Components */
 
-        /* Sidebar Header Enhancements */
-        .sidebar-title-section {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        /* Clean Sidebar Header */
+        .sidebar-title {
+          font-size: 20px;
+          font-weight: 700;
+          color: #ffffff;
           margin-bottom: 16px;
-        }
-
-        .settings-btn {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: white;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          font-size: 16px;
-        }
-
-        .settings-btn:hover {
-          background: rgba(102, 126, 234, 0.3);
-          transform: rotate(90deg);
+          text-align: left;
         }
 
         .search-container {
@@ -1879,22 +1860,14 @@ export default function FigmaDMsPage() {
 
         {/* Left Sidebar - Completely Redesigned */}
         <div className="left-sidebar">
-          {/* Header with search and settings */}
+          {/* Clean Header */}
           <div className="sidebar-header">
-            <div className="sidebar-title-section">
-              <div className="sidebar-title">💬 Messages</div>
-              <button 
-                className="settings-btn"
-                onClick={() => setShowSettings(!showSettings)}
-              >
-                ⚙️
-              </button>
-            </div>
+            <div className="sidebar-title">Messages</div>
             <div className="search-container">
               <input 
                 type="text" 
                 className="search-input" 
-                placeholder="🔍 Search conversations, users..."
+                placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -1906,7 +1879,7 @@ export default function FigmaDMsPage() {
           {/* Status selector */}
           <div className="status-section">
             <div className="section-header">
-              <span>📊 Your Status</span>
+              <span>Your Status</span>
             </div>
             <div className="status-selector">
               <button className="status-btn active">🟢 Online</button>
@@ -1919,7 +1892,7 @@ export default function FigmaDMsPage() {
           {/* Enhanced user list */}
           <div className="conversations-section">
             <div className="section-header">
-              <span>💬 Conversations</span>
+              <span>Conversations</span>
               <span className="section-count">{filteredUsers.length}</span>
             </div>
             
