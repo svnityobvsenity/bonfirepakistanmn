@@ -1717,6 +1717,23 @@ export default function FigmaDMsPage() {
           position: relative;
         }
 
+        /* DMs Home Icon Special Styling */
+        .server-icon.dms-home:hover {
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.8),
+            0 0 0 3px rgba(102, 126, 234, 0.8),
+            0 0 30px rgba(102, 126, 234, 0.6);
+          border-color: rgba(102, 126, 234, 0.8);
+        }
+
+        .server-icon.dms-home.active {
+          border-color: rgba(102, 126, 234, 0.8);
+          box-shadow: 
+            0 6px 30px rgba(0, 0, 0, 0.7),
+            0 0 0 3px rgba(102, 126, 234, 0.6),
+            0 0 20px rgba(102, 126, 234, 0.4);
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
           .server-list {
@@ -1799,8 +1816,76 @@ export default function FigmaDMsPage() {
         
         {/* Server List - Enhanced Cool Design */}
         <div className="server-list">
+          <div 
+            className="server-icon dms-home active"
+            title="DMs Home"
+            style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}
+          >
+            <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor">
+              <path d="M50 10 L65 35 L90 35 L72.5 52.5 L80 80 L50 65 L20 80 L27.5 52.5 L10 35 L35 35 Z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div className="server-separator"></div>
           <div className="server-icon github">
-            ⚡
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="2" y="6" width="2" height="2"/>
+              <rect x="4" y="4" width="2" height="2"/>
+              <rect x="6" y="2" width="2" height="2"/>
+              <rect x="8" y="2" width="2" height="2"/>
+              <rect x="10" y="4" width="2" height="2"/>
+              <rect x="12" y="4" width="2" height="2"/>
+              <rect x="14" y="2" width="2" height="2"/>
+              <rect x="16" y="2" width="2" height="2"/>
+              <rect x="18" y="4" width="2" height="2"/>
+              <rect x="20" y="6" width="2" height="2"/>
+              <rect x="0" y="8" width="2" height="2"/>
+              <rect x="2" y="8" width="2" height="2"/>
+              <rect x="4" y="6" width="2" height="2"/>
+              <rect x="6" y="4" width="2" height="2"/>
+              <rect x="8" y="4" width="2" height="2"/>
+              <rect x="10" y="6" width="2" height="2"/>
+              <rect x="12" y="6" width="2" height="2"/>
+              <rect x="14" y="4" width="2" height="2"/>
+              <rect x="16" y="4" width="2" height="2"/>
+              <rect x="18" y="6" width="2" height="2"/>
+              <rect x="20" y="8" width="2" height="2"/>
+              <rect x="22" y="8" width="2" height="2"/>
+              <rect x="0" y="10" width="2" height="2"/>
+              <rect x="2" y="10" width="2" height="2"/>
+              <rect x="4" y="8" width="2" height="2"/>
+              <rect x="6" y="6" width="2" height="2"/>
+              <rect x="8" y="6" width="2" height="2"/>
+              <rect x="10" y="8" width="2" height="2"/>
+              <rect x="12" y="8" width="2" height="2"/>
+              <rect x="14" y="6" width="2" height="2"/>
+              <rect x="16" y="6" width="2" height="2"/>
+              <rect x="18" y="8" width="2" height="2"/>
+              <rect x="20" y="10" width="2" height="2"/>
+              <rect x="22" y="10" width="2" height="2"/>
+              <rect x="2" y="12" width="2" height="2"/>
+              <rect x="4" y="10" width="2" height="2"/>
+              <rect x="6" y="8" width="2" height="2"/>
+              <rect x="8" y="8" width="2" height="2"/>
+              <rect x="10" y="10" width="2" height="2"/>
+              <rect x="12" y="10" width="2" height="2"/>
+              <rect x="14" y="8" width="2" height="2"/>
+              <rect x="16" y="8" width="2" height="2"/>
+              <rect x="18" y="10" width="2" height="2"/>
+              <rect x="20" y="12" width="2" height="2"/>
+              <rect x="6" y="10" width="2" height="2"/>
+              <rect x="8" y="10" width="2" height="2"/>
+              <rect x="10" y="12" width="2" height="2"/>
+              <rect x="12" y="12" width="2" height="2"/>
+              <rect x="14" y="10" width="2" height="2"/>
+              <rect x="16" y="10" width="2" height="2"/>
+              <rect x="8" y="12" width="2" height="2"/>
+              <rect x="10" y="14" width="2" height="2"/>
+              <rect x="12" y="14" width="2" height="2"/>
+              <rect x="14" y="12" width="2" height="2"/>
+              <rect x="10" y="16" width="2" height="2"/>
+              <rect x="12" y="16" width="2" height="2"/>
+              <rect x="11" y="18" width="2" height="2"/>
+            </svg>
             <div className="server-notification">3</div>
           </div>
           <div className="server-separator"></div>
@@ -1808,18 +1893,143 @@ export default function FigmaDMsPage() {
             className="server-icon blender active"
             onClick={() => handleServerClick('The Club // Pakistan')}
           >
+            <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor">
+              <path d="M25 30 Q20 25 15 30 Q10 35 15 40 Q20 35 25 40 L30 45 Q35 40 40 45 L45 40 Q50 35 55 40 L60 35 Q65 30 70 35 Q75 40 70 45 Q65 40 60 45 L55 50 Q50 55 45 50 L40 55 Q35 60 30 55 L25 60 Q20 65 15 60 Q10 55 15 50 Q20 55 25 50 L30 45"/>
+              <circle cx="35" cy="25" r="3"/>
+              <circle cx="45" cy="25" r="3"/>
+              <path d="M30 70 Q35 75 40 70 Q45 65 50 70 L55 75 Q60 70 65 75 Q70 80 65 85 Q60 80 55 85 L50 90 Q45 85 40 90 Q35 85 30 90 Q25 85 30 80 Z"/>
+            </svg>
             <div className="server-notification">12</div>
           </div>
           <div 
             className="server-icon coinbase"
             onClick={() => handleServerClick('Crypto Trading')}
           >
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="2" height="2"/>
+              <rect x="8" y="4" width="2" height="2"/>
+              <rect x="10" y="4" width="2" height="2"/>
+              <rect x="12" y="4" width="2" height="2"/>
+              <rect x="14" y="4" width="2" height="2"/>
+              <rect x="16" y="4" width="2" height="2"/>
+              <rect x="4" y="6" width="2" height="2"/>
+              <rect x="6" y="6" width="2" height="2"/>
+              <rect x="8" y="6" width="2" height="2"/>
+              <rect x="10" y="6" width="2" height="2"/>
+              <rect x="12" y="6" width="2" height="2"/>
+              <rect x="14" y="6" width="2" height="2"/>
+              <rect x="16" y="6" width="2" height="2"/>
+              <rect x="18" y="6" width="2" height="2"/>
+              <rect x="4" y="8" width="2" height="2"/>
+              <rect x="6" y="8" width="2" height="2" fill="#000"/>
+              <rect x="8" y="8" width="2" height="2" fill="#000"/>
+              <rect x="10" y="8" width="2" height="2"/>
+              <rect x="12" y="8" width="2" height="2"/>
+              <rect x="14" y="8" width="2" height="2" fill="#000"/>
+              <rect x="16" y="8" width="2" height="2" fill="#000"/>
+              <rect x="18" y="8" width="2" height="2"/>
+              <rect x="4" y="10" width="2" height="2"/>
+              <rect x="6" y="10" width="2" height="2" fill="#000"/>
+              <rect x="8" y="10" width="2" height="2" fill="#000"/>
+              <rect x="10" y="10" width="2" height="2"/>
+              <rect x="12" y="10" width="2" height="2"/>
+              <rect x="14" y="10" width="2" height="2" fill="#000"/>
+              <rect x="16" y="10" width="2" height="2" fill="#000"/>
+              <rect x="18" y="10" width="2" height="2"/>
+              <rect x="4" y="12" width="2" height="2"/>
+              <rect x="6" y="12" width="2" height="2"/>
+              <rect x="8" y="12" width="2" height="2"/>
+              <rect x="10" y="12" width="2" height="2" fill="#000"/>
+              <rect x="12" y="12" width="2" height="2" fill="#000"/>
+              <rect x="14" y="12" width="2" height="2"/>
+              <rect x="16" y="12" width="2" height="2"/>
+              <rect x="18" y="12" width="2" height="2"/>
+              <rect x="6" y="14" width="2" height="2"/>
+              <rect x="8" y="14" width="2" height="2"/>
+              <rect x="10" y="14" width="2" height="2"/>
+              <rect x="12" y="14" width="2" height="2"/>
+              <rect x="14" y="14" width="2" height="2"/>
+              <rect x="16" y="14" width="2" height="2"/>
+              <rect x="8" y="16" width="2" height="2"/>
+              <rect x="10" y="16" width="2" height="2"/>
+              <rect x="12" y="16" width="2" height="2"/>
+              <rect x="14" y="16" width="2" height="2"/>
+              <rect x="10" y="18" width="2" height="2"/>
+              <rect x="12" y="18" width="2" height="2"/>
+            </svg>
             <div className="server-notification">5</div>
           </div>
           <div 
             className="server-icon instagram"
             onClick={() => handleServerClick('Instagram Creators')}
-          ></div>
+          >
+            <svg width="36" height="36" viewBox="0 0 32 32" fill="currentColor">
+              <rect x="4" y="8" width="2" height="2"/>
+              <rect x="6" y="6" width="2" height="2"/>
+              <rect x="8" y="4" width="2" height="2"/>
+              <rect x="10" y="4" width="2" height="2"/>
+              <rect x="12" y="4" width="2" height="2"/>
+              <rect x="14" y="4" width="2" height="2"/>
+              <rect x="16" y="4" width="2" height="2"/>
+              <rect x="18" y="4" width="2" height="2"/>
+              <rect x="20" y="4" width="2" height="2"/>
+              <rect x="22" y="4" width="2" height="2"/>
+              <rect x="24" y="6" width="2" height="2"/>
+              <rect x="26" y="8" width="2" height="2"/>
+              <rect x="4" y="10" width="2" height="2"/>
+              <rect x="6" y="8" width="2" height="2"/>
+              <rect x="8" y="6" width="2" height="2"/>
+              <rect x="10" y="6" width="2" height="2"/>
+              <rect x="12" y="6" width="2" height="2"/>
+              <rect x="14" y="6" width="2" height="2"/>
+              <rect x="16" y="6" width="2" height="2"/>
+              <rect x="18" y="6" width="2" height="2"/>
+              <rect x="20" y="6" width="2" height="2"/>
+              <rect x="22" y="6" width="2" height="2"/>
+              <rect x="24" y="8" width="2" height="2"/>
+              <rect x="26" y="10" width="2" height="2"/>
+              <rect x="2" y="12" width="2" height="2"/>
+              <rect x="4" y="12" width="2" height="2"/>
+              <rect x="6" y="10" width="2" height="2"/>
+              <rect x="8" y="8" width="2" height="2" fill="#000"/>
+              <rect x="10" y="8" width="2" height="2"/>
+              <rect x="12" y="8" width="2" height="2"/>
+              <rect x="14" y="8" width="2" height="2"/>
+              <rect x="16" y="8" width="2" height="2"/>
+              <rect x="18" y="8" width="2" height="2"/>
+              <rect x="20" y="8" width="2" height="2"/>
+              <rect x="22" y="8" width="2" height="2" fill="#000"/>
+              <rect x="24" y="10" width="2" height="2"/>
+              <rect x="26" y="12" width="2" height="2"/>
+              <rect x="28" y="12" width="2" height="2"/>
+              <rect x="2" y="14" width="2" height="2"/>
+              <rect x="4" y="14" width="2" height="2"/>
+              <rect x="6" y="12" width="2" height="2"/>
+              <rect x="8" y="10" width="2" height="2" fill="#000"/>
+              <rect x="10" y="10" width="2" height="2"/>
+              <rect x="12" y="10" width="2" height="2"/>
+              <rect x="14" y="10" width="2" height="2"/>
+              <rect x="16" y="10" width="2" height="2"/>
+              <rect x="18" y="10" width="2" height="2"/>
+              <rect x="20" y="10" width="2" height="2"/>
+              <rect x="22" y="10" width="2" height="2" fill="#000"/>
+              <rect x="24" y="12" width="2" height="2"/>
+              <rect x="26" y="14" width="2" height="2"/>
+              <rect x="28" y="14" width="2" height="2"/>
+              <rect x="14" y="14" width="2" height="2" fill="#ff69b4"/>
+              <rect x="16" y="14" width="2" height="2" fill="#ff69b4"/>
+              <rect x="6" y="20" width="2" height="2"/>
+              <rect x="8" y="22" width="2" height="2"/>
+              <rect x="10" y="24" width="2" height="2"/>
+              <rect x="12" y="24" width="2" height="2"/>
+              <rect x="14" y="24" width="2" height="2"/>
+              <rect x="16" y="24" width="2" height="2"/>
+              <rect x="18" y="24" width="2" height="2"/>
+              <rect x="20" y="24" width="2" height="2"/>
+              <rect x="22" y="22" width="2" height="2"/>
+              <rect x="24" y="20" width="2" height="2"/>
+            </svg>
+          </div>
           <div 
             className="server-icon vscode"
             onClick={() => handleServerClick('VS Code Developers')}
