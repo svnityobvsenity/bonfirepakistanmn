@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import InboxIcon from './InboxIcon';
 
 // Server data based on Figma JSON
 const getServerChannels = (serverName: string) => {
@@ -544,6 +545,31 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
 
         .server-icon:active {
           transform: translateY(-6px) scale(1.05);
+        }
+
+        /* Inbox Icon Styling */
+        .inbox-icon {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .inbox-icon button {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: none;
+          color: white;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .inbox-icon:hover button {
+          transform: scale(1.1);
         }
 
         /* Server Notification Badge */
@@ -1100,6 +1126,14 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
               }}
             />
           </div>
+          
+          {/* Friend Requests Inbox */}
+          <div className="server-icon inbox-icon" style={{position: 'relative'}}>
+            <InboxIcon onRequestAction={(requestId: string, action: 'accept' | 'reject') => {
+              console.log(`Friend request ${action}:`, requestId);
+            }} />
+          </div>
+          
           <div className="server-separator"></div>
           <div 
             className={`server-icon github ${currentServerName === 'Dev Community' ? 'active' : ''}`}

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import FigmaServerPage from './FigmaServerPage';
+import InboxIcon from './InboxIcon';
 
 // Server icon component with better error handling
 const ServerIcon = ({ src, alt, fallback, className, style, onClick, title }: {
@@ -638,6 +639,31 @@ export default function FigmaDMsPage() {
 
         .server-icon:active {
           transform: translateY(-6px) scale(1.05);
+        }
+
+        /* Inbox Icon Styling */
+        .inbox-icon {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .inbox-icon button {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: none;
+          color: white;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .inbox-icon:hover button {
+          transform: scale(1.1);
         }
 
         /* Server Notification Badge */
@@ -1983,6 +2009,14 @@ export default function FigmaDMsPage() {
             style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}
             title="DMs Home"
           />
+          
+          {/* Friend Requests Inbox */}
+          <div className="server-icon inbox-icon" style={{position: 'relative'}}>
+            <InboxIcon onRequestAction={(requestId: string, action: 'accept' | 'reject') => {
+              console.log(`Friend request ${action}:`, requestId);
+            }} />
+          </div>
+          
           <div className="server-separator"></div>
           <div 
             className="server-icon github"
