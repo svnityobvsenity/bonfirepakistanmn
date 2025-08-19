@@ -1,8 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabaseClient'
+import { RateLimiter } from '@/lib/rateLimit'
+
+// Rate limiter: 5 messages per 5 seconds per user
+const messageLimiter = new RateLimiter({
+  windowMs: 5000, // 5 seconds
+  maxRequests: 5,
+  keyGenerator: (req: NextRequest) => {
+    const authHeader = req.headers.get('authorization')
+    return authHeader || req.ip || 'unknown'
+  }
+})
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResult = await messageLimiter.isAllowed(request)
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { 
+          error: 'Rate limit exceeded', 
+          retryAfter: Math.ceil(rateLimitResult.retryAfter / 1000) 
+        }, 
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(rateLimitResult.retryAfter / 1000).toString(),
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': new Date(rateLimitResult.resetTime).toISOString()
+          }
+        }
+      )
+    }
+
     const { channelId, content } = await request.json()
 
     // Get the current user from the request
