@@ -5,9 +5,11 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // Enable static export for better Netlify compatibility
-  output: 'export',
-  distDir: 'out'
+  // Enable static export for better Netlify compatibility - temporarily disabled for dev
+  // output: 'export',
+  // distDir: 'out',
+  // Ensure static assets are properly handled
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
 }
 
 module.exports = nextConfig
