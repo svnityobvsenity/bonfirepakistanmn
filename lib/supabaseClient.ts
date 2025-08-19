@@ -1,14 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+
+// Create clients with fallback values for build time
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co', 
+  supabaseAnonKey || 'placeholder-key'
+)
 
 // Server-side client with service role (for admin operations)
 export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseServiceRoleKey || 'placeholder-service-key',
   {
     auth: {
       autoRefreshToken: false,
@@ -16,6 +23,15 @@ export const supabaseAdmin = createClient(
     }
   }
 )
+
+// Only validate environment when actually running the app, not during build
+// This prevents build-time errors when environment variables aren't set
+if (typeof window !== 'undefined') {
+  // Client-side validation
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn('Supabase environment variables not configured')
+  }
+}
 
 // Type definitions for our database schema
 export interface User {

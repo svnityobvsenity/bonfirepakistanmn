@@ -1,20 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimize for Netlify deployment
-  trailingSlash: true,
+  // Optimize for Netlify deployment with Next.js plugin
   images: {
     unoptimized: true
   },
-  // For Netlify, we'll use serverless functions instead of static export
-  // This allows API routes to work properly
-  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
   
-  // Ensure static assets are properly handled
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  // Let Netlify handle the output format
+  // The @netlify/plugin-nextjs will handle serverless functions automatically
   
-  // Optimize for serverless deployment
+  // Ensure proper asset handling
+  assetPrefix: '',
+  
+  // Enable experimental features for better performance
   experimental: {
-    outputFileTracingRoot: process.cwd(),
+    // Remove outputFileTracingRoot as it's not needed with Netlify plugin
   },
 }
 
