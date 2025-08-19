@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchChannelMessages, sendChannelMessage, editChannelMessage, deleteChannelMessage, formatMessageTime, isMessageEdited } from '@/lib/messages'
 import type { Message } from '@/lib/messages'
+import { useRealtimeMessages } from '@/hooks/useRealtimeMessages'
 
 interface OptimisticMessage extends Message {
   isOptimistic?: boolean
@@ -24,6 +25,27 @@ export default function MessageList({ channelId }: MessageListProps) {
   const [editContent, setEditContent] = useState('')
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
+
+  // Set up realtime message listening
+  useRealtimeMessages({
+    channelId,
+    onNewMessage: (message) => {
+      // Only add if not already in messages (avoid duplicates from optimistic UI)
+      setMessages(prev => {
+        const exists = prev.some(msg => msg.id === message.id)
+        if (exists) return prev
+        return [...prev, message]
+      })
+    },
+    onMessageUpdate: (message) => {
+      setMessages(prev => prev.map(msg => 
+        msg.id === message.id ? message : msg
+      ))
+    },
+    onMessageDelete: (messageId) => {
+      setMessages(prev => prev.filter(msg => msg.id !== messageId))
+    }
+  })
 
   useEffect(() => {
     loadMessages()

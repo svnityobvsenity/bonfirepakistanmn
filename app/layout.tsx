@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './styles/_locks.css'
 import './globals.css'
+import { AuthProvider } from '@/contexts/AuthContext'
+import PresenceProvider from '@/components/PresenceProvider'
 
 export const metadata: Metadata = {
   title: 'Bonfire Discord',
@@ -14,7 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          <PresenceProvider>
+            {children}
+          </PresenceProvider>
+        </AuthProvider>
+      </body>
     </html>
   )
 }
