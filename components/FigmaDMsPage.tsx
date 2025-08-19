@@ -3,38 +3,122 @@
 import React, { useState } from 'react';
 import FigmaServerPage from './FigmaServerPage';
 
-// Enhanced user data with more detailed status
-const users = [
-  { id: 1, name: 'daFoxy', status: 'Playing Blender', avatar: '/avatars/dafoxy.jpg', selected: true, online: true, lastSeen: 'Active now', unread: 3 },
-  { id: 2, name: 'james', status: 'Playing Procrast', avatar: '/avatars/james.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 1 },
-  { id: 3, name: 'Ekmand', status: 'Away', avatar: '/avatars/ekmand.jpg', selected: false, online: true, lastSeen: '5 minutes ago', unread: 0 },
-  { id: 4, name: 'Sticks', status: 'Do Not Disturb', avatar: '/avatars/sticks.jpg', selected: false, online: true, lastSeen: '2 hours ago', unread: 0 },
-  { id: 5, name: 'FranzaGeek', status: 'Playing Powerpoi', avatar: '/avatars/franzageek.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 7 },
-  { id: 6, name: "Markella's", status: 'Playing MTG Aren', avatar: '/avatars/markellas.jpg', selected: false, online: true, lastSeen: 'Active now', unread: 0 },
-  { id: 7, name: 'AY-Plays', status: 'Offline', avatar: '/avatars/ayplays.jpg', selected: false, online: false, lastSeen: '2 days ago', unread: 0 },
-  { id: 8, name: 'LemonTiger', status: 'Offline', avatar: '/avatars/lemontiger.jpg', selected: false, online: false, lastSeen: '1 week ago', unread: 0 },
-  { id: 9, name: 'NRD', status: 'Offline', avatar: '/avatars/nrd.jpg', selected: false, online: false, lastSeen: '3 days ago', unread: 0 },
-];
+// Server icon component with better error handling
+const ServerIcon = ({ src, alt, fallback, className, style, onClick, title }: {
+  src: string;
+  alt: string;
+  fallback: string;
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+  title?: string;
+}) => {
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-// Voice channel state
-const voiceChannels = [
-  { id: 'general', name: 'General', users: ['daFoxy', 'james'], maxUsers: 10 },
-  { id: 'music', name: 'Music Lounge', users: ['FranzaGeek'], maxUsers: 8 },
-  { id: 'gaming', name: 'Gaming Hub', users: [], maxUsers: 12 },
-];
+  const handleError = () => {
+    setHasError(true);
+    console.warn(`Failed to load server icon: ${src}`);
+  };
 
-const messages = [
-  { id: 1, author: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool tutorial', avatar: '/avatars/dafoxy.jpg' },
-  { id: 2, author: 'Kalf', time: 'Today at 9:41PM', text: 'Sure thing! Want to start a Watch Party?', avatar: '/avatars/kalf.jpg' },
-  { id: 3, author: 'daFoxy', time: 'Today at 9:41PM', text: "oOoOOoo what's that?", avatar: '/avatars/dafoxy.jpg' },
-  { id: 4, author: 'Kalf', time: 'Today at 9:41PM', text: "It's this new feature. Have you heard of it?", avatar: '/avatars/kalf.jpg' },
-  { id: 5, author: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?', avatar: '/avatars/dafoxy.jpg' },
-  { id: 6, author: 'Kalf', time: 'Today at 9:44 PM', text: "Just paste a YouTube link into the DM and we can all see you if you want to start a Watch Party!", avatar: '/avatars/kalf.jpg' },
-  { id: 7, author: 'daFoxy', time: 'Today at 9:41PM', text: "Woah! I'll start one now!", avatar: '/avatars/dafoxy.jpg' },
-  { id: 8, author: 'Kalf', time: 'Today at 9:44 PM', text: "Cool, can't wait to see the video:D", avatar: '/avatars/kalf.jpg' },
-  { id: 9, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Awesome, starting now...', avatar: '/avatars/dafoxy.jpg' },
-  { id: 10, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Joined.', avatar: '/avatars/kalf.jpg' },
-];
+  const handleLoad = () => {
+    setIsLoaded(true);
+  };
+
+  if (hasError) {
+    return (
+      <div 
+        className={className} 
+        style={{...style, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}
+        onClick={onClick}
+        title={title}
+      >
+        {fallback}
+      </div>
+    );
+  }
+
+  return (
+    <div className={className} style={style} onClick={onClick} title={title}>
+      <img 
+        src={src} 
+        alt={alt} 
+        style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+        onError={handleError}
+        onLoad={handleLoad}
+        loading="eager"
+      />
+    </div>
+  );
+};
+
+// Avatar component with fallback
+const Avatar = ({ src, alt, fallback, size = 40, className = "", style = {} }: {
+  src: string;
+  alt: string;
+  fallback: string;
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) => {
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    setHasError(true);
+    console.warn(`Failed to load avatar: ${src}`);
+  };
+
+  if (hasError) {
+    return (
+      <div 
+        className={`${className} avatar-fallback`}
+        style={{
+          ...style,
+          width: `${size}px`,
+          height: `${size}px`,
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontSize: `${size * 0.4}px`,
+          fontWeight: 'bold',
+          border: '3px solid transparent',
+          backgroundClip: 'padding-box'
+        }}
+      >
+        {fallback}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      style={{
+        ...style,
+        width: `${size}px`,
+        height: `${size}px`,
+        borderRadius: '50%',
+        objectFit: 'cover',
+        border: '3px solid transparent',
+        backgroundClip: 'padding-box'
+      }}
+      onError={handleError}
+      loading="lazy"
+    />
+  );
+};
+
+// User data will be populated by real-time data
+const users: any[] = [];
+
+// Voice channels and messages will be populated by real-time data
+const voiceChannels: any[] = [];
+const messages: any[] = [];
 
 export default function FigmaDMsPage() {
   const [selectedUserId, setSelectedUserId] = useState(1);
@@ -300,12 +384,17 @@ export default function FigmaDMsPage() {
         </button>
 
         <div className="voice-header">
-          <div className="voice-channel-name">🔊 {channel?.name}</div>
+          <div className="voice-channel-name">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '8px'}}>
+              <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+            </svg>
+            {channel?.name}
+          </div>
           <div className="voice-users-count">{channel?.users.length}/{channel?.maxUsers} users</div>
         </div>
 
         <div className="voice-users-grid">
-          {channel?.users.map((username, index) => (
+          {channel?.users.map((username: string, index: number) => (
             <div key={index} className="voice-user-card">
               <div className="voice-user-avatar">
                 {username.charAt(0).toUpperCase()}
@@ -332,7 +421,15 @@ export default function FigmaDMsPage() {
             onClick={() => toggleVoiceSetting('muted')}
             title={voiceSettings.muted ? 'Unmute' : 'Mute'}
           >
-            {voiceSettings.muted ? '🔇' : '🎤'}
+{voiceSettings.muted ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -340,7 +437,15 @@ export default function FigmaDMsPage() {
             onClick={() => toggleVoiceSetting('deafened')}
             title={voiceSettings.deafened ? 'Undeafen' : 'Deafen'}
           >
-            {voiceSettings.deafened ? '🔇' : '🔊'}
+{voiceSettings.deafened ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -348,7 +453,15 @@ export default function FigmaDMsPage() {
             onClick={() => toggleVoiceSetting('camera')}
             title={voiceSettings.camera ? 'Turn off camera' : 'Turn on camera'}
           >
-            {voiceSettings.camera ? '📹' : '📷'}
+{voiceSettings.camera ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -356,7 +469,15 @@ export default function FigmaDMsPage() {
             onClick={() => toggleVoiceSetting('screenShare')}
             title={voiceSettings.screenShare ? 'Stop sharing' : 'Share screen'}
           >
-            {voiceSettings.screenShare ? '🖥️' : '📺'}
+{voiceSettings.screenShare ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -364,7 +485,9 @@ export default function FigmaDMsPage() {
             onClick={handleVoiceDisconnect}
             title="Disconnect"
           >
-            📞
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,9C10.89,9 10,8.1 10,7C10,5.89 10.89,5 12,5C13.11,5 14,5.89 14,7C14,8.1 13.11,9 12,9M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -471,8 +594,6 @@ export default function FigmaDMsPage() {
           width: 72px;
           height: 72px;
           border-radius: 16px;
-          background-size: cover;
-          background-position: center;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           position: relative;
@@ -482,6 +603,12 @@ export default function FigmaDMsPage() {
           border: 2px solid transparent;
           flex-shrink: 0;
           overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 32px;
+          font-weight: bold;
+          color: white;
         }
 
         .server-icon::before {
@@ -1006,17 +1133,45 @@ export default function FigmaDMsPage() {
           animation: wiggle 0.5s ease-in-out;
         }
 
-        .online-dot {
+        .status-dot {
           position: absolute;
           bottom: -2px;
           right: -2px;
           width: 14px;
           height: 14px;
-          background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
           border: 3px solid rgba(0, 0, 0, 0.8);
           border-radius: 50%;
           box-shadow: 0 0 10px rgba(67, 233, 123, 0.6);
           animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        .status-dot.online {
+          background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .status-dot.offline {
+          background: rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .unread-badge {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          min-width: 18px;
+          height: 18px;
+          background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+          border: 2px solid rgba(0, 0, 0, 0.8);
+          border-radius: 10px;
+          color: white;
+          font-size: 11px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 4px;
+          box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+          animation: pulse 2s infinite;
         }
 
         .user-item.selected .online-dot {
@@ -1287,6 +1442,41 @@ export default function FigmaDMsPage() {
           margin-top: 4px;
         }
 
+        /* Message Actions */
+        .message-actions {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 6px;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .message:hover .message-actions {
+          opacity: 1;
+        }
+
+        .message-action-btn {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: rgba(255, 255, 255, 0.7);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+
+        .message-action-btn:hover {
+          background: rgba(102, 126, 234, 0.3);
+          border-color: rgba(102, 126, 234, 0.5);
+          color: white;
+          transform: scale(1.1);
+        }
+
         .read-receipt {
           font-size: 10px;
           color: rgba(255, 255, 255, 0.4);
@@ -1466,41 +1656,7 @@ export default function FigmaDMsPage() {
 
 
 
-        /* Status Section */
-        .status-section {
-          margin-top: 24px;
-          margin-bottom: 20px;
-          padding: 0 16px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          padding-top: 20px;
-        }
 
-        .status-selector {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-
-        .status-btn {
-          padding: 4px 8px;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
-          font-size: 11px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .status-btn:hover {
-          background: rgba(255, 255, 255, 0.2);
-          transform: translateY(-1px);
-        }
-
-        .status-btn.active {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-color: transparent;
-        }
 
         /* Enhanced Chat Components */
         .chat-user-info {
@@ -1819,83 +1975,176 @@ export default function FigmaDMsPage() {
         
         {/* Server List - Enhanced Cool Design */}
         <div className="server-list">
-          <div 
+          <ServerIcon
+            src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg"
+            alt="Home"
+            fallback="🏠"
             className="server-icon dms-home active"
-            title="DMs Home"
             style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}
-          >
-            <img src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" alt="Home" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
-          </div>
-          <div className="server-separator"></div>
-          <div className="server-icon github">
-            <img src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" alt="Server" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
-            <div className="server-notification">3</div>
-          </div>
+            title="DMs Home"
+          />
           <div className="server-separator"></div>
           <div 
-            className="server-icon blender active"
-            onClick={() => handleServerClick('The Club // Pakistan')}
+            className="server-icon github"
+            onClick={() => handleServerClick('Dev Community')}
           >
-            <img src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" alt="The Club Pakistan" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <ServerIcon
+              src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg"
+              alt="Dev Community"
+              fallback="DC"
+              style={{}}
+            />
+            <div className="server-notification">5</div>
+          </div>
+          <div className="server-separator"></div>
+          <div className="server-icon blender active" style={{position: 'relative'}}>
+            <ServerIcon
+              src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg"
+              alt="The Club Pakistan"
+              fallback="TC"
+              onClick={() => handleServerClick('The Club // Pakistan')}
+              style={{}}
+            />
             <div className="server-notification">12</div>
           </div>
           <div 
             className="server-icon coinbase"
             onClick={() => handleServerClick('Crypto Trading')}
           >
-            <img src="/server-icons/53d49a6aa2aeff61fd8ef985a96144dbe.jpg" alt="Crypto Trading" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/53d49a6aa2aeff61fd8ef985a96144dbe.jpg" 
+              alt="Crypto Trading" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '₿';
+              }}
+            />
             <div className="server-notification">5</div>
           </div>
           <div 
             className="server-icon instagram"
             onClick={() => handleServerClick('Instagram Creators')}
           >
-            <img src="/server-icons/580f58c411d2109942782c106268fecc.jpg" alt="Instagram Creators" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/580f58c411d2109942782c106268fecc.jpg" 
+              alt="Instagram Creators" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>';
+              }}
+            />
           </div>
           <div 
             className="server-icon vscode"
             onClick={() => handleServerClick('VS Code Developers')}
           >
-            <img src="/server-icons/5ad5eebc4deb5eaf9c4ae763b1288030.jpg" alt="VS Code Developers" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/5ad5eebc4deb5eaf9c4ae763b1288030.jpg" 
+              alt="VS Code Developers" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'VS';
+              }}
+            />
             <div className="server-notification">2</div>
           </div>
           <div 
             className="server-icon github-desktop"
             onClick={() => handleServerClick('GitHub Community')}
           >
-            <img src="/server-icons/7014fac3aa9bc359185869c4c4240147.jpg" alt="GitHub Community" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/7014fac3aa9bc359185869c4c4240147.jpg" 
+              alt="GitHub Community" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'GH';
+              }}
+            />
           </div>
           <div 
             className="server-icon nova"
             onClick={() => handleServerClick('Nova Users')}
           >
-            <img src="/server-icons/71b228b9bd2b6eb5aa62f7209875deeb.jpg" alt="Nova Users" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/71b228b9bd2b6eb5aa62f7209875deeb.jpg" 
+              alt="Nova Users" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'N';
+              }}
+            />
             <div className="server-notification">7</div>
           </div>
           <div 
             className="server-icon google-chrome"
             onClick={() => handleServerClick('Chrome Extensions')}
           >
-            <img src="/server-icons/f2d253b769bb2960dc38d9d2109f2faf.jpg" alt="Chrome Extensions" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/f2d253b769bb2960dc38d9d2109f2faf.jpg" 
+              alt="Chrome Extensions" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '🌐';
+              }}
+            />
           </div>
           <div 
             className="server-icon superstar"
             onClick={() => handleServerClick('Superstar Gaming')}
           >
-            <img src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" alt="Superstar Gaming" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" 
+              alt="Superstar Gaming" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '⭐';
+              }}
+            />
             <div className="server-notification">99+</div>
           </div>
           <div 
             className="server-icon microsoft"
             onClick={() => handleServerClick('Microsoft Office')}
           >
-            <img src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" alt="Microsoft Office" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" 
+              alt="Microsoft Office" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'MS';
+              }}
+            />
           </div>
           <div 
             className="server-icon youtube"
             onClick={() => handleServerClick('YouTube Creators')}
           >
-            <img src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" alt="YouTube Creators" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" 
+              alt="YouTube Creators" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/></svg>';
+              }}
+            />
             <div className="server-notification">1</div>
           </div>
         </div>
@@ -1918,23 +2167,12 @@ export default function FigmaDMsPage() {
 
 
 
-          {/* Status selector */}
-          <div className="status-section">
-            <div className="section-header">
-              <span>Your Status</span>
-            </div>
-            <div className="status-selector">
-              <button className="status-btn active">🟢 Online</button>
-              <button className="status-btn">🟡 Away</button>
-              <button className="status-btn">🔴 Busy</button>
-              <button className="status-btn">⚫ Invisible</button>
-            </div>
-          </div>
+
 
           {/* Enhanced user list */}
-          <div className="conversations-section">
+          <div className="user-list">
             <div className="section-header">
-              <span>Conversations</span>
+              <span>Direct Messages</span>
               <span className="section-count">{filteredUsers.length}</span>
             </div>
             
@@ -1947,10 +2185,14 @@ export default function FigmaDMsPage() {
                 onClick={() => setSelectedUserId(user.id)}
               >
                 <div className="user-avatar-container">
-                  <div 
-                    className="user-avatar"
-                    style={{backgroundImage: `url(${user.avatar})`}}
-                  >
+                  <div style={{position: 'relative'}}>
+                    <Avatar
+                      src={user.avatar}
+                      alt={user.name}
+                      fallback={user.fallback}
+                      size={40}
+                      className="user-avatar"
+                    />
                     <div className={`status-dot ${user.online ? 'online' : 'offline'}`} />
                   </div>
                   {user.unread > 0 && (
@@ -1990,19 +2232,37 @@ export default function FigmaDMsPage() {
                     className={`voice-mini-btn ${voiceSettings.muted ? 'active' : ''}`}
                     onClick={() => toggleVoiceSetting('muted')}
                   >
-                    {voiceSettings.muted ? '🔇' : '🎤'}
+        {voiceSettings.muted ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+              </svg>
+            )}
                   </button>
                   <button 
                     className={`voice-mini-btn ${voiceSettings.deafened ? 'active' : ''}`}
                     onClick={() => toggleVoiceSetting('deafened')}
                   >
-                    {voiceSettings.deafened ? '🔇' : '🔊'}
+        {voiceSettings.deafened ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+              </svg>
+            )}
                   </button>
                   <button 
                     className="voice-mini-btn disconnect"
                     onClick={handleVoiceDisconnect}
                   >
-                    📞
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,9C10.89,9 10,8.1 10,7C10,5.89 10.89,5 12,5C13.11,5 14,5.89 14,7C14,8.1 13.11,9 12,9M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z"/>
+            </svg>
                   </button>
                 </div>
               </div>
@@ -2015,10 +2275,14 @@ export default function FigmaDMsPage() {
           {/* Enhanced Chat Header */}
           <div className="chat-header">
             <div className="chat-user-info">
-              <div 
-                className="chat-user-avatar"
-                style={{backgroundImage: `url(${users.find(u => u.id === selectedUserId)?.avatar})`}}
-              >
+              <div style={{position: 'relative'}}>
+                <Avatar
+                  src={users.find(u => u.id === selectedUserId)?.avatar || '/avatars/default.jpg'}
+                  alt={users.find(u => u.id === selectedUserId)?.name || 'User'}
+                  fallback={users.find(u => u.id === selectedUserId)?.fallback || 'U'}
+                  size={40}
+                  className="chat-user-avatar"
+                />
                 <div className={`status-dot ${users.find(u => u.id === selectedUserId)?.online ? 'online' : 'offline'}`} />
               </div>
               <div className="chat-user-details">
@@ -2059,9 +2323,12 @@ export default function FigmaDMsPage() {
             <div className="messages-date-header">Today</div>
             {currentMessages.map((message, index) => (
               <div key={message.id} className="message">
-                <div 
+                <Avatar
+                  src={message.avatar}
+                  alt={message.author}
+                  fallback={message.author.charAt(0).toUpperCase()}
+                  size={36}
                   className="message-avatar"
-                  style={{backgroundImage: `url(${message.avatar})`}}
                 />
                 <div className="message-content">
                   <div className="message-header">
@@ -2073,24 +2340,76 @@ export default function FigmaDMsPage() {
                   {/* Enhanced message reactions */}
                   {index < 4 && (
                     <div className="message-reactions">
-                      <button className="reaction-btn active">👍 2</button>
-                      <button className="reaction-btn">❤️ 1</button>
-                      <button className="reaction-btn">😂 3</button>
+                      <button className="reaction-btn active">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '4px'}}>
+                          <path d="M5,9V21H1V9H5M9,21A2,2 0 0,1 7,19V9C7,8.45 7.22,7.95 7.59,7.59L14.17,1L15.23,2.06C15.5,2.33 15.67,2.7 15.67,3.11L15.64,3.43L14.69,8H21C22.11,8 23,8.9 23,10V12C23,12.26 22.95,12.5 22.86,12.73L19.84,19.78C19.54,20.5 18.83,21 18,21H9M9,19H18.03L21,12V10H12.21L13.34,4.68L9,9.03V19Z"/>
+                        </svg>
+                        2
+                      </button>
+                      <button className="reaction-btn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '4px'}}>
+                          <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+                        </svg>
+                        1
+                      </button>
+                      <button className="reaction-btn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '4px'}}>
+                          <path d="M12,2C6.486,2 2,6.486 2,12C2,17.515 6.486,22 12,22C17.515,22 22,17.515 22,12C22,6.486 17.515,2 12,2M12,20C7.589,20 4,16.411 4,12C4,7.589 7.589,4 12,4C16.411,4 20,7.589 20,12C20,16.411 16.411,20 12,20M8.5,11A1.5,1.5 0 0,1 7,9.5A1.5,1.5 0 0,1 8.5,8A1.5,1.5 0 0,1 10,9.5A1.5,1.5 0 0,1 8.5,11M15.5,11A1.5,1.5 0 0,1 14,9.5A1.5,1.5 0 0,1 15.5,8A1.5,1.5 0 0,1 17,9.5A1.5,1.5 0 0,1 15.5,11M12,17.5C14.33,17.5 16.31,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5Z"/>
+                        </svg>
+                        3
+                      </button>
                       <button className="add-reaction-btn">+</button>
                     </div>
                   )}
                   
                   {/* Message actions */}
                   <div className="message-actions">
-                    <button className="message-action-btn" title="Reply">↩️</button>
-                    <button className="message-action-btn" title="React">😊</button>
-                    <button className="message-action-btn" title="More">⋯</button>
+                    <button className="message-action-btn" title="Reply">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10,9V5L3,12L10,19V14.9C15,14.9 18.5,16.5 21,20C20,15 17,10 10,9Z"/>
+                      </svg>
+                    </button>
+                    <button className="message-action-btn" title="React">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,2C6.486,2 2,6.486 2,12C2,17.515 6.486,22 12,22C17.515,22 22,17.515 22,12C22,6.486 17.515,2 12,2M12,20C7.589,20 4,16.411 4,12C4,7.589 7.589,4 12,4C16.411,4 20,7.589 20,12C20,16.411 16.411,20 12,20M8.5,11A1.5,1.5 0 0,1 7,9.5A1.5,1.5 0 0,1 8.5,8A1.5,1.5 0 0,1 10,9.5A1.5,1.5 0 0,1 8.5,11M15.5,11A1.5,1.5 0 0,1 14,9.5A1.5,1.5 0 0,1 15.5,8A1.5,1.5 0 0,1 17,9.5A1.5,1.5 0 0,1 15.5,11M12,17.5C14.33,17.5 16.31,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5Z"/>
+                      </svg>
+                    </button>
+                    <button className="message-action-btn" title="More">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
+                      </svg>
+                    </button>
                   </div>
                   
                   {/* Enhanced read receipts */}
                   <div className="message-meta">
                     <div className={`read-receipt ${index < 2 ? 'read' : index < 5 ? 'delivered' : 'sending'}`}>
-                      {index < 2 ? '✓✓ Read' : index < 5 ? '✓ Delivered' : '⏳ Sending...'}
+                      {index < 2 ? (
+                        <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                          </svg>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                          </svg>
+                          Read
+                        </span>
+                      ) : index < 5 ? (
+                        <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                          </svg>
+                          Delivered
+                        </span>
+                      ) : (
+                        <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
+                            <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/>
+                          </svg>
+                          Sending...
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -2115,36 +2434,80 @@ export default function FigmaDMsPage() {
           <div className="message-input-area">
             <div className="message-input-container">
               <div className="input-extras">
-                <button className="input-extra-btn" title="Upload file">📎</button>
-                <button className="input-extra-btn" title="GIF">🎬</button>
-                <button className="input-extra-btn" title="Sticker">🎨</button>
+                <button className="input-extra-btn" title="Upload file">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                  </svg>
+                </button>
+                <button className="input-extra-btn" title="GIF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.5,9H13V7H11.5V9M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,13H9V11H7V13M15,11H17V13H15V11M13,15H11V17H13V15Z"/>
+                  </svg>
+                </button>
+                <button className="input-extra-btn" title="Sticker">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.5,2A1.5,1.5 0 0,1 20,3.5V11.5A1.5,1.5 0 0,1 18.5,13H13V18.5A1.5,1.5 0 0,1 11.5,20H3.5A1.5,1.5 0 0,1 2,18.5V3.5A1.5,1.5 0 0,1 3.5,2H18.5M18.5,11.5V3.5H3.5V18.5H11.5V11.5H18.5Z"/>
+                  </svg>
+                </button>
               </div>
               <input 
                 type="text" 
                 className="message-input"
-                placeholder={`💬 Message ${users.find(u => u.id === selectedUserId)?.name || 'user'}...`}
+                placeholder={`Message ${users.find(u => u.id === selectedUserId)?.name || 'user'}...`}
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyPress={handleKeyPress}
               />
               <div className="input-actions">
-                <button className="input-btn emoji-btn" title="Emoji">😊</button>
+                <button className="input-btn emoji-btn" title="Emoji">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,2C6.486,2 2,6.486 2,12C2,17.515 6.486,22 12,22C17.515,22 22,17.515 22,12C22,6.486 17.515,2 12,2M12,20C7.589,20 4,16.411 4,12C4,7.589 7.589,4 12,4C16.411,4 20,7.589 20,12C20,16.411 16.411,20 12,20M8.5,11A1.5,1.5 0 0,1 7,9.5A1.5,1.5 0 0,1 8.5,8A1.5,1.5 0 0,1 10,9.5A1.5,1.5 0 0,1 8.5,11M15.5,11A1.5,1.5 0 0,1 14,9.5A1.5,1.5 0 0,1 15.5,8A1.5,1.5 0 0,1 17,9.5A1.5,1.5 0 0,1 15.5,11M12,17.5C14.33,17.5 16.31,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5Z"/>
+                  </svg>
+                </button>
                 <button 
                   className="input-btn send-btn"
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim()}
                 >
-                  {messageInput.trim() ? '🚀' : '🎤'}
+                  {messageInput.trim() ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                    </svg>
+                  )}
                 </button>
               </div>
             </div>
             
             {/* Quick actions bar */}
             <div className="quick-actions-bar">
-              <button className="quick-action-btn">📷 Photo</button>
-              <button className="quick-action-btn">🎵 Audio</button>
-              <button className="quick-action-btn">📍 Location</button>
-              <button className="quick-action-btn">💰 Payment</button>
+              <button className="quick-action-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '6px'}}>
+                  <path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/>
+                </svg>
+                Photo
+              </button>
+              <button className="quick-action-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '6px'}}>
+                  <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+                </svg>
+                Audio
+              </button>
+              <button className="quick-action-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '6px'}}>
+                  <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+                </svg>
+                Location
+              </button>
+              <button className="quick-action-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '6px'}}>
+                  <path d="M7,15H9C9,16.08 10.37,17 12,17C13.63,17 15,16.08 15,15C15,13.9 13.96,13.5 11.76,12.97C9.64,12.44 7,11.78 7,9C7,7.21 8.47,5.69 10.5,5.18V3H13.5V5.18C15.53,5.69 17,7.21 17,9H15C15,7.92 13.63,7 12,7C10.37,7 9,7.92 9,9C9,10.1 10.04,10.5 12.24,11.03C14.36,11.56 17,12.22 17,15C17,16.79 15.53,18.31 13.5,18.82V21H10.5V18.82C8.47,18.31 7,16.79 7,15Z"/>
+                </svg>
+                Payment
+              </button>
             </div>
           </div>
         </div>

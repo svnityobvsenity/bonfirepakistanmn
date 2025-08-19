@@ -3,7 +3,22 @@
 import React, { useState } from 'react';
 
 // Server data based on Figma JSON
-const channels = [
+const getServerChannels = (serverName: string) => {
+  if (serverName === 'Dev Community') {
+    return [
+      { id: 1, name: 'general', type: 'text', selected: true },
+      { id: 2, name: 'react-help', type: 'text', selected: false },
+      { id: 3, name: 'javascript-tips', type: 'text', selected: false },
+      { id: 4, name: 'showcase', type: 'text', selected: false },
+      { id: 5, name: 'job-board', type: 'text', selected: false },
+      { id: 6, name: 'resources', type: 'text', selected: false },
+      { id: 7, name: 'code-review', type: 'text', selected: false },
+      { id: 8, name: 'Study Hall', type: 'voice', selected: false },
+      { id: 9, name: 'Pair Programming', type: 'voice', selected: false },
+      { id: 10, name: 'Coffee Break', type: 'voice', selected: false },
+    ];
+  } else {
+    return [
   { id: 1, name: 'Main-Chat', type: 'text', selected: true },
   { id: 2, name: 'Media', type: 'text', selected: false },
   { id: 3, name: 'Forum', type: 'text', selected: false },
@@ -15,26 +30,18 @@ const channels = [
   { id: 9, name: 'Music', type: 'voice', selected: false },
   { id: 10, name: 'Gaming', type: 'voice', selected: false },
 ];
+  }
+};
 
-const members = [
-  { id: 1, name: 'daFoxy', status: 'Online', avatar: '/avatars/dafoxy.jpg', role: 'Owner' },
-  { id: 2, name: 'james', status: 'Online', avatar: '/avatars/james.jpg', role: 'Admin' },
-  { id: 3, name: 'Ekmand', status: 'Away', avatar: '/avatars/ekmand.jpg', role: 'Member' },
-  { id: 4, name: 'Sticks', status: 'Offline', avatar: '/avatars/sticks.jpg', role: 'Member' },
-];
+const getServerMembers = (serverName: string): any[] => {
+  // Return empty array - members will be populated by real-time data
+  return [];
+};
 
-const getServerMessages = (serverName: string) => [
-  { id: 1, author: 'daFoxy', time: 'Today at 9:41PM', text: 'I saw this really cool video the other day mind if I send it?', avatar: '/avatars/dafoxy.jpg' },
-  { id: 2, author: 'Kalf', time: 'Today at 9:41PM', text: 'Sure thing! Want to start a Watch Party?', avatar: '/avatars/kalf.jpg' },
-  { id: 3, author: 'daFoxy', time: 'Today at 9:41PM', text: 'oOoOOoo what\'s that?', avatar: '/avatars/dafoxy.jpg' },
-  { id: 4, author: 'Kalf', time: 'Today at 9:41PM', text: 'It\'s this new Discord feature. Have you heard of it?', avatar: '/avatars/kalf.jpg' },
-  { id: 5, author: 'daFoxy', time: 'Today at 9:41PM', text: 'No, how does it work?', avatar: '/avatars/kalf.jpg' },
-  { id: 6, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Just paste a YouTube link into the DM and Discord will ask you if you want to start a Watch Party!', avatar: '/avatars/kalf.jpg' },
-  { id: 7, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Woah! I\'ll start one now!', avatar: '/avatars/dafoxy.jpg' },
-  { id: 8, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Cool, can\'t wait to see the video:D', avatar: '/avatars/kalf.jpg' },
-  { id: 9, author: 'daFoxy', time: 'Today at 9:41PM', text: 'Awesome, starting now...', avatar: '/avatars/dafoxy.jpg' },
-  { id: 10, author: 'Kalf', time: 'Today at 9:44 PM', text: 'Joined.', avatar: '/avatars/kalf.jpg' },
-];
+const getServerMessages = (serverName: string): any[] => {
+  // Return empty array - messages will be populated by real-time data
+  return [];
+};
 
 interface FigmaServerPageProps {
   onBackToDMs: () => void;
@@ -44,7 +51,10 @@ interface FigmaServerPageProps {
 export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServerPageProps) {
   const [selectedChannelId, setSelectedChannelId] = useState(1);
   const [messageInput, setMessageInput] = useState('');
-  const [currentMessages, setCurrentMessages] = useState(getServerMessages(serverName));
+  const [currentServerName, setCurrentServerName] = useState(serverName);
+  const [currentMessages, setCurrentMessages] = useState(getServerMessages(currentServerName));
+  const members = getServerMembers(currentServerName);
+  const channels = getServerChannels(currentServerName);
   const [currentView, setCurrentView] = useState<'server' | 'voice'>('server');
   const [isVoiceConnected, setIsVoiceConnected] = useState(false);
   const [voiceSettings, setVoiceSettings] = useState({
@@ -67,6 +77,14 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
       setCurrentMessages([...currentMessages, newMessage]);
       setMessageInput('');
     }
+  };
+
+  const handleServerClick = (newServerName: string) => {
+    // Update the current server and refresh all data
+    setCurrentServerName(newServerName);
+    setCurrentMessages(getServerMessages(newServerName));
+    setSelectedChannelId(1); // Reset to first channel
+    console.log(`Switched to server: ${newServerName}`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -288,7 +306,12 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         </button>
 
         <div className="server-voice-header">
-          <div className="server-voice-channel-name">🔊 {channel?.name}</div>
+          <div className="server-voice-channel-name">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{marginRight: '8px'}}>
+              <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+            </svg>
+            {channel?.name}
+          </div>
           <div className="server-voice-server-name">{serverName}</div>
         </div>
 
@@ -326,7 +349,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             onClick={() => toggleVoiceSetting('muted')}
             title={voiceSettings.muted ? 'Unmute' : 'Mute'}
           >
-            {voiceSettings.muted ? '🔇' : '🎤'}
+{voiceSettings.muted ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -334,7 +365,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             onClick={() => toggleVoiceSetting('deafened')}
             title={voiceSettings.deafened ? 'Undeafen' : 'Deafen'}
           >
-            {voiceSettings.deafened ? '🔇' : '🔊'}
+{voiceSettings.deafened ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -342,7 +381,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             onClick={() => toggleVoiceSetting('camera')}
             title={voiceSettings.camera ? 'Turn off camera' : 'Turn on camera'}
           >
-            {voiceSettings.camera ? '📹' : '📷'}
+{voiceSettings.camera ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -350,7 +397,15 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             onClick={() => toggleVoiceSetting('screenShare')}
             title={voiceSettings.screenShare ? 'Stop sharing' : 'Share screen'}
           >
-            {voiceSettings.screenShare ? '🖥️' : '📺'}
+{voiceSettings.screenShare ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/>
+              </svg>
+            )}
           </button>
           
           <button 
@@ -358,7 +413,9 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             onClick={handleVoiceDisconnect}
             title="Disconnect"
           >
-            📞
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,9C10.89,9 10,8.1 10,7C10,5.89 10.89,5 12,5C13.11,5 14,5.89 14,7C14,8.1 13.11,9 12,9M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -1032,26 +1089,217 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
             title="Back to DMs"
             style={{background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)'}}
           >
-            <img src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" alt="Back to DMs" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" 
+              alt="Back to DMs" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '←';
+              }}
+            />
           </div>
           <div className="server-separator"></div>
-          <div className="server-icon github">
-            <img src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" alt="Server" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
-            <div className="server-notification">3</div>
+          <div 
+            className={`server-icon github ${currentServerName === 'Dev Community' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Dev Community')}
+          >
+            <img 
+              src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" 
+              alt="Dev Community" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'DC';
+              }}
+            />
+            <div className="server-notification">5</div>
           </div>
           <div className="server-separator"></div>
-          <div className="server-icon blender active">
-            <img src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" alt="Active Server" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+          <div 
+            className={`server-icon blender ${currentServerName === 'The Club // Pakistan' ? 'active' : ''}`}
+            onClick={() => handleServerClick('The Club // Pakistan')}
+          >
+            <img 
+              src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" 
+              alt="The Club // Pakistan" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'TC';
+              }}
+            />
             <div className="server-notification">12</div>
+          </div>
+          <div 
+            className={`server-icon coinbase ${currentServerName === 'Crypto Trading' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Crypto Trading')}
+          >
+            <img 
+              src="/server-icons/53d49a6aa2aeff61fd8ef985a96144dbe.jpg" 
+              alt="Crypto Trading" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '₿';
+              }}
+            />
+            <div className="server-notification">5</div>
+          </div>
+          <div 
+            className={`server-icon instagram ${currentServerName === 'Instagram Creators' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Instagram Creators')}
+          >
+            <img 
+              src="/server-icons/580f58c411d2109942782c106268fecc.jpg" 
+              alt="Instagram Creators" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>';
+              }}
+            />
+          </div>
+          <div 
+            className={`server-icon vscode ${currentServerName === 'VS Code Developers' ? 'active' : ''}`}
+            onClick={() => handleServerClick('VS Code Developers')}
+          >
+            <img 
+              src="/server-icons/5ad5eebc4deb5eaf9c4ae763b1288030.jpg" 
+              alt="VS Code Developers" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'VS';
+              }}
+            />
+            <div className="server-notification">2</div>
+          </div>
+          <div 
+            className={`server-icon github-desktop ${currentServerName === 'GitHub Community' ? 'active' : ''}`}
+            onClick={() => handleServerClick('GitHub Community')}
+          >
+            <img 
+              src="/server-icons/7014fac3aa9bc359185869c4c4240147.jpg" 
+              alt="GitHub Community" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'GH';
+              }}
+            />
+          </div>
+          <div 
+            className={`server-icon nova ${currentServerName === 'Nova Users' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Nova Users')}
+          >
+            <img 
+              src="/server-icons/71b228b9bd2b6eb5aa62f7209875deeb.jpg" 
+              alt="Nova Users" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'N';
+              }}
+            />
+            <div className="server-notification">7</div>
+          </div>
+          <div 
+            className={`server-icon google-chrome ${currentServerName === 'Chrome Extensions' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Chrome Extensions')}
+          >
+            <img 
+              src="/server-icons/f2d253b769bb2960dc38d9d2109f2faf.jpg" 
+              alt="Chrome Extensions" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '🌐';
+              }}
+            />
+          </div>
+          <div 
+            className={`server-icon superstar ${currentServerName === 'Superstar Gaming' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Superstar Gaming')}
+          >
+            <img 
+              src="/server-icons/01bc4f2897376613febb1d498bf46717.jpg" 
+              alt="Superstar Gaming" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '⭐';
+              }}
+            />
+            <div className="server-notification">99+</div>
+          </div>
+          <div 
+            className={`server-icon microsoft ${currentServerName === 'Microsoft Office' ? 'active' : ''}`}
+            onClick={() => handleServerClick('Microsoft Office')}
+          >
+            <img 
+              src="/server-icons/0490b20ab0113ed5f1888dbf8aa942fb.jpg" 
+              alt="Microsoft Office" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = 'MS';
+              }}
+            />
+          </div>
+          <div 
+            className={`server-icon youtube ${currentServerName === 'YouTube Creators' ? 'active' : ''}`}
+            onClick={() => handleServerClick('YouTube Creators')}
+          >
+            <img 
+              src="/server-icons/3f567664e36f2cf1d7db0151a268f799.jpg" 
+              alt="YouTube Creators" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21,2H3C1.89,2 1,2.89 1,4V16C1,17.11 1.89,18 3,18H10V20H8V22H16V20H14V18H21C22.11,18 23,17.11 23,16V4C23,2.89 22.11,2 21,2M21,16H3V4H21V16Z"/></svg>';
+              }}
+            />
+            <div className="server-notification">1</div>
           </div>
           <div className="server-separator"></div>
           <div className="server-icon" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
-            <img src="/server-icons/53d49a6aa2aeff61fd8ef985a96144dbe.jpg" alt="Server" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/53d49a6aa2aeff61fd8ef985a96144dbe.jpg" 
+              alt="Server" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.textContent = '₿';
+              }}
+            />
             <div className="server-notification">7</div>
           </div>
           <div className="server-separator"></div>
           <div className="server-icon" style={{background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'}}>
-            <img src="/server-icons/580f58c411d2109942782c106268fecc.jpg" alt="Server" style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}} />
+            <img 
+              src="/server-icons/580f58c411d2109942782c106268fecc.jpg" 
+              alt="Server" 
+              style={{width: '36px', height: '36px', borderRadius: '12px', objectFit: 'cover'}}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.fontSize = '24px';
+                e.currentTarget.parentElement!.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>';
+              }}
+            />
             <div className="server-notification">2</div>
           </div>
         </div>
@@ -1059,7 +1307,7 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
         {/* Left Sidebar - Channels */}
         <div className="channels-sidebar">
           <div className="server-header">
-            <div className="server-name">{serverName}</div>
+            <div className="server-name">{currentServerName}</div>
             <div className="server-dropdown">▼</div>
           </div>
           
@@ -1083,7 +1331,11 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
                 className={`channel-item voice-channel ${selectedChannelId === channel.id ? 'selected' : ''}`}
                 onClick={() => setSelectedChannelId(channel.id)}
               >
-                <div className="channel-icon">🔊</div>
+                <div className="channel-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+                  </svg>
+                </div>
                 <div className="channel-name">{channel.name}</div>
                 <div className="voice-channel-controls">
                   <button 
@@ -1094,7 +1346,9 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
                       handleVoiceChannelJoin(channel.id);
                     }}
                   >
-                    🎤
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                    </svg>
                   </button>
                   <div className="voice-users-count">2/10</div>
                 </div>
@@ -1143,13 +1397,23 @@ export default function FigmaServerPage({ onBackToDMs, serverName }: FigmaServer
                 onKeyPress={handleKeyPress}
               />
               <div className="server-input-actions">
-                <button className="server-input-btn">📎</button>
-                <button className="server-input-btn">😊</button>
+                <button className="server-input-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                  </svg>
+                </button>
+                <button className="server-input-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,2C6.486,2 2,6.486 2,12C2,17.515 6.486,22 12,22C17.515,22 22,17.515 22,12C22,6.486 17.515,2 12,2M12,20C7.589,20 4,16.411 4,12C4,7.589 7.589,4 12,4C16.411,4 20,7.589 20,12C20,16.411 16.411,20 12,20M8.5,11A1.5,1.5 0 0,1 7,9.5A1.5,1.5 0 0,1 8.5,8A1.5,1.5 0 0,1 10,9.5A1.5,1.5 0 0,1 8.5,11M15.5,11A1.5,1.5 0 0,1 14,9.5A1.5,1.5 0 0,1 15.5,8A1.5,1.5 0 0,1 17,9.5A1.5,1.5 0 0,1 15.5,11M12,17.5C14.33,17.5 16.31,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5Z"/>
+                  </svg>
+                </button>
                 <button 
                   className="server-input-btn server-send-btn"
                   onClick={handleSendMessage}
                 >
-                  ➤
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
+                  </svg>
                 </button>
               </div>
             </div>
