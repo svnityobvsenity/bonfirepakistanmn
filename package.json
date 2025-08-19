@@ -16,7 +16,8 @@
     "test:e2e:debug": "playwright test --debug",
     "test:all": "npm run test && npm run test:e2e",
     "seed:test": "npx tsx scripts/seed-test-data.ts",
-    "seed:cleanup": "npx tsx scripts/seed-test-data.ts cleanup"
+    "seed:cleanup": "npx tsx scripts/seed-test-data.ts cleanup",
+    "setup:supabase": "node scripts/setup-supabase.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
