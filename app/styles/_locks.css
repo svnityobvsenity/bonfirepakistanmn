@@ -1,0 +1,134 @@
+/*
+ * CSS LOCK LAYER - Critical UI Spacing Protection
+ * DO NOT MODIFY - These rules prevent accidental changes to sidebar spacing
+ * Created for production-grade Discord clone stability
+ */
+
+:root {
+  /* Sidebar dimension variables - LOCKED */
+  --sidebar-width-desktop: 280px;
+  --sidebar-width-tablet: 240px;
+  --sidebar-width-mobile: 200px;
+  --sidebar-padding: 16px;
+  --sidebar-member-width: 240px;
+  --sidebar-top-desktop: 150px;
+  --sidebar-top-tablet: 120px;
+  --sidebar-top-mobile: 106px;
+  --sidebar-left: 24px;
+  --sidebar-left-mobile: 16px;
+}
+
+/* DM Sidebar Locks - FigmaDMsPage.tsx */
+.left-sidebar {
+  width: var(--sidebar-width-desktop) !important;
+  padding: var(--sidebar-padding) !important;
+  left: var(--sidebar-left) !important;
+  top: 140px !important; /* DM specific top position */
+  height: calc(100vh - 164px) !important;
+}
+
+/* Server Channel Sidebar Locks - FigmaServerPage.tsx */
+.channels-sidebar {
+  width: var(--sidebar-width-desktop) !important;
+  left: var(--sidebar-left) !important;
+  top: var(--sidebar-top-desktop) !important;
+  height: calc(100vh - 174px) !important;
+}
+
+/* Server Members Sidebar Locks - FigmaServerPage.tsx */
+.members-sidebar {
+  width: var(--sidebar-member-width) !important;
+  right: var(--sidebar-left) !important;
+  top: var(--sidebar-top-desktop) !important;
+  height: calc(100vh - 174px) !important;
+}
+
+/* Channel and DM Item Spacing Locks */
+.channel-item {
+  padding: 10px 20px !important;
+  margin: 3px 12px !important;
+  border-radius: 12px !important;
+}
+
+.dm-item {
+  padding: 8px 16px !important;
+  margin: 2px 8px !important;
+  border-radius: 8px !important;
+}
+
+.member-item {
+  padding: 8px 20px !important;
+  margin: 2px 8px !important;
+  border-radius: 8px !important;
+}
+
+/* Avatar Size Locks */
+.member-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+}
+
+.dm-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+}
+
+.server-message-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+}
+
+/* Responsive Locks */
+@media (max-width: 1200px) {
+  .left-sidebar {
+    width: var(--sidebar-width-tablet) !important;
+    top: var(--sidebar-top-tablet) !important;
+    height: calc(100vh - 144px) !important;
+  }
+  
+  .channels-sidebar {
+    width: var(--sidebar-width-tablet) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .left-sidebar {
+    left: var(--sidebar-left-mobile) !important;
+    width: var(--sidebar-width-mobile) !important;
+    top: var(--sidebar-top-mobile) !important;
+  }
+  
+  .channels-sidebar {
+    left: var(--sidebar-left-mobile) !important;
+    width: var(--sidebar-width-mobile) !important;
+  }
+}
+
+/* Header Locks */
+.server-header {
+  height: 70px !important;
+  padding: var(--sidebar-padding) 20px !important;
+}
+
+.members-header {
+  padding: var(--sidebar-padding) 20px !important;
+}
+
+/* Input Area Locks */
+.server-message-input-area {
+  padding: 24px !important;
+}
+
+.message-input-container {
+  padding: 12px 16px !important;
+  border-radius: 16px !important;
+}
+
+/* 
+ * CRITICAL: These locks ensure pixel-perfect consistency
+ * Any changes to sidebar dimensions must be made through CSS variables above
+ * Direct modifications to component styles should be avoided
+ */
