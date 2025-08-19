@@ -75,6 +75,41 @@ export class RateLimiter {
     return record ? record.resetTime : Date.now() + this.config.windowMs
   }
 
+  async isAllowed(req: NextRequest): Promise<{
+    allowed: boolean
+    limit: number
+    remaining: number
+    resetTime: number
+    retryAfter: number
+  }> {
+    const key = this.getKey(req)
+    const isExceeded = this.isRateLimitExceeded(key)
+    
+    if (isExceeded) {
+      const resetTime = this.getResetTime(key)
+      const retryAfter = Math.ceil((resetTime - Date.now()) / 1000)
+      
+      return {
+        allowed: false,
+        limit: this.config.maxRequests,
+        remaining: 0,
+        resetTime,
+        retryAfter
+      }
+    }
+
+    const remaining = this.getRemainingRequests(key)
+    const resetTime = this.getResetTime(key)
+    
+    return {
+      allowed: true,
+      limit: this.config.maxRequests,
+      remaining,
+      resetTime,
+      retryAfter: 0
+    }
+  }
+
   middleware() {
     return (req: NextRequest) => {
       const key = this.getKey(req)

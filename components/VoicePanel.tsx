@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { VoiceClient, VoiceState, VoiceUser } from '@/lib/voice'
+import { getVoiceClient, VoiceState, VoiceUser } from '@/lib/voice'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface VoicePanelProps {
@@ -12,7 +12,7 @@ interface VoicePanelProps {
 
 export default function VoicePanel({ channelId, dmId, channelName }: VoicePanelProps) {
   const { user } = useAuth()
-  const [voiceClient, setVoiceClient] = useState<VoiceClient | null>(null)
+  const [voiceClient, setVoiceClient] = useState<any>(null)
   const [voiceState, setVoiceState] = useState<VoiceState>({
     isConnected: false,
     isMuted: false,
@@ -33,7 +33,7 @@ export default function VoicePanel({ channelId, dmId, channelName }: VoicePanelP
 
       const signalingServerUrl = process.env.NEXT_PUBLIC_SIGNALING_SERVER_URL || 'ws://localhost:3001'
       
-      const client = new VoiceClient({
+      const client = getVoiceClient({
         signalingServerUrl,
         turnServers: [
           {
@@ -43,18 +43,18 @@ export default function VoicePanel({ channelId, dmId, channelName }: VoicePanelP
       })
 
       // Set up event listeners
-      client.onStateChange = (state) => setVoiceState(state)
-      client.onUserJoin = (voiceUser) => {
+      client.on('stateChange', (state) => setVoiceState(state))
+      client.on('userJoin', (voiceUser) => {
         setVoiceUsers(prev => [...prev, voiceUser])
-      }
-      client.onUserLeave = (userId) => {
+      })
+      client.on('userLeave', (userId) => {
         setVoiceUsers(prev => prev.filter(u => u.userId !== userId))
-      }
-      client.onUserUpdate = (voiceUser) => {
+      })
+      client.on('userUpdate', (voiceUser) => {
         setVoiceUsers(prev => prev.map(u => 
           u.userId === voiceUser.userId ? voiceUser : u
         ))
-      }
+      })
 
       await client.initialize()
       setVoiceClient(client)
