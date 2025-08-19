@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { formatMessageTime, isMessageEdited } from '@/lib/messages'
-import type { MessageWithUser, DMMessageWithUser } from '@/lib/messages'
+import type { Message } from '@/lib/messages'
 
 interface MessageItemProps {
-  message: MessageWithUser | DMMessageWithUser
+  message: Message
   isOwnMessage: boolean
   onEdit?: (messageId: string, newContent: string) => void
   onDelete?: (messageId: string) => void

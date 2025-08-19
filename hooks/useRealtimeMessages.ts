@@ -1,12 +1,12 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { supabase } from '@/lib/supabaseClient'
-import type { MessageWithUser, DMMessageWithUser } from '@/lib/messages'
+import type { Message } from '@/lib/messages'
 
 interface UseRealtimeMessagesOptions {
   channelId?: string
   dmId?: string
-  onNewMessage?: (message: MessageWithUser | DMMessageWithUser) => void
-  onMessageUpdate?: (message: MessageWithUser | DMMessageWithUser) => void
+  onNewMessage?: (message: Message) => void
+  onMessageUpdate?: (message: Message) => void
   onMessageDelete?: (messageId: string) => void
 }
 
@@ -21,7 +21,7 @@ export function useRealtimeMessages({
   const broadcastChannelRef = useRef<BroadcastChannel | null>(null)
 
   const handleNewMessage = useCallback((payload: any) => {
-    const message = payload.new as MessageWithUser | DMMessageWithUser
+    const message = payload.new as Message
     
     // Only handle messages for the current channel/DM
     if (channelId && 'channel_id' in message && message.channel_id === channelId) {
@@ -44,7 +44,7 @@ export function useRealtimeMessages({
   }, [channelId, dmId, onNewMessage])
 
   const handleMessageUpdate = useCallback((payload: any) => {
-    const message = payload.new as MessageWithUser | DMMessageWithUser
+    const message = payload.new as Message
     
     if (channelId && 'channel_id' in message && message.channel_id === channelId) {
       onMessageUpdate?.(message)
