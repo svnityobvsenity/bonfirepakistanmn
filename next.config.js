@@ -5,11 +5,17 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // Enable static export for better Netlify compatibility - temporarily disabled for dev
-  // output: 'export',
-  // distDir: 'out',
+  // For Netlify, we'll use serverless functions instead of static export
+  // This allows API routes to work properly
+  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
+  
   // Ensure static assets are properly handled
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  
+  // Optimize for serverless deployment
+  experimental: {
+    outputFileTracingRoot: process.cwd(),
+  },
 }
 
 module.exports = nextConfig

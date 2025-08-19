@@ -218,29 +218,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Demo accounts for testing */}
-        <div className="mt-8 pt-6 border-t border-white/20">
-          <p className="text-sm text-gray-400 mb-3">Quick Demo Login:</p>
-          <div className="space-y-2">
-            {[
-              { email: 'demo1@example.com', password: 'demo123', label: 'Demo User 1' },
-              { email: 'demo2@example.com', password: 'demo123', label: 'Demo User 2' },
-              { email: 'demo3@example.com', password: 'demo123', label: 'Demo User 3' }
-            ].map((demo, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setEmail(demo.email)
-                  setPassword(demo.password)
-                  setIsSignUp(false)
-                }}
-                className="w-full py-2 px-3 bg-white/5 border border-white/10 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white text-sm transition-all"
-              >
-                {demo.label}
-              </button>
-            ))}
-          </div>
-        </div>
+
       </div>
     </div>
   )

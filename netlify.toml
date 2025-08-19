@@ -1,11 +1,14 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
 
-# Enable Next.js static export
+# Netlify Next.js plugin for serverless functions
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [build.processing]
   skip_processing = false
 
