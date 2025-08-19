@@ -38,6 +38,9 @@ SUPABASE_SERVICE_ROLE_KEY=${supabaseServiceKey}
 
 # Optional: Signaling Server
 NEXT_PUBLIC_SIGNALING_SERVER_URL=ws://localhost:3001
+
+# Ngrok Configuration (for testing with friends)
+# NGROK_AUTHTOKEN=your_ngrok_auth_token_here
 `;
 
   const envPath = path.join(process.cwd(), '.env.local');
@@ -51,6 +54,10 @@ NEXT_PUBLIC_SIGNALING_SERVER_URL=ws://localhost:3001
     console.log('2. Visit: http://localhost:3000');
     console.log('3. Create an account and test the app');
     console.log('4. Check SUPABASE_SETUP.md for detailed configuration');
+    console.log('\n🌐 For testing with friends:');
+    console.log('1. Get ngrok auth token from: https://dashboard.ngrok.com/get-started/your-authtoken');
+    console.log('2. Add NGROK_AUTHTOKEN=your_token to .env.local');
+    console.log('3. Run: npm run dev:ngrok');
     
   } catch (error) {
     console.error('❌ Error saving .env.local:', error.message);

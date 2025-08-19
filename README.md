@@ -82,10 +82,23 @@ supabase db push
 ### 5. Start Development Server
 
 ```bash
+# Local development
 npm run dev
+
+# Development with ngrok tunnel (for testing with friends)
+npm run dev:ngrok
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to see the app!
+
+### 6. Testing with Friends (Optional)
+
+To make your local app accessible to friends for testing:
+
+1. Get your ngrok auth token from [ngrok dashboard](https://dashboard.ngrok.com/get-started/your-authtoken)
+2. Add `NGROK_AUTHTOKEN=your_token` to `.env.local`
+3. Run `npm run dev:ngrok`
+4. Share the ngrok URL with your friends
 
 ## 📁 Project Structure
 
@@ -157,6 +170,7 @@ railway up
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | Yes |
 | `NEXT_PUBLIC_SIGNALING_SERVER_URL` | WebSocket signaling server | No |
 | `NEXT_PUBLIC_TURN_URL` | TURN server for voice chat | No |
+| `NGROK_AUTHTOKEN` | Ngrok auth token for testing | No |
 
 ### Database Schema
 
